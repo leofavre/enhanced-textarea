@@ -1,1 +1,3 @@
-/* Entry */
+export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
+
+}
