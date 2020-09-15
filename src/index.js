@@ -34,7 +34,15 @@ export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
 
   attributeChangedCallback (...args) {
     super.attributeChangedCallback && super.attributeChangedCallback(...args);
-    const [attrName] = args;
+    const [attrName, pastValue, nextValue] = args;
+
+    if (attrName === 'autoresize' && pastValue !== nextValue) {
+      if (pastValue == null) {
+        this.__handleAutoResizeStart();
+      } else if (nextValue == null) {
+        this.__handleAutoResizeEnd();
+      }
+    }
 
     if (attrName === 'autoresize' || attrName === 'rows') {
       this.__handleChange();
@@ -52,6 +60,17 @@ export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
     super.disconnectedCallback && super.disconnectedCallback();
     this.__resizeObserver.unobserve(this);
     this.removeEventListener('input', this.__handleChange);
+  }
+
+  __handleAutoResizeStart () {
+    this.__previousMinHeight = this.style.minHeight;
+    this.__previousResize = this.style.resize;
+    this.style.resize = 'none';
+  }
+
+  __handleAutoResizeEnd () {
+    this.style.minHeight = this.__previousMinHeight;
+    this.style.resize = this.__previousResize;
   }
 
   __handleChange () {
