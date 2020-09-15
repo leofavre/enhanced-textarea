@@ -1,3 +1,5 @@
+const OBSERVED = ['autoresize', 'rows', 'class', 'style'];
+
 export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
   constructor () {
     super();
@@ -25,11 +27,7 @@ export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
   }
 
   static get observedAttributes () {
-    return [
-      ...super.observedAttributes || [],
-      'autoresize',
-      'rows'
-    ];
+    return [...super.observedAttributes || [], ...OBSERVED];
   }
 
   attributeChangedCallback (...args) {
@@ -44,7 +42,7 @@ export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
       }
     }
 
-    if (attrName === 'autoresize' || attrName === 'rows') {
+    if (OBSERVED.includes[attrName]) {
       this.__handleChange();
     }
   }
