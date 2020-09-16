@@ -1,4 +1,5 @@
 import { OBSERVED_ATTRIBUTES, LAZY_PROPERTIES } from './constants.js';
+import setAttr from './helpers/setAttr.js';
 
 export default BaseClass => class extends BaseClass {
   constructor () {
@@ -17,11 +18,7 @@ export default BaseClass => class extends BaseClass {
   }
 
   set autoheight (value) {
-    if (value) {
-      this.setAttribute('autoheight', '');
-    } else {
-      this.removeAttribute('autoheight');
-    }
+    setAttr(this, 'autoheight', value);
   }
 
   get value () {

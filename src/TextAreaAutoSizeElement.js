@@ -1,5 +1,6 @@
 import { SHARED_ATTRIBUTES } from './constants.js';
 import TextAreaAutoSizeFactory from './TextAreaAutoSizeFactory.js';
+import setAttr from './setAttr.js';
 
 const BaseClass = TextAreaAutoSizeFactory(HTMLElement);
 
@@ -45,11 +46,7 @@ export default class extends BaseClass {
         return this.getAttribute(attrName);
       },
       set (value) {
-        if (value == null || value === false) {
-          this.removeAttribute(attrName);
-        } else {
-          this.setAttribute(attrName, value);
-        }
+        setAttr(this, attrName, value);
       }
     });
 
@@ -60,7 +57,7 @@ export default class extends BaseClass {
     const [attrName, , nextValue] = args;
 
     if (SHARED_ATTRIBUTES.includes(attrName)) {
-      this.textElement.setAttribute(attrName, nextValue);
+      setAttr(this.textElement, attrName, nextValue);
     }
 
     super.attributeChangedCallback && super.attributeChangedCallback(...args);
