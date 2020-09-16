@@ -8,13 +8,13 @@
     import { AutomaticallyResizableTextArea } from './src/index.js';
 
     customElements.define(
-      'automatically-resizable',
+      'textarea-autosize',
       AutomaticallyResizableTextArea,
       { extends: 'textarea' }
     );
   </script>
 </head>
 <body>
-  <textarea is="automatically-resizable" autoresize></textarea>
+  <textarea is="textarea-autosize" autoheight></textarea>
 </body>
 </html>

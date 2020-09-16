@@ -1,4 +1,4 @@
-const OBSERVED = ['autoresize', 'rows', 'class', 'style'];
+const OBSERVED_ATTRS = ['autoheight', 'rows', 'class', 'style'];
 
 export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
   constructor () {
@@ -6,35 +6,35 @@ export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
     this.__handleChange = this.__handleChange.bind(this);
   }
 
-  get autoresize () {
-    return this.autoResize;
+  get autoheight () {
+    return this.autoHeight;
   }
 
-  set autoresize (value) {
-    this.autoResize = value;
+  set autoheight (value) {
+    this.autoHeight = value;
   }
 
-  get autoResize () {
-    return this.hasAttribute('autoresize');
+  get autoHeight () {
+    return this.hasAttribute('autoheight');
   }
 
-  set autoResize (value) {
+  set autoHeight (value) {
     if (value) {
-      this.setAttribute('autoresize', '');
+      this.setAttribute('autoheight', '');
     } else {
-      this.removeAttribute('autoresize');
+      this.removeAttribute('autoheight');
     }
   }
 
   static get observedAttributes () {
-    return [...super.observedAttributes || [], ...OBSERVED];
+    return [...super.observedAttributes || [], ...OBSERVED_ATTRS];
   }
 
   attributeChangedCallback (...args) {
     super.attributeChangedCallback && super.attributeChangedCallback(...args);
     const [attrName, pastValue, nextValue] = args;
 
-    if (attrName === 'autoresize' && pastValue !== nextValue) {
+    if (attrName === 'autoheight' && pastValue !== nextValue) {
       if (pastValue == null) {
         this.__handleAutoResizeStart();
       } else if (nextValue == null) {
@@ -42,7 +42,7 @@ export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
       }
     }
 
-    if (OBSERVED.includes[attrName]) {
+    if (OBSERVED_ATTRS.includes[attrName]) {
       this.__handleChange();
     }
   }
@@ -72,7 +72,7 @@ export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
   }
 
   __handleChange () {
-    if (this.autoResize) {
+    if (this.autoHeight) {
       const offset = this.offsetHeight - this.clientHeight;
       this.style.minHeight = 'auto';
       this.style.minHeight = this.scrollHeight + offset + 'px';
