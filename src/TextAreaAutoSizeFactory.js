@@ -1,6 +1,6 @@
 const OBSERVED_ATTRS = ['autoheight', 'rows', 'class'];
 
-export const TextAreaAutoSizeFactory = BaseClass => class extends BaseClass {
+export default BaseClass => class extends BaseClass {
   constructor () {
     super();
     const targetEl = this._autoResizeTarget || this;
