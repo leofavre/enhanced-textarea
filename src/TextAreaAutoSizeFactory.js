@@ -9,6 +9,7 @@ export default BaseClass => class extends BaseClass {
     this._handleUserResize = this._handleUserResize.bind(this);
     this._handleAutoHeightStart = this._handleAutoHeightStart.bind(this);
     this._handleAutoHeightEnd = this._handleAutoHeightEnd.bind(this);
+    this._makePropertyLazy = this._makePropertyLazy.bind(this);
   }
 
   get autoheight () {
@@ -54,14 +55,15 @@ export default BaseClass => class extends BaseClass {
 
   connectedCallback () {
     super.connectedCallback && super.connectedCallback();
+    LAZY_PROPERTIES.forEach(this._makePropertyLazy);
+  }
 
-    LAZY_PROPERTIES.forEach(propName => {
-      if (Object.keys(this).includes(propName)) {
-        const value = this[propName];
-        delete this[propName];
-        this[propName] = value;
-      }
-    });
+  _makePropertyLazy (propName) {
+    if (Object.keys(this).includes(propName)) {
+      const value = this[propName];
+      delete this[propName];
+      this[propName] = value;
+    }
   }
 
   attributeChangedCallback (...args) {

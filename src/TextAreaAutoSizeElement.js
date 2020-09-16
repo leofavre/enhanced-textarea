@@ -24,32 +24,36 @@ TEMPLATE.innerHTML = `
 export default class extends BaseClass {
   constructor () {
     super();
+
     const shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
+
     this.textElement = this.shadowRoot.querySelector('textarea');
+    this._reflectAttribute = this._reflectAttribute.bind(this);
   }
 
   connectedCallback () {
     super.connectedCallback && super.connectedCallback();
+    SHARED_ATTRIBUTES.forEach(this._reflectAttribute);
+  }
 
-    SHARED_ATTRIBUTES.forEach(attrName => {
-      const oldValue = this[attrName];
+  _reflectAttribute (attrName) {
+    const oldValue = this[attrName];
 
-      Object.defineProperty(this, attrName, {
-        get () {
-          return this.getAttribute(attrName);
-        },
-        set (value) {
-          if (value == null || value === false) {
-            this.removeAttribute(attrName);
-          } else {
-            this.setAttribute(attrName, value);
-          }
+    Object.defineProperty(this, attrName, {
+      get () {
+        return this.getAttribute(attrName);
+      },
+      set (value) {
+        if (value == null || value === false) {
+          this.removeAttribute(attrName);
+        } else {
+          this.setAttribute(attrName, value);
         }
-      });
-
-      this[attrName] = oldValue;
+      }
     });
+
+    this[attrName] = oldValue;
   }
 
   attributeChangedCallback (...args) {
