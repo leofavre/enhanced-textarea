@@ -1,4 +1,4 @@
-export default function (attrName, value) {
+export default function setAttr (attrName, value) {
   if (value == null || value === false) {
     this.removeAttribute(attrName);
   } else {
