@@ -3,11 +3,11 @@ const OBSERVED_ATTRS = ['autoheight', 'rows', 'class'];
 export default BaseClass => class extends BaseClass {
   constructor () {
     super();
-    const targetEl = this._autoResizeTarget || this;
-    this._handleChange = this._handleChange.bind(targetEl);
-    this._handleUserResize = this._handleUserResize.bind(targetEl);
-    this._handleAutoHeightStart = this._handleAutoHeightStart.bind(targetEl);
-    this._handleAutoHeightEnd = this._handleAutoHeightEnd.bind(targetEl);
+    this.textElement = this;
+    this._handleChange = this._handleChange.bind(this);
+    this._handleUserResize = this._handleUserResize.bind(this);
+    this._handleAutoHeightStart = this._handleAutoHeightStart.bind(this);
+    this._handleAutoHeightEnd = this._handleAutoHeightEnd.bind(this);
   }
 
   get autoheight () {
@@ -53,36 +53,38 @@ export default BaseClass => class extends BaseClass {
 
   _addListeners () {
     this._resizeObserver = new ResizeObserver(this._handleChange);
-    this._resizeObserver.observe(this);
-    this.addEventListener('input', this._handleChange);
-    this.addEventListener('pointerup', this._handleUserResize);
-    this.addEventListener('pointerdown', this._handleUserResize);
+    this._resizeObserver.observe(this.textElement);
+    this.textElement.addEventListener('input', this._handleChange);
+    this.textElement.addEventListener('pointerup', this._handleUserResize);
+    this.textElement.addEventListener('pointerdown', this._handleUserResize);
   }
 
   _removeListeners () {
-    this._resizeObserver.unobserve(this);
-    this.removeEventListener('input', this._handleChange);
-    this.removeEventListener('pointerup', this._handleUserResize);
-    this.removeEventListener('pointerdown', this._handleUserResize);
+    this._resizeObserver.unobserve(this.textElement);
+    this.textElement.removeEventListener('input', this._handleChange);
+    this.textElement.removeEventListener('pointerup', this._handleUserResize);
+    this.textElement.removeEventListener('pointerdown', this._handleUserResize);
   }
 
   _handleAutoHeightStart () {
     this._addListeners();
-    this._prevOverflow = this.style.overflow;
-    this.style.overflow = 'hidden';
+    this.textElement._prevOverflow = this.textElement.style.overflow;
+    this.textElement.style.overflow = 'hidden';
   }
 
   _handleAutoHeightEnd () {
     this._removeListeners();
-    this.style.overflow = this._prevOverflow;
+    this.textElement.style.overflow = this.textElement._prevOverflow;
   }
 
   _handleChange () {
-    const offset = this.offsetHeight - this.clientHeight;
-    this.style.minHeight = 'auto';
+    const { offsetHeight, clientHeight } = this.textElement;
+    const offset = offsetHeight - clientHeight;
+    this.textElement.style.minHeight = 'auto';
 
     if (!this._isUserResizing) {
-      this.style.minHeight = `${this.scrollHeight + offset}px`;
+      const { scrollHeight } = this.textElement;
+      this.textElement.style.minHeight = `${scrollHeight + offset}px`;
     }
   }
 
