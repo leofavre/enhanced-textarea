@@ -65,10 +65,13 @@ export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
 
   _handleAutoHeightStart () {
     this._addListeners();
+    this._prevOverflow = this.style.overflow;
+    this.style.overflow = 'hidden';
   }
 
   _handleAutoHeightEnd () {
     this._removeListeners();
+    this.style.overflow = this._prevOverflow;
   }
 
   _handleChange () {
