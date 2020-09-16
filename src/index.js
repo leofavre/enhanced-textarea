@@ -73,6 +73,6 @@ export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
   }
 
   __handleUserResize ({ type }) {
-    this.__isUserResizing = type === 'pointerdown';
+    this.__isUserResizing = (type === 'pointerdown');
   }
 }
