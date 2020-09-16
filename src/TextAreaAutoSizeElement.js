@@ -30,27 +30,27 @@ export default class extends BaseClass {
     shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
 
     this.textElement = this.shadowRoot.querySelector('textarea');
-    this._reflectAttribute = this._reflectAttribute.bind(this);
+    this._reflectToAttribute = this._reflectToAttribute.bind(this);
   }
 
   connectedCallback () {
     super.connectedCallback && super.connectedCallback();
-    SHARED_ATTRIBUTES.forEach(this._reflectAttribute);
+    SHARED_ATTRIBUTES.forEach(this._reflectToAttribute);
   }
 
-  _reflectAttribute (attrName) {
-    const oldValue = this[attrName];
+  _reflectToAttribute (propName) {
+    const oldValue = this[propName];
 
-    Object.defineProperty(this, attrName, {
+    Object.defineProperty(this, propName, {
       get () {
-        return this.getAttribute(attrName);
+        return this.getAttribute(propName);
       },
       set (value) {
-        setAttr(this, attrName, value);
+        setAttr(this, propName, value);
       }
     });
 
-    this[attrName] = oldValue;
+    this[propName] = oldValue;
   }
 
   attributeChangedCallback (...args) {
