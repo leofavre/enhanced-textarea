@@ -65,7 +65,7 @@ export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
       this.style.minHeight = 'auto';
 
       if (!this.__isUserResizing) {
-        this.style.minHeight = `${Math.max(this.scrollHeight + offset)}px`;
+        this.style.minHeight = `${this.scrollHeight + offset}px`;
       } else {
         this.__resizeTimeout = setTimeout(this.__handleChange, 50);
       }
