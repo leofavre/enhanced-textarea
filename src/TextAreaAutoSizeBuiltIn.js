@@ -1,4 +1,4 @@
 import { TextAreaAutoSizeFactory } from './TextAreaAutoSizeFactory.js';
 
-export const TextAreaAutoSizeCustomized =
+export const TextAreaAutoSizeBuiltIn =
   TextAreaAutoSizeFactory(HTMLTextAreaElement);

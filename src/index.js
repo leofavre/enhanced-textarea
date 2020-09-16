@@ -1,1 +1,1 @@
-export { TextAreaAutoSizeCustomized } from './TextAreaAutoSizeCustomized.js';
+export { TextAreaAutoSizeBuiltIn } from './TextAreaAutoSizeBuiltIn.js';
