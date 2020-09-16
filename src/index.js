@@ -37,9 +37,9 @@ export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
 
     if (attrName === 'autoheight' && prevValue !== nextValue) {
       if (prevValue == null) {
-        this.__addListeners();
+        this.__handleAutoHeightStart();
       } else if (nextValue == null) {
-        this.__removeListeners();
+        this.__handleAutoHeightEnd();
       }
     }
 
@@ -61,6 +61,14 @@ export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
     this.removeEventListener('input', this.__handleChange);
     this.removeEventListener('pointerup', this.__handleUserResize);
     this.removeEventListener('pointerdown', this.__handleUserResize);
+  }
+
+  __handleAutoHeightStart () {
+    this.__addListeners();
+  }
+
+  __handleAutoHeightEnd () {
+    this.__removeListeners();
   }
 
   __handleChange () {
