@@ -1,5 +1,7 @@
-import { OBSERVED_ATTRIBUTES, LAZY_PROPERTIES } from './constants.js';
 import setAttr from './helpers/setAttr.js';
+
+const OBSERVED_ATTRIBUTES = ['autoheight', 'rows', 'cols', 'class'];
+const LAZY_PROPERTIES = ['autoheight', 'value'];
 
 export default BaseClass => class extends BaseClass {
   constructor () {
@@ -10,6 +12,7 @@ export default BaseClass => class extends BaseClass {
     this._handleUserResize = this._handleUserResize.bind(this);
     this._handleAutoHeightStart = this._handleAutoHeightStart.bind(this);
     this._handleAutoHeightEnd = this._handleAutoHeightEnd.bind(this);
+
     this._makePropertyLazy = this._makePropertyLazy.bind(this);
   }
 
@@ -28,11 +31,9 @@ export default BaseClass => class extends BaseClass {
   set value (value) {
     super.value = value;
 
-    if (this !== this.textElement) {
-      this.textElement.value = value;
+    if (this.autoheight) {
+      this._handleChange();
     }
-
-    this._handleChange();
   }
 
   static get observedAttributes () {

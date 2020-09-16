@@ -6,19 +6,23 @@
   <title>Text Area Auto Size</title>
   <script type="module">
     import TextAreaAutoSizeBuiltIn from './src/TextAreaAutoSizeBuiltIn.js';
-    import TextAreaAutoSizeElement from './src/TextAreaAutoSizeElement.js';
 
-    const options = { extends: 'textarea' };
-    customElements.define('textarea-autosize-ext', TextAreaAutoSizeBuiltIn, options);
-    customElements.define('textarea-autosize', TextAreaAutoSizeElement);
+    const textAreaElement = document.querySelector('textarea');
+    textAreaElement.value = 'super long text'.repeat(20).trim();
+    textAreaElement.rows = 2;
+    textAreaElement.cols = 50;
+    textAreaElement.autoheight = true;
+
+    setTimeout(() => {
+      const options = { extends: 'textarea' };
+      customElements.define('textarea-autosize', TextAreaAutoSizeBuiltIn, options);
+    }, 1000);
   </script>
 </head>
 <body>
   <textarea
     style="box-sizing: border-box;"
-    is="textarea-autosize-ext"
-    autoheight
+    is="textarea-autosize"
   ></textarea>
-  <textarea-autosize autoheight></textarea-autosize>
 </body>
 </html>
