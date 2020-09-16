@@ -1,8 +1,10 @@
 import setAttr from './helpers/setAttr.js';
 import resetProperty from './helpers/resetProperty.js';
+import removeStyleProp from './helpers/removeStyleProp.js';
 
 const OBSERVED_ATTRIBUTES = ['autoheight', 'rows', 'cols', 'class', 'style'];
 const LAZY_PROPERTIES = ['autoheight', 'value'];
+const ignoreMinHeight = removeStyleProp('min-height');
 
 export default BaseClass => class extends BaseClass {
   constructor () {
@@ -52,7 +54,10 @@ export default BaseClass => class extends BaseClass {
       }
 
       if (this.autoheight && OBSERVED_ATTRIBUTES.includes(attrName)) {
-        setTimeout(this._handleChange);
+        if (!attrName === 'style' ||
+          ignoreMinHeight(prevValue) !== ignoreMinHeight(nextValue)) {
+          setTimeout(this._handleChange);
+        }
       }
     }
   }
@@ -75,6 +80,7 @@ export default BaseClass => class extends BaseClass {
 
   _handleAutoHeightStart () {
     this._addListeners();
+
     const {
       resize,
       height,
@@ -95,6 +101,7 @@ export default BaseClass => class extends BaseClass {
 
   _handleAutoHeightEnd () {
     this._removeListeners();
+
     this.textElement.style.resize = this._prevResize;
     this.textElement.style.height = this._prevHeight;
     this.textElement.style.overflow = this._prevOverflow;
