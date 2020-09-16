@@ -27,8 +27,14 @@ export default class extends BaseClass {
     const shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
     this.textElement = this.shadowRoot.querySelector('textarea');
+  }
+
+  connectedCallback () {
+    super.connectedCallback && super.connectedCallback();
 
     SHARED_ATTRIBUTES.forEach(attrName => {
+      const oldValue = this[attrName];
+
       Object.defineProperty(this, attrName, {
         get () {
           return this.getAttribute(attrName);
@@ -41,6 +47,8 @@ export default class extends BaseClass {
           }
         }
       });
+
+      this[attrName] = oldValue;
     });
   }
 

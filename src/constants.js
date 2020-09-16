@@ -12,3 +12,10 @@ export const OBSERVED_ATTRIBUTES = [
   ...PARENT_ATTRIBUTES,
   ...SHARED_ATTRIBUTES
 ];
+
+export const LAZY_PROPERTIES = [
+  'autoHeight',
+  'autoheight',
+  'value',
+  ...SHARED_ATTRIBUTES
+];

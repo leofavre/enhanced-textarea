@@ -1,9 +1,10 @@
-import { OBSERVED_ATTRIBUTES } from './constants.js';
+import { OBSERVED_ATTRIBUTES, LAZY_PROPERTIES } from './constants.js';
 
 export default BaseClass => class extends BaseClass {
   constructor () {
     super();
     this.textElement = this;
+
     this._handleChange = this._handleChange.bind(this);
     this._handleUserResize = this._handleUserResize.bind(this);
     this._handleAutoHeightStart = this._handleAutoHeightStart.bind(this);
@@ -49,6 +50,20 @@ export default BaseClass => class extends BaseClass {
       ...super.observedAttributes || [],
       ...OBSERVED_ATTRIBUTES
     ];
+  }
+
+  connectedCallback () {
+    super.connectedCallback && super.connectedCallback();
+
+    LAZY_PROPERTIES.forEach(propName => {
+      if (Object.keys(this).includes(propName)) {
+        const value = this[propName];
+        console.log([this, 'will update', propName, value]);
+        delete this[propName];
+        this[propName] = value;
+        console.log([this, 'did update', propName, value]);
+      }
+    });
   }
 
   attributeChangedCallback (...args) {
