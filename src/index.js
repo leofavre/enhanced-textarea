@@ -3,8 +3,13 @@ const OBSERVED_ATTRS = ['autoheight', 'rows', 'class'];
 export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
   constructor () {
     super();
-    this._handleChange = this._handleChange.bind(this);
-    this._handleUserResize = this._handleUserResize.bind(this);
+
+    const targetEl = this._autoResizeTarget || this;
+
+    this._handleChange = this._handleChange.bind(targetEl);
+    this._handleUserResize = this._handleUserResize.bind(targetEl);
+    this._handleAutoHeightStart = this._handleAutoHeightStart.bind(targetEl);
+    this._handleAutoHeightEnd = this._handleAutoHeightEnd.bind(targetEl);
   }
 
   get autoheight () {
