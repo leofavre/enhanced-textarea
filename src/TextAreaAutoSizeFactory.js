@@ -13,18 +13,10 @@ export default BaseClass => class extends BaseClass {
   }
 
   get autoheight () {
-    return this.autoHeight;
-  }
-
-  set autoheight (value) {
-    this.autoHeight = value;
-  }
-
-  get autoHeight () {
     return this.hasAttribute('autoheight');
   }
 
-  set autoHeight (value) {
+  set autoheight (value) {
     if (value) {
       this.setAttribute('autoheight', '');
     } else {
@@ -78,7 +70,7 @@ export default BaseClass => class extends BaseClass {
       }
     }
 
-    if (this.autoHeight && OBSERVED_ATTRIBUTES.includes(attrName)) {
+    if (this.autoheight && OBSERVED_ATTRIBUTES.includes(attrName)) {
       this._handleChange();
     }
   }

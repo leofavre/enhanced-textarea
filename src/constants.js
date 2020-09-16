@@ -14,7 +14,6 @@ export const OBSERVED_ATTRIBUTES = [
 ];
 
 export const LAZY_PROPERTIES = [
-  'autoHeight',
   'autoheight',
   'value',
   ...SHARED_ATTRIBUTES
