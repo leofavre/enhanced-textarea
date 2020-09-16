@@ -68,13 +68,13 @@ export default BaseClass => class extends BaseClass {
 
   _handleAutoHeightStart () {
     this._addListeners();
-    this.textElement._prevOverflow = this.textElement.style.overflow;
+    this._prevOverflow = this.textElement.style.overflow;
     this.textElement.style.overflow = 'hidden';
   }
 
   _handleAutoHeightEnd () {
     this._removeListeners();
-    this.textElement.style.overflow = this.textElement._prevOverflow;
+    this.textElement.style.overflow = this._prevOverflow;
   }
 
   _handleChange () {
