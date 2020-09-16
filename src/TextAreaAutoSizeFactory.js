@@ -1,7 +1,6 @@
 import setAttr from './helpers/setAttr.js';
 
 const OBSERVED_ATTRIBUTES = ['autoheight', 'rows', 'cols', 'class'];
-const LAZY_PROPERTIES = ['autoheight', 'value'];
 
 export default BaseClass => class extends BaseClass {
   constructor () {
@@ -12,8 +11,6 @@ export default BaseClass => class extends BaseClass {
     this._handleUserResize = this._handleUserResize.bind(this);
     this._handleAutoHeightStart = this._handleAutoHeightStart.bind(this);
     this._handleAutoHeightEnd = this._handleAutoHeightEnd.bind(this);
-
-    this._makePropertyLazy = this._makePropertyLazy.bind(this);
   }
 
   get autoheight () {
@@ -41,19 +38,6 @@ export default BaseClass => class extends BaseClass {
       ...super.observedAttributes || [],
       ...OBSERVED_ATTRIBUTES
     ];
-  }
-
-  connectedCallback () {
-    super.connectedCallback && super.connectedCallback();
-    LAZY_PROPERTIES.forEach(this._makePropertyLazy);
-  }
-
-  _makePropertyLazy (propName) {
-    if (Object.keys(this).includes(propName)) {
-      const value = this[propName];
-      delete this[propName];
-      this[propName] = value;
-    }
   }
 
   attributeChangedCallback (...args) {
