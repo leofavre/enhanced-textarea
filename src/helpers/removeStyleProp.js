@@ -1,2 +1,4 @@
-export default propName => (styleStr = '') =>
-  styleStr.replace(new RegExp(`${propName}:.*?;`, 'g'), '');
+export default propName => styleStr =>
+  styleStr != null && styleStr.replace
+    ? styleStr.replace(new RegExp(`${propName}:.*?;`, 'g'), '')
+    : styleStr;
