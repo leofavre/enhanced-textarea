@@ -28,14 +28,6 @@ export default class extends BaseClass {
     this.textElement = this.shadowRoot.querySelector('textarea');
   }
 
-  get value () {
-    return super.value;
-  }
-
-  set value (value) {
-    this.textElement.value = value;
-  }
-
   attributeChangedCallback (...args) {
     const [attrName, , nextValue] = args;
 

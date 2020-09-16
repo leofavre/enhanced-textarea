@@ -30,6 +30,15 @@ export default BaseClass => class extends BaseClass {
     }
   }
 
+  get value () {
+    return super.value;
+  }
+
+  set value (value) {
+    super.value = value;
+    this._handleChange();
+  }
+
   static get observedAttributes () {
     return [...super.observedAttributes || [], ...OBSERVED_ATTRS];
   }
