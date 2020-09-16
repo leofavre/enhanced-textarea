@@ -1,6 +1,6 @@
 import { SHARED_ATTRIBUTES } from './constants.js';
 import TextAreaAutoSizeFactory from './TextAreaAutoSizeFactory.js';
-import setAttr from './setAttr.js';
+import setAttr from './helpers/setAttr.js';
 
 const BaseClass = TextAreaAutoSizeFactory(HTMLElement);
 
