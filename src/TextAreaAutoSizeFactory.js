@@ -98,12 +98,8 @@ export default BaseClass => class extends BaseClass {
   _handleChange () {
     const { offsetHeight, clientHeight } = this.textElement;
     const offset = offsetHeight - clientHeight;
-
     this.textElement.style.minHeight = 'auto';
-    this.textElement.style.minHeight = 'height';
-
     const { scrollHeight } = this.textElement;
-
     this.textElement.style.minHeight = `${scrollHeight + offset}px`;
   }
 };
