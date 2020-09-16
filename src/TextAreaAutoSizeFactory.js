@@ -41,11 +41,6 @@ export default BaseClass => class extends BaseClass {
     ];
   }
 
-  connectedCallback () {
-    super.connectedCallback && super.connectedCallback();
-    LAZY_PROPERTIES.forEach(resetProperty.bind(this));
-  }
-
   attributeChangedCallback (...args) {
     super.attributeChangedCallback && super.attributeChangedCallback(...args);
     const [attrName, prevValue, nextValue] = args;
@@ -63,6 +58,11 @@ export default BaseClass => class extends BaseClass {
     }
   }
 
+  connectedCallback () {
+    super.connectedCallback && super.connectedCallback();
+    LAZY_PROPERTIES.forEach(resetProperty.bind(this));
+  }
+
   _addListeners () {
     this._resizeObserver = new ResizeObserver(this._handleChange);
     this._resizeObserver.observe(this.textElement);
@@ -76,16 +76,22 @@ export default BaseClass => class extends BaseClass {
 
   _handleAutoHeightStart () {
     this._addListeners();
-    const { resize, height, overflow } = this.textElement.style;
+    const {
+      resize,
+      height,
+      overflow,
+      boxSizing
+    } = this.textElement.style;
 
     this._prevResize = resize;
-    this.textElement.style.resize = 'none';
-
     this._prevHeight = height;
-    this.textElement.style.height = 'auto';
-
     this._prevOverflow = overflow;
+    this._prevBoxSizing = boxSizing;
+
+    this.textElement.style.resize = 'none';
+    this.textElement.style.height = 'auto';
     this.textElement.style.overflow = 'hidden';
+    this.textElement.style.boxSizing = 'border-box';
   }
 
   _handleAutoHeightEnd () {
@@ -93,6 +99,7 @@ export default BaseClass => class extends BaseClass {
     this.textElement.style.resize = this._prevResize;
     this.textElement.style.height = this._prevHeight;
     this.textElement.style.overflow = this._prevOverflow;
+    this.textElement.style.boxSizing = this._prevBoxSizing;
   }
 
   _handleChange () {
