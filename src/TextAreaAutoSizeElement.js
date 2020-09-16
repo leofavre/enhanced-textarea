@@ -1,6 +1,10 @@
-import { SHARED_ATTRIBUTES } from './constants.js';
-import TextAreaAutoSizeFactory from './TextAreaAutoSizeFactory.js';
+import {
+  NATIVE_REFLECTED_PROPERTIES,
+  NATIVE_REFLECTED_ATTRIBUTES
+} from './constants.js';
+
 import setAttr from './helpers/setAttr.js';
+import TextAreaAutoSizeFactory from './TextAreaAutoSizeFactory.js';
 
 const BaseClass = TextAreaAutoSizeFactory(HTMLElement);
 
@@ -35,7 +39,7 @@ export default class extends BaseClass {
 
   connectedCallback () {
     super.connectedCallback && super.connectedCallback();
-    SHARED_ATTRIBUTES.forEach(this._reflectToAttribute);
+    NATIVE_REFLECTED_PROPERTIES.forEach(this._reflectToAttribute);
   }
 
   _reflectToAttribute (propName) {
@@ -56,7 +60,7 @@ export default class extends BaseClass {
   attributeChangedCallback (...args) {
     const [attrName, , nextValue] = args;
 
-    if (SHARED_ATTRIBUTES.includes(attrName)) {
+    if (NATIVE_REFLECTED_ATTRIBUTES.includes(attrName)) {
       setAttr(this.textElement, attrName, nextValue);
     }
 
