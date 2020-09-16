@@ -80,28 +80,14 @@ export default BaseClass => class extends BaseClass {
 
   _handleAutoHeightStart () {
     this._addListeners();
-
-    const {
-      resize,
-      height,
-      overflow,
-      boxSizing
-    } = this.textElement.style;
-
-    this._prevResize = resize;
-    this._prevHeight = height;
-    this._prevOverflow = overflow;
-    this._prevBoxSizing = boxSizing;
-
-    this.textElement.style.resize = 'none';
-    this.textElement.style.height = 'auto';
-    this.textElement.style.overflow = 'hidden';
-    this.textElement.style.boxSizing = 'border-box';
+    this._prevResize = this.textElement.style.resize;
+    this._prevHeight = this.textElement.style.height;
+    this._prevOverflow = this.textElement.style.overflow;
+    this._prevBoxSizing = this.textElement.style.boxSizing;
   }
 
   _handleAutoHeightEnd () {
     this._removeListeners();
-
     this.textElement.style.resize = this._prevResize;
     this.textElement.style.height = this._prevHeight;
     this.textElement.style.overflow = this._prevOverflow;
@@ -111,7 +97,13 @@ export default BaseClass => class extends BaseClass {
   _handleChange () {
     const { offsetHeight, clientHeight } = this.textElement;
     const offset = offsetHeight - clientHeight;
+
     this.textElement.style.minHeight = 'auto';
+    this.textElement.style.resize = 'none';
+    this.textElement.style.height = 'auto';
+    this.textElement.style.overflow = 'hidden';
+    this.textElement.style.boxSizing = 'border-box';
+
     const { scrollHeight } = this.textElement;
     this.textElement.style.minHeight = `${scrollHeight + offset}px`;
   }
