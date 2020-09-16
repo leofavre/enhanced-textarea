@@ -2,6 +2,47 @@ import TextAreaAutoSizeFactory from './TextAreaAutoSizeFactory.js';
 
 const BaseClass = TextAreaAutoSizeFactory(HTMLElement);
 
-export default class extends BaseClass {
+const TEMPLATE = document.createElement('template');
 
+TEMPLATE.innerHTML = `
+  <style>
+    :host {
+      display: inline-block;
+      padding: 0 !important;
+      border: none !important;
+    }
+    textarea {
+      display: block;
+      box-sizing: border-box;
+      resize: none;
+    }
+  </style>
+  <textarea part="textarea"></textarea>
+`;
+
+export default class extends BaseClass {
+  constructor () {
+    super();
+    const shadowRoot = this.attachShadow({ mode: 'open' });
+    shadowRoot.appendChild(TEMPLATE.content.cloneNode(true));
+    this.textElement = this.shadowRoot.querySelector('textarea');
+  }
+
+  get value () {
+    return super.value;
+  }
+
+  set value (value) {
+    this.textElement.value = value;
+  }
+
+  attributeChangedCallback (...args) {
+    const [attrName, , nextValue] = args;
+
+    if (attrName === 'rows') {
+      this.textElement.setAttribute('rows', nextValue);
+    }
+
+    super.attributeChangedCallback && super.attributeChangedCallback(...args);
+  }
 }
