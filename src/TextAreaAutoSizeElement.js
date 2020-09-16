@@ -1,3 +1,4 @@
+import { SHARED_ATTRIBUTES } from './constants.js';
 import TextAreaAutoSizeFactory from './TextAreaAutoSizeFactory.js';
 
 const BaseClass = TextAreaAutoSizeFactory(HTMLElement);
@@ -31,8 +32,8 @@ export default class extends BaseClass {
   attributeChangedCallback (...args) {
     const [attrName, , nextValue] = args;
 
-    if (attrName === 'rows') {
-      this.textElement.setAttribute('rows', nextValue);
+    if (SHARED_ATTRIBUTES.includes(attrName)) {
+      this.textElement.setAttribute(attrName, nextValue);
     }
 
     super.attributeChangedCallback && super.attributeChangedCallback(...args);

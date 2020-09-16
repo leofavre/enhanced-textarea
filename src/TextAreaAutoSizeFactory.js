@@ -1,4 +1,4 @@
-const OBSERVED_ATTRS = ['autoheight', 'rows', 'class'];
+import { OBSERVED_ATTRIBUTES } from './constants.js';
 
 export default BaseClass => class extends BaseClass {
   constructor () {
@@ -40,7 +40,10 @@ export default BaseClass => class extends BaseClass {
   }
 
   static get observedAttributes () {
-    return [...super.observedAttributes || [], ...OBSERVED_ATTRS];
+    return [
+      ...super.observedAttributes || [],
+      ...OBSERVED_ATTRIBUTES
+    ];
   }
 
   attributeChangedCallback (...args) {
@@ -55,7 +58,7 @@ export default BaseClass => class extends BaseClass {
       }
     }
 
-    if (this.autoHeight && OBSERVED_ATTRS.includes(attrName)) {
+    if (this.autoHeight && OBSERVED_ATTRIBUTES.includes(attrName)) {
       this._handleChange();
     }
   }
