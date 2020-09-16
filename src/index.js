@@ -33,15 +33,22 @@ export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
 
   attributeChangedCallback (...args) {
     super.attributeChangedCallback && super.attributeChangedCallback(...args);
-    const [attrName] = args;
+    const [attrName, prevValue, nextValue] = args;
+
+    if (attrName === 'autoheight' && prevValue !== nextValue) {
+      if (prevValue == null) {
+        this.__addListeners();
+      } else if (nextValue == null) {
+        this.__removeListeners();
+      }
+    }
 
     if (OBSERVED_ATTRS.includes(attrName)) {
       this.__handleChange();
     }
   }
 
-  connectedCallback () {
-    super.connectedCallback && super.connectedCallback();
+  __addListeners () {
     this.__resizeObserver = new ResizeObserver(this.__handleChange);
     this.__resizeObserver.observe(this);
     this.addEventListener('input', this.__handleChange);
@@ -49,8 +56,7 @@ export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
     this.addEventListener('pointerdown', this.__handleUserResize);
   }
 
-  disconnectedCallback () {
-    super.disconnectedCallback && super.disconnectedCallback();
+  __removeListeners () {
     this.__resizeObserver.unobserve(this);
     this.removeEventListener('input', this.__handleChange);
     this.removeEventListener('pointerup', this.__handleUserResize);
@@ -58,21 +64,19 @@ export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
   }
 
   __handleChange () {
-    clearTimeout(this.__resizeTimeout);
+    const offset = this.offsetHeight - this.clientHeight;
+    this.style.minHeight = 'auto';
 
-    if (this.autoHeight) {
-      const offset = this.offsetHeight - this.clientHeight;
-      this.style.minHeight = 'auto';
-
-      if (!this.__isUserResizing) {
-        this.style.minHeight = `${this.scrollHeight + offset}px`;
-      } else {
-        this.__resizeTimeout = setTimeout(this.__handleChange, 50);
-      }
+    if (!this.__isUserResizing) {
+      this.style.minHeight = `${this.scrollHeight + offset}px`;
     }
   }
 
   __handleUserResize ({ type }) {
     this.__isUserResizing = (type === 'pointerdown');
+
+    if (type === 'pointerup') {
+      this.__handleChange();
+    }
   }
 }
