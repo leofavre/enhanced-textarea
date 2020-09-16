@@ -8,10 +8,7 @@ export default BaseClass => class extends BaseClass {
   constructor () {
     super();
     this.textElement = this;
-
     this._handleChange = this._handleChange.bind(this);
-    this._handleAutoHeightStart = this._handleAutoHeightStart.bind(this);
-    this._handleAutoHeightEnd = this._handleAutoHeightEnd.bind(this);
   }
 
   get autoheight () {
