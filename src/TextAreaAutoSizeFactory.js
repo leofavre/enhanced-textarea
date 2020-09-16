@@ -1,7 +1,7 @@
 import setAttr from './helpers/setAttr.js';
 import resetProperty from './helpers/resetProperty.js';
 
-const OBSERVED_ATTRIBUTES = ['autoheight', 'rows', 'cols', 'class'];
+const OBSERVED_ATTRIBUTES = ['autoheight', 'rows', 'cols', 'class', 'style'];
 const LAZY_PROPERTIES = ['autoheight', 'value'];
 
 export default BaseClass => class extends BaseClass {
@@ -45,16 +45,18 @@ export default BaseClass => class extends BaseClass {
     super.attributeChangedCallback && super.attributeChangedCallback(...args);
     const [attrName, prevValue, nextValue] = args;
 
-    if (attrName === 'autoheight' && prevValue !== nextValue) {
-      if (prevValue == null) {
-        this._handleAutoHeightStart();
-      } else if (nextValue == null) {
-        this._handleAutoHeightEnd();
+    if (prevValue !== nextValue) {
+      if (attrName === 'autoheight') {
+        if (prevValue == null) {
+          this._handleAutoHeightStart();
+        } else if (nextValue == null) {
+          this._handleAutoHeightEnd();
+        }
       }
-    }
 
-    if (this.autoheight && OBSERVED_ATTRIBUTES.includes(attrName)) {
-      this._handleChange();
+      if (this.autoheight && OBSERVED_ATTRIBUTES.includes(attrName)) {
+        setTimeout(this._handleChange);
+      }
     }
   }
 
