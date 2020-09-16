@@ -3,8 +3,8 @@ const OBSERVED_ATTRS = ['autoheight', 'rows', 'class'];
 export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
   constructor () {
     super();
-    this.__handleChange = this.__handleChange.bind(this);
-    this.__handleUserResize = this.__handleUserResize.bind(this);
+    this._handleChange = this._handleChange.bind(this);
+    this._handleUserResize = this._handleUserResize.bind(this);
   }
 
   get autoheight () {
@@ -37,54 +37,54 @@ export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
 
     if (attrName === 'autoheight' && prevValue !== nextValue) {
       if (prevValue == null) {
-        this.__handleAutoHeightStart();
+        this._handleAutoHeightStart();
       } else if (nextValue == null) {
-        this.__handleAutoHeightEnd();
+        this._handleAutoHeightEnd();
       }
     }
 
     if (this.autoHeight && OBSERVED_ATTRS.includes(attrName)) {
-      this.__handleChange();
+      this._handleChange();
     }
   }
 
-  __addListeners () {
-    this.__resizeObserver = new ResizeObserver(this.__handleChange);
-    this.__resizeObserver.observe(this);
-    this.addEventListener('input', this.__handleChange);
-    this.addEventListener('pointerup', this.__handleUserResize);
-    this.addEventListener('pointerdown', this.__handleUserResize);
+  _addListeners () {
+    this._resizeObserver = new ResizeObserver(this._handleChange);
+    this._resizeObserver.observe(this);
+    this.addEventListener('input', this._handleChange);
+    this.addEventListener('pointerup', this._handleUserResize);
+    this.addEventListener('pointerdown', this._handleUserResize);
   }
 
-  __removeListeners () {
-    this.__resizeObserver.unobserve(this);
-    this.removeEventListener('input', this.__handleChange);
-    this.removeEventListener('pointerup', this.__handleUserResize);
-    this.removeEventListener('pointerdown', this.__handleUserResize);
+  _removeListeners () {
+    this._resizeObserver.unobserve(this);
+    this.removeEventListener('input', this._handleChange);
+    this.removeEventListener('pointerup', this._handleUserResize);
+    this.removeEventListener('pointerdown', this._handleUserResize);
   }
 
-  __handleAutoHeightStart () {
-    this.__addListeners();
+  _handleAutoHeightStart () {
+    this._addListeners();
   }
 
-  __handleAutoHeightEnd () {
-    this.__removeListeners();
+  _handleAutoHeightEnd () {
+    this._removeListeners();
   }
 
-  __handleChange () {
+  _handleChange () {
     const offset = this.offsetHeight - this.clientHeight;
     this.style.minHeight = 'auto';
 
-    if (!this.__isUserResizing) {
+    if (!this._isUserResizing) {
       this.style.minHeight = `${this.scrollHeight + offset}px`;
     }
   }
 
-  __handleUserResize ({ type }) {
-    this.__isUserResizing = (type === 'pointerdown');
+  _handleUserResize ({ type }) {
+    this._isUserResizing = (type === 'pointerdown');
 
     if (type === 'pointerup') {
-      this.__handleChange();
+      this._handleChange();
     }
   }
 }
