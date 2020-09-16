@@ -5,13 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Auto Resize Text Area Element</title>
   <script type="module">
-    import { AutomaticallyResizableTextArea } from './src/index.js';
-
-    customElements.define(
-      'textarea-autosize',
-      AutomaticallyResizableTextArea,
-      { extends: 'textarea' }
-    );
+    import { TextAreaAutoSize } from './src/index.js';
+    const options = { extends: 'textarea' };
+    customElements.define('textarea-autosize', TextAreaAutoSize, options);
   </script>
 </head>
 <body>

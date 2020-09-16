@@ -1,6 +1,6 @@
 const OBSERVED_ATTRS = ['autoheight', 'rows', 'class'];
 
-export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
+export class TextAreaAutoSize extends HTMLTextAreaElement {
   constructor () {
     super();
 
