@@ -43,7 +43,7 @@ export class AutomaticallyResizableTextArea extends HTMLTextAreaElement {
       }
     }
 
-    if (OBSERVED_ATTRS.includes(attrName)) {
+    if (this.autoHeight && OBSERVED_ATTRS.includes(attrName)) {
       this.__handleChange();
     }
   }
