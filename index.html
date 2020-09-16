@@ -8,10 +8,10 @@
     import TextAreaAutoSizeBuiltIn from './src/TextAreaAutoSizeBuiltIn.js';
 
     const textAreaElement = document.querySelector('textarea');
+    textAreaElement.autoheight = true;
     textAreaElement.value = 'super long text'.repeat(20).trim();
     textAreaElement.rows = 2;
     textAreaElement.cols = 50;
-    textAreaElement.autoheight = true;
 
     setTimeout(() => {
       const options = { extends: 'textarea' };

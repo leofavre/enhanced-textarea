@@ -1,4 +1,5 @@
 import setAttr from './helpers/setAttr.js';
+import resetProperty from './helpers/resetProperty.js';
 
 const OBSERVED_ATTRIBUTES = ['autoheight', 'rows', 'cols', 'class'];
 const LAZY_PROPERTIES = ['autoheight', 'value'];
@@ -9,11 +10,8 @@ export default BaseClass => class extends BaseClass {
     this.textElement = this;
 
     this._handleChange = this._handleChange.bind(this);
-    this._handleUserResize = this._handleUserResize.bind(this);
     this._handleAutoHeightStart = this._handleAutoHeightStart.bind(this);
     this._handleAutoHeightEnd = this._handleAutoHeightEnd.bind(this);
-
-    this._makePropertyLazy = this._makePropertyLazy.bind(this);
   }
 
   get autoheight () {
@@ -21,7 +19,7 @@ export default BaseClass => class extends BaseClass {
   }
 
   set autoheight (value) {
-    setAttr(this, 'autoheight', value);
+    setAttr.call(this, 'autoheight', value);
   }
 
   get value () {
@@ -45,15 +43,7 @@ export default BaseClass => class extends BaseClass {
 
   connectedCallback () {
     super.connectedCallback && super.connectedCallback();
-    LAZY_PROPERTIES.forEach(this._makePropertyLazy);
-  }
-
-  _makePropertyLazy (propName) {
-    if (Object.keys(this).includes(propName)) {
-      const value = this[propName];
-      delete this[propName];
-      this[propName] = value;
-    }
+    LAZY_PROPERTIES.forEach(resetProperty.bind(this));
   }
 
   attributeChangedCallback (...args) {
@@ -77,44 +67,43 @@ export default BaseClass => class extends BaseClass {
     this._resizeObserver = new ResizeObserver(this._handleChange);
     this._resizeObserver.observe(this.textElement);
     this.textElement.addEventListener('input', this._handleChange);
-    this.textElement.addEventListener('pointerup', this._handleUserResize);
-    this.textElement.addEventListener('pointerdown', this._handleUserResize);
   }
 
   _removeListeners () {
     this._resizeObserver.unobserve(this.textElement);
     this.textElement.removeEventListener('input', this._handleChange);
-    this.textElement.removeEventListener('pointerup', this._handleUserResize);
-    this.textElement.removeEventListener('pointerdown', this._handleUserResize);
   }
 
   _handleAutoHeightStart () {
     this._addListeners();
-    this._prevOverflow = this.textElement.style.overflow;
+    const { resize, height, overflow } = this.textElement.style;
+
+    this._prevResize = resize;
+    this.textElement.style.resize = 'none';
+
+    this._prevHeight = height;
+    this.textElement.style.height = 'auto';
+
+    this._prevOverflow = overflow;
     this.textElement.style.overflow = 'hidden';
   }
 
   _handleAutoHeightEnd () {
     this._removeListeners();
+    this.textElement.style.resize = this._prevResize;
+    this.textElement.style.height = this._prevHeight;
     this.textElement.style.overflow = this._prevOverflow;
   }
 
   _handleChange () {
     const { offsetHeight, clientHeight } = this.textElement;
     const offset = offsetHeight - clientHeight;
+
     this.textElement.style.minHeight = 'auto';
+    this.textElement.style.minHeight = 'height';
 
-    if (!this._isUserResizing) {
-      const { scrollHeight } = this.textElement;
-      this.textElement.style.minHeight = `${scrollHeight + offset}px`;
-    }
-  }
+    const { scrollHeight } = this.textElement;
 
-  _handleUserResize ({ type }) {
-    this._isUserResizing = (type === 'pointerdown');
-
-    if (type === 'pointerup') {
-      this._handleChange();
-    }
+    this.textElement.style.minHeight = `${scrollHeight + offset}px`;
   }
 };
