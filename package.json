@@ -2,7 +2,7 @@
   "name": "template-repo",
   "version": "0.1.0",
   "description": "Template Repository",
-  "main": "src/index.js",
+  "main": "src/TextAreaAutoSizeFactory.js",
   "scripts": {
     "start": "snowpack dev",
     "test": "echo \"Error: no test specified\" && exit 1"
