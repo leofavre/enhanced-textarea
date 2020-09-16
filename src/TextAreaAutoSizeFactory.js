@@ -36,6 +36,11 @@ export default BaseClass => class extends BaseClass {
 
   set value (value) {
     super.value = value;
+
+    if (this !== this.textElement) {
+      this.textElement.value = value;
+    }
+
     this._handleChange();
   }
 
