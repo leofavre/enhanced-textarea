@@ -58,10 +58,8 @@ export default BaseClass => class extends BaseClass {
     LAZY_PROPERTIES.forEach(propName => {
       if (Object.keys(this).includes(propName)) {
         const value = this[propName];
-        console.log([this, 'will update', propName, value]);
         delete this[propName];
         this[propName] = value;
-        console.log([this, 'did update', propName, value]);
       }
     });
   }
