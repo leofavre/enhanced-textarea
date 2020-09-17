@@ -1,9 +1,10 @@
 import setAttr from './helpers/setAttr.js';
+import typeCast from './helpers/typeCast.js';
 import resetProperty from './helpers/resetProperty.js';
 import removeStyleProp from './helpers/removeStyleProp.js';
 
 const OBSERVED_ATTRIBUTES = ['autoheight', 'rows', 'cols', 'class', 'style'];
-const LAZY_PROPERTIES = ['autoheight', 'value'];
+
 const ignoreMinHeight = removeStyleProp('min-height');
 
 export default BaseClass => class extends BaseClass {
@@ -14,7 +15,7 @@ export default BaseClass => class extends BaseClass {
   }
 
   get autoheight () {
-    return this.hasAttribute('autoheight');
+    return typeCast.call(this, 'autoheight', Boolean);
   }
 
   set autoheight (value) {
@@ -64,7 +65,7 @@ export default BaseClass => class extends BaseClass {
 
   connectedCallback () {
     super.connectedCallback && super.connectedCallback();
-    LAZY_PROPERTIES.forEach(resetProperty.bind(this));
+    resetProperty.call(this, 'autoheight');
   }
 
   _addListeners () {
