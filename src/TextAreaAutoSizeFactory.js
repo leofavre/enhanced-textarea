@@ -1,11 +1,9 @@
 import setAttr from './helpers/setAttr.js';
 import getCoercedAttr from './helpers/getCoercedAttr.js';
 import resetProperty from './helpers/resetProperty.js';
-import removeStyleProp from './helpers/removeStyleProp.js';
+import ignoreMinHeight from './helpers/ignoreMinHeight.js';
 
 const OBSERVED_ATTRIBUTES = ['autoheight', 'rows', 'cols', 'class', 'style'];
-
-const ignoreMinHeight = removeStyleProp('min-height');
 
 export default BaseClass => class extends BaseClass {
   constructor () {
@@ -28,10 +26,7 @@ export default BaseClass => class extends BaseClass {
 
   set value (value) {
     super.value = value;
-
-    if (this.autoheight) {
-      this._handleChange();
-    }
+    this._handleChange();
   }
 
   static get observedAttributes () {
@@ -54,11 +49,11 @@ export default BaseClass => class extends BaseClass {
         }
       }
 
-      if (this.autoheight) {
-        if (!attrName === 'style' ||
-          ignoreMinHeight(prevValue) !== ignoreMinHeight(nextValue)) {
-          setTimeout(this._handleChange);
-        }
+      const hasStyleChanged = () =>
+        ignoreMinHeight(prevValue) !== ignoreMinHeight(nextValue);
+
+      if (!attrName === 'style' || hasStyleChanged()) {
+        setTimeout(this._handleChange);
       }
     }
   }
@@ -96,16 +91,18 @@ export default BaseClass => class extends BaseClass {
   }
 
   _handleChange () {
-    const { offsetHeight, clientHeight } = this.textElement;
-    const offset = offsetHeight - clientHeight;
+    if (this.autoheight) {
+      const { offsetHeight, clientHeight } = this.textElement;
+      const offset = offsetHeight - clientHeight;
 
-    this.textElement.style.minHeight = 'auto';
-    this.textElement.style.resize = 'none';
-    this.textElement.style.height = 'auto';
-    this.textElement.style.overflow = 'hidden';
-    this.textElement.style.boxSizing = 'border-box';
+      this.textElement.style.minHeight = 'auto';
+      this.textElement.style.resize = 'none';
+      this.textElement.style.height = 'auto';
+      this.textElement.style.overflow = 'hidden';
+      this.textElement.style.boxSizing = 'border-box';
 
-    const { scrollHeight } = this.textElement;
-    this.textElement.style.minHeight = `${scrollHeight + offset}px`;
+      const { scrollHeight } = this.textElement;
+      this.textElement.style.minHeight = `${scrollHeight + offset}px`;
+    }
   }
 };
