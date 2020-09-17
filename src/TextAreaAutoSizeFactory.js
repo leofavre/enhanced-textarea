@@ -13,11 +13,11 @@ export default BaseClass => class extends BaseClass {
   }
 
   get autoheight () {
-    return getCoercedAttr.call(this, 'autoheight', Boolean);
+    return getCoercedAttr(this, 'autoheight', Boolean);
   }
 
   set autoheight (value) {
-    setAttr.call(this, 'autoheight', value);
+    setAttr(this, 'autoheight', value);
   }
 
   get value () {
@@ -60,7 +60,7 @@ export default BaseClass => class extends BaseClass {
 
   connectedCallback () {
     super.connectedCallback && super.connectedCallback();
-    resetProperty.call(this, 'autoheight');
+    resetProperty(this, 'autoheight');
   }
 
   _addListeners () {

@@ -61,47 +61,47 @@ export default class extends BaseClass {
   }
 
   get rows () {
-    return getCoercedAttr.call(this, 'rows', String);
+    return getCoercedAttr(this, 'rows', String);
   }
 
   set rows (value) {
-    setAttr.call(this, 'rows', value);
+    setAttr(this, 'rows', value);
     this.textElement.rows = value;
   }
 
   get cols () {
-    return getCoercedAttr.call(this, 'cols', String);
+    return getCoercedAttr(this, 'cols', String);
   }
 
   set cols (value) {
-    setAttr.call(this, 'cols', value);
+    setAttr(this, 'cols', value);
     this.textElement.cols = value;
   }
 
   get disabled () {
-    return getCoercedAttr.call(this, 'disabled', Boolean);
+    return getCoercedAttr(this, 'disabled', Boolean);
   }
 
   set disabled (value) {
-    setAttr.call(this, 'disabled', value);
+    setAttr(this, 'disabled', value);
     this.textElement.disabled = value;
   }
 
   get minLength () {
-    return getCoercedAttr.call(this, 'minlength', Number);
+    return getCoercedAttr(this, 'minlength', Number);
   }
 
   set minLength (value) {
-    setAttr.call(this, 'minlength', value);
+    setAttr(this, 'minlength', value);
     this.textElement.minLength = value;
   }
 
   get maxLength () {
-    return getCoercedAttr.call(this, 'maxlength', Number);
+    return getCoercedAttr(this, 'maxlength', Number);
   }
 
   set maxLength (value) {
-    setAttr.call(this, 'maxlength', value);
+    setAttr(this, 'maxlength', value);
     this.textElement.maxLength = value;
   }
 }

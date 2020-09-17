@@ -1,5 +1,5 @@
-export default function getCoercedAttr (attrName, type = String) {
+export default (element, attrName, type = String) => {
   return type === Boolean
-    ? this.hasAttribute(attrName)
-    : type(this.getAttribute(attrName) || null);
-}
+    ? element.hasAttribute(attrName)
+    : type(element.getAttribute(attrName) || null);
+};
