@@ -1,3 +1,3 @@
-import removeStyleProp from './helpers/removeStyleProp.js';
+import removeStyleProp from './removeStyleProp.js';
 
 export default removeStyleProp('min-height');
