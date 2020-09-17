@@ -1,5 +1,5 @@
-export default (element, attrName, type = String) => {
+export default function typeCast (attrName, type = String) {
   return type === Boolean
-    ? element.hasAttribute(attrName)
-    : type(element.getAttribute(attrName) || null);
-};
+    ? this.hasAttribute(attrName)
+    : type(this.getAttribute(attrName) || null);
+}

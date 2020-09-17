@@ -1,5 +1,5 @@
-export default (element, propName) => {
-  const value = element[propName];
-  delete element[propName];
-  element[propName] = value;
-};
+export default function resetProperty (propName) {
+  const value = this[propName];
+  delete this[propName];
+  this[propName] = value;
+}

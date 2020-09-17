@@ -98,10 +98,10 @@ export default class extends BaseClass {
 
         Object.defineProperty(this, propName, {
           get () {
-            return typeCast(self, attrName, type);
+            return typeCast.call(self, attrName, type);
           },
           set (value) {
-            setAttr(self, attrName, value);
+            setAttr.call(self, attrName, value);
           }
         });
       });
@@ -118,7 +118,7 @@ export default class extends BaseClass {
     const [attrName, prevValue, nextValue] = args;
 
     if (prevValue !== nextValue && OBSERVED_ATTRIBUTES.includes(attrName)) {
-      setAttr(this.textElement, attrName, nextValue);
+      setAttr.call(this.textElement, attrName, nextValue);
     }
   }
 }
