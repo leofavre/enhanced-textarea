@@ -1,5 +1,5 @@
 import setAttr from './helpers/setAttr.js';
-import typeCast from './helpers/typeCast.js';
+import getCoercedAttr from './helpers/getCoercedAttr.js';
 import resetProperty from './helpers/resetProperty.js';
 import TextAreaAutoSizeFactory from './TextAreaAutoSizeFactory.js';
 
@@ -61,7 +61,7 @@ export default class extends BaseClass {
   }
 
   get rows () {
-    return typeCast.call(this, 'rows', String);
+    return getCoercedAttr.call(this, 'rows', String);
   }
 
   set rows (value) {
@@ -70,7 +70,7 @@ export default class extends BaseClass {
   }
 
   get cols () {
-    return typeCast.call(this, 'cols', String);
+    return getCoercedAttr.call(this, 'cols', String);
   }
 
   set cols (value) {
@@ -79,7 +79,7 @@ export default class extends BaseClass {
   }
 
   get disabled () {
-    return typeCast.call(this, 'disabled', Boolean);
+    return getCoercedAttr.call(this, 'disabled', Boolean);
   }
 
   set disabled (value) {
@@ -88,7 +88,7 @@ export default class extends BaseClass {
   }
 
   get minLength () {
-    return typeCast.call(this, 'minlength', Number);
+    return getCoercedAttr.call(this, 'minlength', Number);
   }
 
   set minLength (value) {
@@ -97,7 +97,7 @@ export default class extends BaseClass {
   }
 
   get maxLength () {
-    return typeCast.call(this, 'maxlength', Number);
+    return getCoercedAttr.call(this, 'maxlength', Number);
   }
 
   set maxLength (value) {

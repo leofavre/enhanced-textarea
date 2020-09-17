@@ -1,5 +1,5 @@
 import setAttr from './helpers/setAttr.js';
-import typeCast from './helpers/typeCast.js';
+import getCoercedAttr from './helpers/getCoercedAttr.js';
 import resetProperty from './helpers/resetProperty.js';
 import removeStyleProp from './helpers/removeStyleProp.js';
 
@@ -15,7 +15,7 @@ export default BaseClass => class extends BaseClass {
   }
 
   get autoheight () {
-    return typeCast.call(this, 'autoheight', Boolean);
+    return getCoercedAttr.call(this, 'autoheight', Boolean);
   }
 
   set autoheight (value) {
