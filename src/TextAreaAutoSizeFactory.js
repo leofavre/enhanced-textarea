@@ -10,6 +10,7 @@ export default BaseClass => class extends BaseClass {
     super();
     this.textElement = this;
     this._handleChange = this._handleChange.bind(this);
+    this._handleUserResize = this._handleUserResize.bind(this);
   }
 
   get autoheight () {
@@ -67,25 +68,25 @@ export default BaseClass => class extends BaseClass {
     this._resizeObserver = new ResizeObserver(this._handleChange);
     this._resizeObserver.observe(this.textElement);
     this.textElement.addEventListener('input', this._handleChange);
+    this.addEventListener('pointerup', this._handleUserResize);
+    this.addEventListener('pointerdown', this._handleUserResize);
   }
 
   _removeListeners () {
     this._resizeObserver.unobserve(this.textElement);
     this.textElement.removeEventListener('input', this._handleChange);
+    this.removeEventListener('pointerup', this._handleUserResize);
+    this.removeEventListener('pointerdown', this._handleUserResize);
   }
 
   _handleAutoHeightStart () {
     this._addListeners();
-    this._prevResize = this.textElement.style.resize;
-    this._prevHeight = this.textElement.style.height;
     this._prevOverflow = this.textElement.style.overflow;
     this._prevBoxSizing = this.textElement.style.boxSizing;
   }
 
   _handleAutoHeightEnd () {
     this._removeListeners();
-    this.textElement.style.resize = this._prevResize;
-    this.textElement.style.height = this._prevHeight;
     this.textElement.style.overflow = this._prevOverflow;
     this.textElement.style.boxSizing = this._prevBoxSizing;
   }
@@ -96,13 +97,27 @@ export default BaseClass => class extends BaseClass {
       const offset = offsetHeight - clientHeight;
 
       this.textElement.style.minHeight = 'auto';
-      this.textElement.style.resize = 'none';
-      this.textElement.style.height = 'auto';
       this.textElement.style.overflow = 'hidden';
       this.textElement.style.boxSizing = 'border-box';
 
-      const { scrollHeight } = this.textElement;
-      this.textElement.style.minHeight = `${scrollHeight + offset}px`;
+      if (!this._isUserResizing) {
+        const { scrollHeight } = this.textElement;
+        this.textElement.style.minHeight = `${scrollHeight + offset}px`;
+      }
+    }
+  }
+
+  _handleUserResize ({ type }) {
+    this._isUserResizing = (type === 'pointerdown');
+
+    if (this._isUserResizing) {
+      const { minHeight } = this.textElement.style;
+      this.textElement.style.height = minHeight;
+      this.textElement.style.minHeight = 'auto';
+    } else {
+      const { height } = this.textElement.style;
+      this.textElement.style.minHeight = height;
+      this.textElement.style.height = 'auto';
     }
   }
 };
