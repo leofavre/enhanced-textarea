@@ -54,7 +54,7 @@ export default BaseClass => class extends BaseClass {
         }
       }
 
-      if (this.autoheight && OBSERVED_ATTRIBUTES.includes(attrName)) {
+      if (this.autoheight) {
         if (!attrName === 'style' ||
           ignoreMinHeight(prevValue) !== ignoreMinHeight(nextValue)) {
           setTimeout(this._handleChange);
