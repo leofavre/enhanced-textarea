@@ -7,28 +7,25 @@
   <script type="module">
     import TextAreaAutoSizeBuiltIn from './src/TextAreaAutoSizeBuiltIn.js';
 
-    const options = { extends: 'textarea' };
-
     customElements.define(
       'textarea-built-in',
       TextAreaAutoSizeBuiltIn,
-      options
+      { extends: 'textarea' }
     );
 
     setTimeout(() => {
-      const options = { extends: 'textarea' };
-
       customElements.define(
         'textarea-lazy-built-in',
         class extends TextAreaAutoSizeBuiltIn {},
-        options
+        { extends: 'textarea' }
       );
-    }, 1000);
+    }, 1500);
 
     Array.from(document.querySelectorAll('textarea')).forEach(element => {
       element.autoheight = true;
       element.value = 'super long text'.repeat(20).trim();
       element.rows = 2;
+      element.maxLength = 500;
     });
   </script>
 </head>
