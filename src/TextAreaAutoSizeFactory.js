@@ -3,9 +3,7 @@ import typeCast from './helpers/typeCast.js';
 import resetProperty from './helpers/resetProperty.js';
 import removeStyleProp from './helpers/removeStyleProp.js';
 
-const OBSERVED_ATTRIBUTES = ['autoheight', 'rows', 'cols', 'class', 'style'];
-
-const ignoreMinHeight = removeStyleProp('min-height');
+const omitMinHeight = removeStyleProp('min-height');
 
 export default BaseClass => class extends BaseClass {
   constructor () {
@@ -15,11 +13,11 @@ export default BaseClass => class extends BaseClass {
   }
 
   get autoheight () {
-    return typeCast.call(this, 'autoheight', Boolean);
+    return typeCast(this, 'autoheight', Boolean);
   }
 
   set autoheight (value) {
-    setAttr.call(this, 'autoheight', value);
+    setAttr(this, 'autoheight', value);
   }
 
   get value () {
@@ -28,16 +26,17 @@ export default BaseClass => class extends BaseClass {
 
   set value (value) {
     super.value = value;
-
-    if (this.autoheight) {
-      this._handleChange();
-    }
+    this.autoheight && this._handleChange();
   }
 
   static get observedAttributes () {
     return [
       ...super.observedAttributes || [],
-      ...OBSERVED_ATTRIBUTES
+      'autoheight',
+      'rows',
+      'cols',
+      'class',
+      'style'
     ];
   }
 
@@ -54,9 +53,11 @@ export default BaseClass => class extends BaseClass {
         }
       }
 
-      if (this.autoheight && OBSERVED_ATTRIBUTES.includes(attrName)) {
-        if (!attrName === 'style' ||
-          ignoreMinHeight(prevValue) !== ignoreMinHeight(nextValue)) {
+      if (this.autoheight) {
+        const hasStyleChanged = () =>
+          omitMinHeight(prevValue) !== omitMinHeight(nextValue);
+
+        if (!attrName === 'style' || hasStyleChanged()) {
           setTimeout(this._handleChange);
         }
       }
@@ -65,7 +66,7 @@ export default BaseClass => class extends BaseClass {
 
   connectedCallback () {
     super.connectedCallback && super.connectedCallback();
-    resetProperty.call(this, 'autoheight');
+    resetProperty(this, 'autoheight');
   }
 
   _addListeners () {

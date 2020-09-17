@@ -1,8 +1,8 @@
-export default function setAttr (attrName, value) {
+export default (element, attrName, value) => {
   if (value == null || value === false) {
-    this.removeAttribute(attrName);
+    element.removeAttribute(attrName);
   } else {
     const parsedValue = value === true ? '' : value;
-    this.setAttribute(attrName, parsedValue);
+    element.setAttribute(attrName, parsedValue);
   }
-}
+};
