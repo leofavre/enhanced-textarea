@@ -7,22 +7,42 @@
   <script type="module">
     import TextAreaAutoSizeBuiltIn from './src/TextAreaAutoSizeBuiltIn.js';
 
-    const textAreaElement = document.querySelector('textarea');
-    textAreaElement.autoheight = true;
-    textAreaElement.value = 'super long text'.repeat(20).trim();
-    textAreaElement.rows = 2;
-    textAreaElement.cols = 50;
+    const options = { extends: 'textarea' };
+
+    customElements.define(
+      'textarea-built-in',
+      TextAreaAutoSizeBuiltIn,
+      options
+    );
 
     setTimeout(() => {
       const options = { extends: 'textarea' };
-      customElements.define('textarea-autosize', TextAreaAutoSizeBuiltIn, options);
+
+      customElements.define(
+        'textarea-lazy-built-in',
+        class extends TextAreaAutoSizeBuiltIn {},
+        options
+      );
     }, 1000);
+
+    Array.from(document.querySelectorAll('textarea')).forEach(element => {
+      element.autoheight = true;
+      element.value = 'super long text'.repeat(20).trim();
+      element.rows = 2;
+    });
   </script>
 </head>
 <body>
   <textarea
     style="box-sizing: border-box;"
-    is="textarea-autosize"
+    is="textarea-built-in"
+    cols="60"
+  ></textarea>
+
+  <textarea
+    style="box-sizing: border-box;"
+    is="textarea-lazy-built-in"
+    cols="60"
   ></textarea>
 </body>
 </html>
