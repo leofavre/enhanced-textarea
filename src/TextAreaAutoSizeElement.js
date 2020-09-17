@@ -1,6 +1,5 @@
 import setAttr from './helpers/setAttr.js';
 import typeCast from './helpers/typeCast.js';
-import resetProperty from './helpers/resetProperty.js';
 import TextAreaAutoSizeFactory from './TextAreaAutoSizeFactory.js';
 
 const BaseClass = TextAreaAutoSizeFactory(HTMLElement);
@@ -32,6 +31,26 @@ TEMPLATE.innerHTML = `
   <textarea part="textarea"></textarea>
 `;
 
+const PROPERTIES = {
+  autocomplete: Boolean,
+  autofocus: Boolean,
+  cols: Number,
+  disabled: Boolean,
+  maxLength: Number,
+  minLength: Number,
+  readOnly: Boolean,
+  rows: Number
+};
+
+const LAZY_PROPERTIES = [
+  'value',
+  ...Object.keys(PROPERTIES)
+];
+
+const OBSERVED_ATTRIBUTES = Object
+  .keys(PROPERTIES)
+  .map(item => item.toLowerCase());
+
 export default class extends BaseClass {
   constructor () {
     super();
@@ -40,68 +59,66 @@ export default class extends BaseClass {
     this.textElement = this.shadowRoot.querySelector('textarea');
   }
 
+  static get observedAttributes () {
+    return [
+      ...super.observedAttributes,
+      ...OBSERVED_ATTRIBUTES
+    ];
+  }
+
   connectedCallback () {
     super.connectedCallback && super.connectedCallback();
-    [
-      'rows',
-      'cols',
-      'disabled',
-      'minLength',
-      'maxLength'
-    ].forEach(resetProperty.bind(this));
+    const self = this;
+    const userProperties = Object.getOwnPropertyNames(this);
+
+    const initialUserEntries = LAZY_PROPERTIES
+      .filter(propName => userProperties.includes(propName))
+      .reduce((result, propName) => ({
+        ...result,
+        [propName]: this[propName]
+      }), {});
+
+    Object.defineProperty(this, 'value', {
+      get () {
+        return self.textElement.value;
+      },
+      set (value) {
+        self.textElement.value = value;
+
+        if (self.autoheight) {
+          self._handleChange();
+        }
+      }
+    });
+
+    Object
+      .entries(PROPERTIES)
+      .forEach(([propName, type]) => {
+        const attrName = propName.toLowerCase();
+
+        Object.defineProperty(this, propName, {
+          get () {
+            return typeCast.call(self, attrName, type);
+          },
+          set (value) {
+            setAttr.call(self, attrName, value);
+          }
+        });
+      });
+
+    Object
+      .entries(initialUserEntries)
+      .forEach(([propName, value]) => {
+        this[propName] = value;
+      });
   }
 
-  get value () {
-    return super.value;
-  }
+  attributeChangedCallback (...args) {
+    super.attributeChangedCallback && super.attributeChangedCallback(...args);
+    const [attrName, prevValue, nextValue] = args;
 
-  set value (value) {
-    super.value = value;
-    this.textElement.value = value;
-  }
-
-  get rows () {
-    return typeCast.call(this, 'rows', String);
-  }
-
-  set rows (value) {
-    setAttr.call(this, 'rows', value);
-    this.textElement.rows = value;
-  }
-
-  get cols () {
-    return typeCast.call(this, 'cols', String);
-  }
-
-  set cols (value) {
-    setAttr.call(this, 'cols', value);
-    this.textElement.cols = value;
-  }
-
-  get disabled () {
-    return typeCast.call(this, 'disabled', Boolean);
-  }
-
-  set disabled (value) {
-    setAttr.call(this, 'disabled', value);
-    this.textElement.disabled = value;
-  }
-
-  get minLength () {
-    return typeCast.call(this, 'minlength', Number);
-  }
-
-  set minLength (value) {
-    setAttr.call(this, 'minlength', value);
-    this.textElement.minLength = value;
-  }
-
-  get maxLength () {
-    return typeCast.call(this, 'maxlength', Number);
-  }
-
-  set maxLength (value) {
-    setAttr.call(this, 'maxlength', value);
-    this.textElement.maxLength = value;
+    if (prevValue !== nextValue && OBSERVED_ATTRIBUTES.includes(attrName)) {
+      setAttr.call(this.textElement, attrName, nextValue);
+    }
   }
 }
