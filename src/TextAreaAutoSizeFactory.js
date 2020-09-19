@@ -1,7 +1,7 @@
 import setAttr from './helpers/setAttr.js';
 import getCoercedAttr from './helpers/getCoercedAttr.js';
 import resetProperty from './helpers/resetProperty.js';
-import hasHeightChanged from './helpers/hasHeightChanged.js';
+import hasStyleExceptHeightChanged from './helpers/hasStyleExceptHeightChanged.js';
 
 const OBSERVED_ATTRIBUTES = ['autoheight', 'rows', 'cols', 'class', 'style'];
 
@@ -49,7 +49,8 @@ export default BaseClass => class extends BaseClass {
         }
       }
 
-      if (!attrName === 'style' || hasHeightChanged(prevValue, nextValue)) {
+      if (!attrName === 'style' ||
+        hasStyleExceptHeightChanged(prevValue, nextValue)) {
         setTimeout(this._handleChange);
       }
     }
