@@ -1,7 +1,7 @@
 import setAttr from './helpers/setAttr.js';
 import getCoercedAttr from './helpers/getCoercedAttr.js';
 import resetProperty from './helpers/resetProperty.js';
-import ignoreMinHeight from './helpers/ignoreMinHeight.js';
+import hasHeightChanged from './helpers/hasHeightChanged.js';
 
 const OBSERVED_ATTRIBUTES = ['autoheight', 'rows', 'cols', 'class', 'style'];
 
@@ -10,7 +10,6 @@ export default BaseClass => class extends BaseClass {
     super();
     this.textElement = this;
     this._handleChange = this._handleChange.bind(this);
-    this._handleUserResize = this._handleUserResize.bind(this);
   }
 
   get autoheight () {
@@ -50,10 +49,7 @@ export default BaseClass => class extends BaseClass {
         }
       }
 
-      const hasStyleChanged = () =>
-        ignoreMinHeight(prevValue) !== ignoreMinHeight(nextValue);
-
-      if (!attrName === 'style' || hasStyleChanged()) {
+      if (!attrName === 'style' || hasHeightChanged(prevValue, nextValue)) {
         setTimeout(this._handleChange);
       }
     }
@@ -68,15 +64,11 @@ export default BaseClass => class extends BaseClass {
     this._resizeObserver = new ResizeObserver(this._handleChange);
     this._resizeObserver.observe(this.textElement);
     this.textElement.addEventListener('input', this._handleChange);
-    this.addEventListener('pointerup', this._handleUserResize);
-    this.addEventListener('pointerdown', this._handleUserResize);
   }
 
   _removeListeners () {
     this._resizeObserver.unobserve(this.textElement);
     this.textElement.removeEventListener('input', this._handleChange);
-    this.removeEventListener('pointerup', this._handleUserResize);
-    this.removeEventListener('pointerdown', this._handleUserResize);
   }
 
   _handleAutoHeightStart () {
@@ -96,28 +88,18 @@ export default BaseClass => class extends BaseClass {
       const { offsetHeight, clientHeight } = this.textElement;
       const offset = offsetHeight - clientHeight;
 
-      this.textElement.style.minHeight = 'auto';
       this.textElement.style.overflow = 'hidden';
       this.textElement.style.boxSizing = 'border-box';
 
-      if (!this._isUserResizing) {
-        const { scrollHeight } = this.textElement;
-        this.textElement.style.minHeight = `${scrollHeight + offset}px`;
-      }
-    }
-  }
+      const { height: prevHeight } = this.textElement.style;
 
-  _handleUserResize ({ type }) {
-    this._isUserResizing = (type === 'pointerdown');
-
-    if (this._isUserResizing) {
-      const { minHeight } = this.textElement.style;
-      this.textElement.style.height = minHeight;
       this.textElement.style.minHeight = 'auto';
-    } else {
-      const { height } = this.textElement.style;
-      this.textElement.style.minHeight = height;
       this.textElement.style.height = 'auto';
+
+      const { scrollHeight } = this.textElement;
+
+      this.textElement.style.height = prevHeight;
+      this.textElement.style.minHeight = `${scrollHeight + offset}px`;
     }
   }
 };
