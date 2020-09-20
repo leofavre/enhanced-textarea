@@ -14,7 +14,7 @@ const parseStyle = styleStr => styleStr
   .join(';')
   .replace(/$/g, ';');
 
-export default (prevStyle, nextStyle) => {
+const hasStyleExceptHeightChanged = (prevStyle, nextStyle) => {
   if (prevStyle == null || nextStyle == null) {
     return false;
   }
@@ -22,3 +22,5 @@ export default (prevStyle, nextStyle) => {
   return ignoreHeight(ignoreMinHeight(parseStyle(prevStyle))) !==
     ignoreHeight(ignoreMinHeight(parseStyle(nextStyle)));
 };
+
+export default hasStyleExceptHeightChanged;

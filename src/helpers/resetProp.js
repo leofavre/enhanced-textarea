@@ -1,5 +1,7 @@
-export default (element, propName) => {
+const resetProp = (element, propName) => {
   const value = element[propName];
   delete element[propName];
   element[propName] = value;
 };
+
+export default resetProp;

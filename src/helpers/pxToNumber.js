@@ -1,4 +1,4 @@
-export default str => {
+const pxToNumber = str => {
   const isPxMeasure = /[0-9-.].*?px$/.test(str);
 
   if (!isPxMeasure) {
@@ -11,3 +11,5 @@ export default str => {
     ? parsedValue
     : undefined;
 };
+
+export default pxToNumber;

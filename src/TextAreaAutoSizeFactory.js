@@ -4,7 +4,7 @@ import resetProp from './helpers/resetProp.js';
 import hasStyleExceptHeightChanged from './helpers/hasStyleExceptHeightChanged.js';
 import pxToNumber from './helpers/pxToNumber.js';
 
-export default BaseClass => class extends BaseClass {
+const TextAreaAutoSizeFactory = BaseClass => class extends BaseClass {
   constructor () {
     super();
     this.textElement = this;
@@ -139,3 +139,5 @@ export default BaseClass => class extends BaseClass {
       : prop;
   }
 };
+
+export default TextAreaAutoSizeFactory;
