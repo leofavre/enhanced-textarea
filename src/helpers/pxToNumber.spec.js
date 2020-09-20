@@ -10,22 +10,22 @@ describe('pxToNumber', () => {
   });
 
   test('Ignores invalid measures', () => {
-    expect(pxToNumber('0px20')).toBe(undefined);
+    expect(pxToNumber('0px20')).toBeUndefined;
   });
 
   test('Ignores invalid measures that end with px', () => {
-    expect(pxToNumber('-0.89-45.389px')).toBe(undefined);
+    expect(pxToNumber('-0.89-45.389px')).toBeUndefined;
   });
 
   test('Ignores entries that are not measures', () => {
-    expect(pxToNumber('auto')).toBe(undefined);
+    expect(pxToNumber('auto')).toBeUndefined;
   });
 
   test('Ignores empty strings', () => {
-    expect(pxToNumber('')).toBe(undefined);
+    expect(pxToNumber('')).toBeUndefined;
   });
 
   test('Ignores undefined entries', () => {
-    expect(pxToNumber()).toBe(undefined);
+    expect(pxToNumber()).toBeUndefined;
   });
 });
