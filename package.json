@@ -29,11 +29,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "jest": {
-    "setupFilesAfterEnv": [
-      "jest-sinon"
-    ]
-  },
   "engines": {
     "node" : ">=12.18.4 <14.11.0"
   }
