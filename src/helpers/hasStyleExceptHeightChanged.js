@@ -8,6 +8,6 @@ export default (prevStyle, nextStyle) => {
     return false;
   }
 
-  return ignoreHeight(ignoreMinHeight(prevStyle)).trim() !==
-    ignoreHeight(ignoreMinHeight(nextStyle)).trim();
+  return ignoreHeight(ignoreMinHeight(prevStyle)).replace(/  +/g, ' ').trim() !==
+    ignoreHeight(ignoreMinHeight(nextStyle)).replace(/  +/g, ' ').trim();
 };

@@ -21,7 +21,9 @@
     "it": true,
     "should": true,
     "beforeEach": true,
-    "afterEach": true
+    "afterEach": true,
+    "test": true,
+    "expect": true
   },
   "overrides": [{
     "files": "*.{test,spec}.js",
