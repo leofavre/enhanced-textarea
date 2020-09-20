@@ -1,5 +1,5 @@
-import setAttr from './helpers/setAttr.js';
 import getCoercedAttr from './helpers/getCoercedAttr.js';
+import setAttr from './helpers/setAttr.js';
 import resetProp from './helpers/resetProp.js';
 import hasStyleExceptHeightChanged from './helpers/hasStyleExceptHeightChanged.js';
 import pxToNumber from './helpers/pxToNumber.js';
@@ -7,9 +7,12 @@ import pxToNumber from './helpers/pxToNumber.js';
 const TextAreaAutoSizeFactory = BaseClass => class extends BaseClass {
   constructor () {
     super();
-    this.textElement = this;
     this._handleChange = this._handleChange.bind(this);
     this._handleUserResize = this._handleUserResize.bind(this);
+  }
+
+  get textElement () {
+    return this;
   }
 
   get autoheight () {
