@@ -1,9 +1,8 @@
 import setAttr from './helpers/setAttr.js';
 import getCoercedAttr from './helpers/getCoercedAttr.js';
-import resetProperty from './helpers/resetProperty.js';
+import resetProp from './helpers/resetProp.js';
 import hasStyleExceptHeightChanged from './helpers/hasStyleExceptHeightChanged.js';
-
-const OBSERVED_ATTRIBUTES = ['autoheight', 'rows', 'cols', 'class', 'style'];
+import pxToNumber from './helpers/pxToNumber.js';
 
 export default BaseClass => class extends BaseClass {
   constructor () {
@@ -32,7 +31,7 @@ export default BaseClass => class extends BaseClass {
   static get observedAttributes () {
     return [
       ...super.observedAttributes || [],
-      ...OBSERVED_ATTRIBUTES
+      ...['autoheight', 'rows', 'cols', 'class', 'style']
     ];
   }
 
@@ -58,30 +57,18 @@ export default BaseClass => class extends BaseClass {
 
   connectedCallback () {
     super.connectedCallback && super.connectedCallback();
-    resetProperty(this, 'autoheight');
+    resetProp(this, 'autoheight');
   }
 
-  _addListeners () {
+  _handleAutoHeightStart () {
     this._resizeObserver = new ResizeObserver(this._handleChange);
     this._resizeObserver.observe(this.textElement);
     this.textElement.addEventListener('input', this._handleChange);
   }
 
-  _removeListeners () {
+  _handleAutoHeightEnd () {
     this._resizeObserver.unobserve(this.textElement);
     this.textElement.removeEventListener('input', this._handleChange);
-  }
-
-  _handleAutoHeightStart () {
-    this._addListeners();
-    this._prevOverflow = this.textElement.style.overflow;
-    this._prevBoxSizing = this.textElement.style.boxSizing;
-  }
-
-  _handleAutoHeightEnd () {
-    this._removeListeners();
-    this.textElement.style.overflow = this._prevOverflow;
-    this.textElement.style.boxSizing = this._prevBoxSizing;
   }
 
   _handleChange () {
@@ -89,8 +76,16 @@ export default BaseClass => class extends BaseClass {
       const { offsetHeight, clientHeight } = this.textElement;
       const offset = offsetHeight - clientHeight;
 
-      this.textElement.style.overflow = 'hidden';
-      this.textElement.style.boxSizing = 'border-box';
+      let inner = 0;
+      const boxSizing = this._getStyleProp('box-sizing');
+
+      if (boxSizing !== 'border-box') {
+        const paddingTop = this._getStyleProp('padding-top');
+        const paddingBottom = this._getStyleProp('padding-bottom');
+        const borderTop = this._getStyleProp('border-top-width');
+        const borderBottom = this._getStyleProp('border-bottom-width');
+        inner = paddingTop + paddingBottom + borderTop + borderBottom;
+      }
 
       const { height: prevHeight } = this.textElement.style;
 
@@ -99,8 +94,17 @@ export default BaseClass => class extends BaseClass {
 
       const { scrollHeight } = this.textElement;
 
+      this.textElement.style.minHeight = `${scrollHeight + offset - inner}px`;
       this.textElement.style.height = prevHeight;
-      this.textElement.style.minHeight = `${scrollHeight + offset}px`;
     }
+  }
+
+  _getStyleProp (str) {
+    const elementStyles = window.getComputedStyle(this);
+    const prop = elementStyles.getPropertyValue(str);
+
+    return prop.endsWith('px')
+      ? pxToNumber(prop)
+      : prop;
   }
 };
