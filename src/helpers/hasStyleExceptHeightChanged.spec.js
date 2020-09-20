@@ -43,4 +43,28 @@ describe('hasStyleExceptHeightChanged', () => {
     const result = hasStyleExceptHeightChanged(prevStyle, nextStyle);
     expect(result).toBe(false);
   });
+
+  it('Verifies that style has not changed even if properties ' +
+    'come in different orders', () => {
+    const prevStyle = 'width: 350px; overflow: hidden;';
+    const nextStyle = 'overflow: hidden; width: 350px;';
+    const result = hasStyleExceptHeightChanged(prevStyle, nextStyle);
+    expect(result).toBe(false);
+  });
+
+  it('Verifies that style has not changed even if the last property ' +
+    'is not followed by a semicolon', () => {
+    const prevStyle = 'width: 350px; overflow: hidden;';
+    const nextStyle = 'width: 350px; overflow: hidden';
+    const result = hasStyleExceptHeightChanged(prevStyle, nextStyle);
+    expect(result).toBe(false);
+  });
+
+  it('Verifies that style has not changed ignoring height and min-height ' +
+    'even with confusing strings', () => {
+    const prevStyle = ' min-height:auto;  width:   350px ; overflow: hidden  ;';
+    const nextStyle = 'overflow: hidden;width:350px;    height: 100px';
+    const result = hasStyleExceptHeightChanged(prevStyle, nextStyle);
+    expect(result).toBe(false);
+  });
 });

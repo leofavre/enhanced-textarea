@@ -3,11 +3,22 @@ import removeStyleProp from './removeStyleProp.js';
 const ignoreHeight = removeStyleProp('height');
 const ignoreMinHeight = removeStyleProp('min-height');
 
+const parseStyle = styleStr => styleStr
+  .replace(/  +/g, ' ')
+  .replace(/ ;/g, ';')
+  .trim()
+  .replace(/;$/g, '')
+  .replace(/:([^ ])/g, ': $1')
+  .split('; ')
+  .sort()
+  .join(';')
+  .replace(/$/g, ';');
+
 export default (prevStyle, nextStyle) => {
   if (prevStyle == null || nextStyle == null) {
     return false;
   }
 
-  return ignoreHeight(ignoreMinHeight(prevStyle)).replace(/  +/g, ' ').trim() !==
-    ignoreHeight(ignoreMinHeight(nextStyle)).replace(/  +/g, ' ').trim();
+  return ignoreHeight(ignoreMinHeight(parseStyle(prevStyle))) !==
+    ignoreHeight(ignoreMinHeight(parseStyle(nextStyle)));
 };
