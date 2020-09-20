@@ -29,8 +29,7 @@
   "overrides": [{
     "files": "*.{test,spec}.js",
     "rules": {
-      "no-unused-expressions": "off",
-      "import/first": "off"
+      "no-unused-expressions": "off"
     }
   }]
 }
