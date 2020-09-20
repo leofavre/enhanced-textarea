@@ -5,12 +5,15 @@
   "main": "src/TextAreaAutoSizeFactory.js",
   "scripts": {
     "start": "snowpack dev",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --coverage"
   },
   "author": "Leonardo Favre <leo@leofavre.com> (https://www.leofavre.com/)",
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
     "babel-eslint": "^10.1.0",
+    "babel-jest": "^26.3.0",
     "eslint": "^7.9.0",
     "eslint-config-semistandard": "^15.0.0",
     "eslint-config-standard": "^14.1.0",
@@ -18,9 +21,15 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "jest": "^26.4.2",
+    "jest-sinon": "^1.0.4",
+    "sinon": "^9.0.3",
     "snowpack": "^2.11.1"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "engines": {
+    "node" : ">=12.18.4 <14.11.0"
   }
 }

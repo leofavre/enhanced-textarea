@@ -9,6 +9,7 @@ export default BaseClass => class extends BaseClass {
     super();
     this.textElement = this;
     this._handleChange = this._handleChange.bind(this);
+    this._handleUserResize = this._handleUserResize.bind(this);
   }
 
   get autoheight () {
@@ -64,11 +65,15 @@ export default BaseClass => class extends BaseClass {
     this._resizeObserver = new ResizeObserver(this._handleChange);
     this._resizeObserver.observe(this.textElement);
     this.textElement.addEventListener('input', this._handleChange);
+    this.textElement.addEventListener('pointerup', this._handleUserResize);
+    this.textElement.addEventListener('pointerdown', this._handleUserResize);
   }
 
   _handleAutoHeightEnd () {
     this._resizeObserver.unobserve(this.textElement);
     this.textElement.removeEventListener('input', this._handleChange);
+    this.textElement.removeEventListener('pointerup', this._handleUserResize);
+    this.textElement.removeEventListener('pointerdown', this._handleUserResize);
   }
 
   _handleChange () {
@@ -93,9 +98,35 @@ export default BaseClass => class extends BaseClass {
       this.textElement.style.height = 'auto';
 
       const { scrollHeight } = this.textElement;
+      const numericNextMinHeight = scrollHeight + offset - inner;
+      const nextMinHeight = `${numericNextMinHeight}px`;
+      const numericPrevHeight = pxToNumber(prevHeight);
 
-      this.textElement.style.minHeight = `${scrollHeight + offset - inner}px`;
-      this.textElement.style.height = prevHeight;
+      let nextHeight = prevHeight;
+
+      if (numericPrevHeight != null) {
+        nextHeight = this._userHasJustResized
+          ? `${Math.max(numericNextMinHeight, numericPrevHeight)}px`
+          : `${numericPrevHeight}px`;
+      }
+
+      this.textElement.style.minHeight = nextMinHeight;
+      this.textElement.style.height = nextHeight;
+    }
+  }
+
+  _handleUserResize ({ type }) {
+    if (type === 'pointerdown') {
+      this._preResizeHeight = this.offsetHeight;
+      this._preResizeWidth = this.offsetWidth;
+      return;
+    }
+
+    if (type === 'pointerup' && (this._preResizeHeight !== this.offsetHeight ||
+      this._preResizeWidth !== this.offsetWidth)) {
+      this._userHasJustResized = true;
+      this._handleChange();
+      this._userHasJustResized = false;
     }
   }
 
