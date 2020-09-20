@@ -1,4 +1,4 @@
-export default (element, attrName, value) => {
+const setAttr = (element, attrName, value) => {
   if (value == null || value === false) {
     element.removeAttribute(attrName);
   } else {
@@ -6,3 +6,5 @@ export default (element, attrName, value) => {
     element.setAttribute(attrName, parsedValue);
   }
 };
+
+export default setAttr;
