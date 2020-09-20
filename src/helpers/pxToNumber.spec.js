@@ -13,11 +13,19 @@ describe('pxToNumber', () => {
     expect(pxToNumber('0px20')).toBe(undefined);
   });
 
-  test('Ignores non-measures', () => {
+  test('Ignores invalid measures that end with px', () => {
+    expect(pxToNumber('-0.89-45.389px')).toBe(undefined);
+  });
+
+  test('Ignores entries that are not measures', () => {
     expect(pxToNumber('auto')).toBe(undefined);
   });
 
-  test('Ignores empty spaces', () => {
+  test('Ignores empty strings', () => {
     expect(pxToNumber('')).toBe(undefined);
+  });
+
+  test('Ignores undefined entries', () => {
+    expect(pxToNumber()).toBe(undefined);
   });
 });
