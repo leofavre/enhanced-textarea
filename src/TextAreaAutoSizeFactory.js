@@ -54,7 +54,7 @@ const TextAreaAutoSizeFactory = BaseClass => class extends BaseClass {
 
       if (!attrName === 'style' ||
         hasStyleExceptHeightChanged(prevValue, nextValue)) {
-        setTimeout(this._handleChange);
+        this._handleChange();
       }
     }
   }
