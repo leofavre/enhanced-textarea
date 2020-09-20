@@ -16,4 +16,8 @@ describe('pxToNumber', () => {
   test('Ignores non-measures', () => {
     expect(pxToNumber('auto')).toBe(undefined);
   });
+
+  test('Ignores empty spaces', () => {
+    expect(pxToNumber('')).toBe(undefined);
+  });
 });
