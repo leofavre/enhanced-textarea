@@ -1,24 +1,26 @@
 import resetProp from './resetProp.js';
-import sinon from 'sinon';
 
 describe('resetProp', () => {
   test('Deletes and then resets a property from an object', () => {
-    const getSpy = sinon.spy();
-    const setSpy = sinon.spy();
+    let descriptor;
 
     const element = {
-      get height () { getSpy(); return this._height; },
-      set height (val) { setSpy(); this._height = val; }
+      get height () { return this._height; },
+      set height (val) { this._height = val; }
     };
 
     element.height = 50;
 
+    descriptor = Object.getOwnPropertyDescriptor(element, 'height');
+    expect(typeof descriptor.get).toBe('function');
+    expect(typeof descriptor.set).toBe('function');
+    expect(descriptor.value).toBe(undefined);
+
     resetProp(element, 'height');
 
-    expect(setSpy).toHaveBeenCalledOnce();
-    expect(setSpy).toHaveBeenCalledBefore(getSpy);
-    expect(getSpy).toHaveBeenCalledOnce();
-    expect(setSpy).not.toHaveBeenCalledAfter(getSpy);
-    expect(element.height).toBe(50);
+    descriptor = Object.getOwnPropertyDescriptor(element, 'height');
+    expect(descriptor.get).toBe(undefined);
+    expect(descriptor.set).toBe(undefined);
+    expect(descriptor.value).toBe(50);
   });
 });

@@ -17,6 +17,7 @@
     }]
   },
   "globals": {
+    "jest": true,
     "describe": true,
     "it": true,
     "should": true,
@@ -28,7 +29,8 @@
   "overrides": [{
     "files": "*.{test,spec}.js",
     "rules": {
-      "no-unused-expressions": "off"
+      "no-unused-expressions": "off",
+      "import/first": "off"
     }
   }]
 }
