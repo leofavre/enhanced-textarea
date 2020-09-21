@@ -1,35 +1,32 @@
 import getCoercedAttr from './getCoercedAttr.js';
 let element;
 
-describe('getCoercedAttr', () => {
+describe('setAttr', () => {
   beforeEach(() => {
-    element = document.createElement('textarea');
-    element.setAttribute('height', '20px');
-    element.setAttribute('readonly', '');
+    element = {
+      hasAttribute: jest.fn(),
+      getAttribute: jest.fn()
+    };
   });
 
-  test('Coerces attribute to a String', () => {
-    const result = getCoercedAttr(element, 'height', String);
-    expect(result).toBe('20px');
+  test('Calls getAttribute if the attribute is coerced to a String ' +
+    'by default', () => {
+    getCoercedAttr(element, 'height');
+    expect(element.getAttribute).toHaveBeenCalledWith('height');
   });
 
-  test('Coerces attribute to a String by default', () => {
-    const result = getCoercedAttr(element, 'height');
-    expect(result).toBe('20px');
+  test('Calls getAttribute if the attribute is coerced to a String', () => {
+    getCoercedAttr(element, 'height', String);
+    expect(element.getAttribute).toHaveBeenCalledWith('height');
   });
 
-  test('Coerces attribute to a Number', () => {
-    const result = getCoercedAttr(element, 'readonly', Number);
-    expect(result).toBe(0);
+  test('Calls getAttribute if the attribute is coerced to a Number', () => {
+    getCoercedAttr(element, 'readonly', Number);
+    expect(element.getAttribute).toHaveBeenCalledWith('readonly');
   });
 
-  test('Coerces attribute to a Boolean', () => {
-    const result = getCoercedAttr(element, 'readonly', Boolean);
-    expect(result).toBe(true);
-  });
-
-  test('Coerces attribute to a Boolean', () => {
-    const result = getCoercedAttr(element, 'disabled', Boolean);
-    expect(result).toBe(false);
+  test('Calls hasAttribute if the attribute is coerced to a Boolean', () => {
+    getCoercedAttr(element, 'disabled', Boolean);
+    expect(element.hasAttribute).toHaveBeenCalledWith('disabled');
   });
 });

@@ -1,5 +1,5 @@
-import setAttr from './helpers/setAttr.js';
 import getCoercedAttr from './helpers/getCoercedAttr.js';
+import setAttr from './helpers/setAttr.js';
 import resetProp from './helpers/resetProp.js';
 import hasStyleExceptHeightChanged from './helpers/hasStyleExceptHeightChanged.js';
 import pxToNumber from './helpers/pxToNumber.js';
@@ -7,9 +7,12 @@ import pxToNumber from './helpers/pxToNumber.js';
 const TextAreaAutoSizeFactory = BaseClass => class extends BaseClass {
   constructor () {
     super();
-    this.textElement = this;
     this._handleChange = this._handleChange.bind(this);
     this._handleUserResize = this._handleUserResize.bind(this);
+  }
+
+  get textElement () {
+    return this;
   }
 
   get autoheight () {
@@ -51,7 +54,7 @@ const TextAreaAutoSizeFactory = BaseClass => class extends BaseClass {
 
       if (!attrName === 'style' ||
         hasStyleExceptHeightChanged(prevValue, nextValue)) {
-        setTimeout(this._handleChange);
+        this._handleChange();
       }
     }
   }
@@ -62,7 +65,7 @@ const TextAreaAutoSizeFactory = BaseClass => class extends BaseClass {
   }
 
   _handleAutoHeightStart () {
-    this._resizeObserver = new ResizeObserver(this._handleChange);
+    this._resizeObserver = new window.ResizeObserver(this._handleChange);
     this._resizeObserver.observe(this.textElement);
     this.textElement.addEventListener('input', this._handleChange);
     this.textElement.addEventListener('pointerup', this._handleUserResize);
@@ -117,21 +120,28 @@ const TextAreaAutoSizeFactory = BaseClass => class extends BaseClass {
 
   _handleUserResize ({ type }) {
     if (type === 'pointerdown') {
-      this._preResizeHeight = this.offsetHeight;
-      this._preResizeWidth = this.offsetWidth;
+      const { offsetHeight, offsetWidth } = this.textElement;
+      this._preResizeHeight = offsetHeight;
+      this._preResizeWidth = offsetWidth;
       return;
     }
 
-    if (type === 'pointerup' && (this._preResizeHeight !== this.offsetHeight ||
-      this._preResizeWidth !== this.offsetWidth)) {
-      this._userHasJustResized = true;
-      this._handleChange();
-      this._userHasJustResized = false;
+    if (type === 'pointerup') {
+      const { offsetHeight, offsetWidth } = this.textElement;
+
+      const hasResized = this._preResizeHeight !== offsetHeight ||
+        this._preResizeWidth !== offsetWidth;
+
+      if (hasResized) {
+        this._userHasJustResized = true;
+        this._handleChange();
+        this._userHasJustResized = false;
+      }
     }
   }
 
   _getStyleProp (str) {
-    const elementStyles = window.getComputedStyle(this);
+    const elementStyles = window.getComputedStyle(this.textElement);
     const prop = elementStyles.getPropertyValue(str);
 
     return prop.endsWith('px')

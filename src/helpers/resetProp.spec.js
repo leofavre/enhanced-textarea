@@ -12,15 +12,15 @@ describe('resetProp', () => {
     element.height = 50;
 
     descriptor = Object.getOwnPropertyDescriptor(element, 'height');
-    expect(typeof descriptor.get).toBe('function');
-    expect(typeof descriptor.set).toBe('function');
-    expect(descriptor.value).toBe(undefined);
+    expect(descriptor.get).toBeInstanceOf(Function);
+    expect(descriptor.set).toBeInstanceOf(Function);
+    expect(descriptor.value).toBeUndefined;
 
     resetProp(element, 'height');
 
     descriptor = Object.getOwnPropertyDescriptor(element, 'height');
-    expect(descriptor.get).toBe(undefined);
-    expect(descriptor.set).toBe(undefined);
+    expect(descriptor.get).toBeUndefined;
+    expect(descriptor.set).toBeUndefined;
     expect(descriptor.value).toBe(50);
   });
 });
