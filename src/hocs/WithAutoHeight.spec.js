@@ -276,8 +276,96 @@ describe('WithAutoHeight', () => {
   });
 
   describe('._handleChange()', () => {
+    beforeEach(() => {
+      element._getStyleProp = jest.fn();
+
+      Object.defineProperty(element, 'autoheight', {
+        value: false,
+        writable: true
+      });
+    });
+
     test('Does nothing if autoheight is undefined', () => {
+      element.autoheight = false;
       element._handleChange();
+    });
+
+    test('Resizes textElement considering padding and border ' +
+      'if the box-sizing is not border-box', () => {
+      element.autoheight = true;
+
+      element.textElement.offsetHeight = 152;
+      element.textElement.clientHeight = 150;
+      element.textElement.scrollHeight = 195;
+      element.textElement.style = { height: 'auto' };
+
+      element._getStyleProp = jest.fn(str => {
+        if (str === 'box-sizing') return 'content-box';
+        if (str.startsWith('padding')) return 20;
+        if (str.startsWith('border')) return 10;
+      });
+
+      element._handleChange();
+
+      expect(element.textElement.style.minHeight).toBe('137px');
+      expect(element.textElement.style.height).toBe('auto');
+    });
+
+    test('Resizes textElement ignoring padding and border ' +
+      'if the box-sizing is border-box', () => {
+      element.autoheight = true;
+
+      element.textElement.offsetHeight = 152;
+      element.textElement.clientHeight = 150;
+      element.textElement.scrollHeight = 195;
+      element.textElement.style = { height: 'auto' };
+
+      element._getStyleProp = jest.fn(str => {
+        if (str === 'box-sizing') return 'border-box';
+      });
+
+      element._handleChange();
+
+      expect(element.textElement.style.minHeight).toBe('197px');
+      expect(element.textElement.style.height).toBe('auto');
+    });
+
+    test('Resizes textElement when height is changed programmatically', () => {
+      element.autoheight = true;
+
+      element.textElement.offsetHeight = 152;
+      element.textElement.clientHeight = 150;
+      element.textElement.scrollHeight = 195;
+      element.textElement.style = { height: '90px' };
+
+      element._getStyleProp = jest.fn(str => {
+        if (str === 'box-sizing') return 'border-box';
+      });
+
+      element._handleChange();
+
+      expect(element.textElement.style.minHeight).toBe('197px');
+      expect(element.textElement.style.height).toBe('90px');
+    });
+
+    test('Resizes textElement when height is changed by user interaction ' +
+      'but restricts it to min-height', () => {
+      element.autoheight = true;
+      element._resizedByUser = true;
+
+      element.textElement.offsetHeight = 152;
+      element.textElement.clientHeight = 150;
+      element.textElement.scrollHeight = 195;
+      element.textElement.style = { height: '90px' };
+
+      element._getStyleProp = jest.fn(str => {
+        if (str === 'box-sizing') return 'border-box';
+      });
+
+      element._handleChange();
+
+      expect(element.textElement.style.minHeight).toBe('197px');
+      expect(element.textElement.style.height).toBe('197px');
     });
   });
 
