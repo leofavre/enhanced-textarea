@@ -2,7 +2,7 @@
   "name": "template-repo",
   "version": "0.1.0",
   "description": "Template Repository",
-  "main": "src/TextAreaAutoSizeFactory.js",
+  "main": "src/EnhancedTextAreaFactory.js",
   "scripts": {
     "start": "snowpack dev",
     "send-coverage": "cat ./coverage/lcov.info | coveralls",
