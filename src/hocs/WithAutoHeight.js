@@ -68,13 +68,13 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
     this._resizeObserver = new ResizeObserver(this._handleChange);
     this._resizeObserver.observe(this.textElement);
     this.textElement.addEventListener('input', this._handleChange);
-    this.textElement.addEventListener('resize', this._handleResize);
+    this.textElement.addEventListener('userresize', this._handleResize);
   }
 
   _handleAutoHeightEnd () {
     this._resizeObserver.unobserve(this.textElement);
     this.textElement.removeEventListener('input', this._handleChange);
-    this.textElement.removeEventListener('resize', this._handleResize);
+    this.textElement.removeEventListener('userresize', this._handleResize);
   }
 
   _handleChange () {
