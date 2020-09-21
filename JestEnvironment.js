@@ -32,6 +32,9 @@ class JestEnvironment extends NodeEnvironment {
 
   async teardown () {
     await super.teardown();
+    this.global.HTMLTextAreaElement = undefined;
+    this.global.ResizeObserver = undefined;
+    this.global.getComputedStyle = undefined;
     this.global.window = undefined;
   }
 }
