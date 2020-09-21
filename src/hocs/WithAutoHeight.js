@@ -1,14 +1,14 @@
-import getCoercedAttr from './helpers/getCoercedAttr.js';
-import setAttr from './helpers/setAttr.js';
-import resetProp from './helpers/resetProp.js';
-import hasStyleExceptHeightChanged from './helpers/hasStyleExceptHeightChanged.js';
-import pxToNumber from './helpers/pxToNumber.js';
+import getCoercedAttr from '../helpers/getCoercedAttr.js';
+import setAttr from '../helpers/setAttr.js';
+import resetProp from '../helpers/resetProp.js';
+import hasStyleExceptHeightChanged from '../helpers/hasStyleExceptHeightChanged.js';
+import pxToNumber from '../helpers/pxToNumber.js';
 
-const TextAreaAutoSizeFactory = BaseClass => class extends BaseClass {
+const WithAutoHeight = (Base = class {}) => class extends Base {
   constructor () {
     super();
     this._handleChange = this._handleChange.bind(this);
-    this._handleUserResize = this._handleUserResize.bind(this);
+    this._handleResize = this._handleResize.bind(this);
   }
 
   get textElement () {
@@ -68,15 +68,13 @@ const TextAreaAutoSizeFactory = BaseClass => class extends BaseClass {
     this._resizeObserver = new ResizeObserver(this._handleChange);
     this._resizeObserver.observe(this.textElement);
     this.textElement.addEventListener('input', this._handleChange);
-    this.textElement.addEventListener('pointerup', this._handleUserResize);
-    this.textElement.addEventListener('pointerdown', this._handleUserResize);
+    this.textElement.addEventListener('userresize', this._handleResize);
   }
 
   _handleAutoHeightEnd () {
     this._resizeObserver.unobserve(this.textElement);
     this.textElement.removeEventListener('input', this._handleChange);
-    this.textElement.removeEventListener('pointerup', this._handleUserResize);
-    this.textElement.removeEventListener('pointerdown', this._handleUserResize);
+    this.textElement.removeEventListener('userresize', this._handleResize);
   }
 
   _handleChange () {
@@ -118,24 +116,10 @@ const TextAreaAutoSizeFactory = BaseClass => class extends BaseClass {
     }
   }
 
-  _handleUserResize ({ type } = {}) {
-    const { offsetHeight, offsetWidth } = this.textElement;
-
-    if (type === 'pointerdown') {
-      this._preResizeHeight = offsetHeight;
-      this._preResizeWidth = offsetWidth;
-      return;
-    }
-
-    if (type === 'pointerup') {
-      this._resizedByUser = this._preResizeHeight !== offsetHeight ||
-        this._preResizeWidth !== offsetWidth;
-
-      if (this._resizedByUser) {
-        this._handleChange();
-        this._resizedByUser = false;
-      }
-    }
+  _handleResize () {
+    this._resizedByUser = true;
+    this._handleChange();
+    this._resizedByUser = false;
   }
 
   _getStyleProp (str) {
@@ -148,4 +132,4 @@ const TextAreaAutoSizeFactory = BaseClass => class extends BaseClass {
   }
 };
 
-export default TextAreaAutoSizeFactory;
+export default WithAutoHeight;

@@ -5,18 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Text Area Auto Size</title>
   <script type="module">
-    import TextAreaAutoSizeBuiltIn from './src/TextAreaAutoSizeBuiltIn.js';
+    import EnhancedTextAreaBuiltIn from './src/EnhancedTextAreaBuiltIn.js';
 
     customElements.define(
-      'textarea-built-in',
-      TextAreaAutoSizeBuiltIn,
+      'enhanced-textarea',
+      EnhancedTextAreaBuiltIn,
       { extends: 'textarea' }
     );
 
     setTimeout(() => {
       customElements.define(
-        'textarea-lazy-built-in',
-        class extends TextAreaAutoSizeBuiltIn {},
+        'lazy-enhanced-textarea',
+        class extends EnhancedTextAreaBuiltIn {},
         { extends: 'textarea' }
       );
     }, 1500);
@@ -31,12 +31,12 @@
 </head>
 <body>
   <textarea
-    is="textarea-built-in"
+    is="enhanced-textarea"
     cols="60"
   ></textarea>
 
   <textarea
-    is="textarea-lazy-built-in"
+    is="lazy-enhanced-textarea"
     cols="60"
   ></textarea>
 </body>

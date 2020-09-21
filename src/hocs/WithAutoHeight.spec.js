@@ -1,21 +1,25 @@
-import getCoercedAttr from './helpers/getCoercedAttr.js';
-import setAttr from './helpers/setAttr.js';
-import resetProp from './helpers/resetProp.js';
-import TextAreaAutoSizeFactory from './TextAreaAutoSizeFactory.js';
+import getCoercedAttr from '../helpers/getCoercedAttr.js';
+import setAttr from '../helpers/setAttr.js';
+import resetProp from '../helpers/resetProp.js';
+import WithAutoHeight from './WithAutoHeight.js';
 
-jest.mock('./helpers/getCoercedAttr.js');
-jest.mock('./helpers/setAttr.js');
-jest.mock('./helpers/resetProp.js');
+jest.mock('../helpers/getCoercedAttr.js');
+jest.mock('../helpers/setAttr.js');
+jest.mock('../helpers/resetProp.js');
 
 let Base;
 let Element;
 let element;
 
-describe('TextAreaAutoSizeFactory', () => {
+describe('WithAutoHeight', () => {
   beforeEach(() => {
     Base = class {};
-    Element = TextAreaAutoSizeFactory(Base);
+    Element = WithAutoHeight(Base);
     element = new Element();
+  });
+
+  test('Uses an empty class as default parameter', () => {
+    WithAutoHeight();
   });
 
   test('Returns a class that extends another passed as parameter', () => {
@@ -30,10 +34,10 @@ describe('TextAreaAutoSizeFactory', () => {
       expect(result).toBe(element);
     });
 
-    test('Makes sure _handleUserResize always is bound to the instance', () => {
-      Element.prototype._handleUserResize = function () { return this; };
+    test('Makes sure _handleResize always is bound to the instance', () => {
+      Element.prototype._handleResize = function () { return this; };
       element = new Element();
-      const [result] = [1].map(element._handleUserResize);
+      const [result] = [1].map(element._handleResize);
       expect(result).toBe(element);
     });
   });
@@ -71,7 +75,7 @@ describe('TextAreaAutoSizeFactory', () => {
 
       descriptor = Object.getOwnPropertyDescriptor(Base.prototype, 'value');
 
-      Element = TextAreaAutoSizeFactory(Base);
+      Element = WithAutoHeight(Base);
       element = new Element();
       element._handleChange = jest.fn();
     });
@@ -122,7 +126,7 @@ describe('TextAreaAutoSizeFactory', () => {
         }
       };
 
-      Element = TextAreaAutoSizeFactory(Base);
+      Element = WithAutoHeight(Base);
       element = new Element();
 
       expect(Element.observedAttributes.sort()).toEqual(expectedAttrs.sort());
@@ -132,7 +136,7 @@ describe('TextAreaAutoSizeFactory', () => {
   describe('.attributeChangedCallback()', () => {
     test('Calls super.attributeChangedCallback forwarding arguments', () => {
       Base.prototype.attributeChangedCallback = jest.fn();
-      Element = TextAreaAutoSizeFactory(Base);
+      Element = WithAutoHeight(Base);
       element = new Element();
       const args = ['attrName', null, 20];
       element.attributeChangedCallback(...args);
@@ -199,7 +203,7 @@ describe('TextAreaAutoSizeFactory', () => {
   describe('.connectedCallback()', () => {
     test('Calls super.connectedCallback', () => {
       Base.prototype.connectedCallback = jest.fn();
-      Element = TextAreaAutoSizeFactory(Base);
+      Element = WithAutoHeight(Base);
       element = new Element();
       element.connectedCallback();
       expect(Base.prototype.connectedCallback).toHaveBeenCalled;
@@ -223,7 +227,7 @@ describe('TextAreaAutoSizeFactory', () => {
       ResizeObserverSpy.mockReset();
     });
 
-    test('Observes textElement resize', () => {
+    test('Observes textElement user resize', () => {
       element._handleAutoHeightStart();
       expect(element._resizeObserver.observe)
         .toHaveBeenCalledWith(element.textElement);
@@ -236,10 +240,7 @@ describe('TextAreaAutoSizeFactory', () => {
         .toHaveBeenCalledWith('input', element._handleChange);
 
       expect(element.textElement.addEventListener)
-        .toHaveBeenCalledWith('pointerup', element._handleUserResize);
-
-      expect(element.textElement.addEventListener)
-        .toHaveBeenCalledWith('pointerdown', element._handleUserResize);
+        .toHaveBeenCalledWith('userresize', element._handleResize);
     });
   });
 
@@ -256,7 +257,7 @@ describe('TextAreaAutoSizeFactory', () => {
       ResizeObserverSpy.mockReset();
     });
 
-    test('Stops observing textElement resize', () => {
+    test('Stops observing textElement userresize', () => {
       element._handleAutoHeightEnd();
 
       expect(element._resizeObserver.unobserve)
@@ -270,81 +271,115 @@ describe('TextAreaAutoSizeFactory', () => {
         .toHaveBeenCalledWith('input', element._handleChange);
 
       expect(element.textElement.removeEventListener)
-        .toHaveBeenCalledWith('pointerup', element._handleUserResize);
-
-      expect(element.textElement.removeEventListener)
-        .toHaveBeenCalledWith('pointerdown', element._handleUserResize);
+        .toHaveBeenCalledWith('userresize', element._handleResize);
     });
   });
 
   describe('._handleChange()', () => {
+    beforeEach(() => {
+      element._getStyleProp = jest.fn();
+
+      Object.defineProperty(element, 'autoheight', {
+        value: false,
+        writable: true
+      });
+    });
+
     test('Does nothing if autoheight is undefined', () => {
+      element.autoheight = false;
       element._handleChange();
+    });
+
+    test('Resizes textElement considering padding and border ' +
+      'if the box-sizing is not border-box', () => {
+      element.autoheight = true;
+
+      element.textElement.offsetHeight = 152;
+      element.textElement.clientHeight = 150;
+      element.textElement.scrollHeight = 195;
+      element.textElement.style = { height: 'auto' };
+
+      element._getStyleProp = jest.fn(str => {
+        if (str === 'box-sizing') return 'content-box';
+        if (str.startsWith('padding')) return 20;
+        if (str.startsWith('border')) return 10;
+      });
+
+      element._handleChange();
+
+      expect(element.textElement.style.minHeight).toBe('137px');
+      expect(element.textElement.style.height).toBe('auto');
+    });
+
+    test('Resizes textElement ignoring padding and border ' +
+      'if the box-sizing is border-box', () => {
+      element.autoheight = true;
+
+      element.textElement.offsetHeight = 152;
+      element.textElement.clientHeight = 150;
+      element.textElement.scrollHeight = 195;
+      element.textElement.style = { height: 'auto' };
+
+      element._getStyleProp = jest.fn(str => {
+        if (str === 'box-sizing') return 'border-box';
+      });
+
+      element._handleChange();
+
+      expect(element.textElement.style.minHeight).toBe('197px');
+      expect(element.textElement.style.height).toBe('auto');
+    });
+
+    test('Resizes textElement when height is changed programmatically', () => {
+      element.autoheight = true;
+
+      element.textElement.offsetHeight = 152;
+      element.textElement.clientHeight = 150;
+      element.textElement.scrollHeight = 195;
+      element.textElement.style = { height: '90px' };
+
+      element._getStyleProp = jest.fn(str => {
+        if (str === 'box-sizing') return 'border-box';
+      });
+
+      element._handleChange();
+
+      expect(element.textElement.style.minHeight).toBe('197px');
+      expect(element.textElement.style.height).toBe('90px');
+    });
+
+    test('Resizes textElement when height is changed by user interaction ' +
+      'but restricts it to min-height', () => {
+      element.autoheight = true;
+      element._resizedByUser = true;
+
+      element.textElement.offsetHeight = 152;
+      element.textElement.clientHeight = 150;
+      element.textElement.scrollHeight = 195;
+      element.textElement.style = { height: '90px' };
+
+      element._getStyleProp = jest.fn(str => {
+        if (str === 'box-sizing') return 'border-box';
+      });
+
+      element._handleChange();
+
+      expect(element.textElement.style.minHeight).toBe('197px');
+      expect(element.textElement.style.height).toBe('197px');
     });
   });
 
-  describe('._handleUserResize()', () => {
-    test('Does nothing if type is undefined', () => {
-      element._handleUserResize();
-    });
-
-    test('Stores textElement dimensions on pointerdown', () => {
-      element.textElement.offsetHeight = 50;
-      element.textElement.offsetWidth = 100;
-
-      element._handleUserResize({ type: 'pointerdown' });
-
-      expect(element._preResizeHeight).toBe(50);
-      expect(element._preResizeWidth).toBe(100);
-    });
-
-    test('Calls _handleChange after setting _resizedByUser to true ' +
-      'if textElement was resized on pointerup', () => {
-      let resizedByUser;
-
-      element._preResizeHeight = 50;
-      element._preResizeWidth = 100;
-
-      element.textElement.offsetHeight = 55;
-      element.textElement.offsetWidth = 105;
-
+  describe('._handleResize()', () => {
+    test('Class _handleChange after setting _resizedByUser to true ' +
+      'and then sets _resizedByUser to false', () => {
       element._handleChange = jest.fn(function () {
-        resizedByUser = this._resizedByUser;
+        expect(element._resizedByUser).toBe(true);
       });
 
-      element._handleUserResize({ type: 'pointerup' });
-
-      expect(element._handleChange).toHaveBeenCalled;
-      expect(resizedByUser).toBe(true);
-    });
-
-    test('Sets _resizedByUser to false after calling _handleChange ' +
-      'if textElement was resized on pointerup', () => {
-      element._preResizeHeight = 50;
-      element._preResizeWidth = 100;
-
-      element.textElement.offsetHeight = 55;
-      element.textElement.offsetWidth = 105;
-
-      element._handleChange = jest.fn();
-      element._handleUserResize({ type: 'pointerup' });
+      element._handleResize();
 
       expect(element._handleChange).toHaveBeenCalled;
       expect(element._resizedByUser).toBe(false);
-    });
-
-    test('Does not call _handleChange if textElement ' +
-      'was not resized on pointerup', () => {
-      element._preResizeHeight = 50;
-      element._preResizeWidth = 100;
-
-      element.textElement.offsetHeight = 50;
-      element.textElement.offsetWidth = 100;
-
-      element._handleChange = jest.fn();
-      element._handleUserResize({ type: 'pointerup' });
-
-      expect(element._handleChange).not.toHaveBeenCalled;
     });
   });
 
