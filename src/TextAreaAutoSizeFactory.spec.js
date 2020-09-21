@@ -366,13 +366,13 @@ describe('TextAreaAutoSizeFactory', () => {
     });
 
     test('Returns the unprocessed value of a style property', () => {
-      const result = element._getStyleProp('height');
-      expect(result).toBe(20);
+      const result = element._getStyleProp('background');
+      expect(result).toBe('#909');
     });
 
     test('Returns the numeric value of a style property in pixels', () => {
-      const result = element._getStyleProp('background');
-      expect(result).toBe('#909');
+      const result = element._getStyleProp('height');
+      expect(result).toBe(20);
     });
   });
 });
