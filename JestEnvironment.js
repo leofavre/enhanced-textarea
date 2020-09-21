@@ -1,21 +1,32 @@
 const NodeEnvironment = require('jest-environment-node');
 
+class HTMLTextAreaElement {}
+
+class ResizeObserver {
+  observe () {}
+  unobserve () {}
+}
+
+function getComputedStyle () {
+  return {
+    getPropertyValue () {
+      return '';
+    }
+  };
+}
+
 class JestEnvironment extends NodeEnvironment {
   async setup () {
     await super.setup();
-    class HTMLTextAreaElement {}
-
-    class ResizeObserver {
-      observe () {}
-      unobserve () {}
-    }
 
     this.global.HTMLTextAreaElement = HTMLTextAreaElement;
     this.global.ResizeObserver = ResizeObserver;
+    this.global.getComputedStyle = getComputedStyle;
 
     this.global.window = {
       HTMLTextAreaElement,
-      ResizeObserver
+      ResizeObserver,
+      getComputedStyle
     };
   }
 

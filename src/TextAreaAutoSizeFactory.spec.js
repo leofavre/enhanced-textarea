@@ -347,4 +347,32 @@ describe('TextAreaAutoSizeFactory', () => {
       expect(element._handleChange).not.toHaveBeenCalled;
     });
   });
+
+  describe('_getStyleProp()', () => {
+    let getComputedStyleSpy;
+
+    beforeEach(() => {
+      getComputedStyleSpy = jest
+        .spyOn(window, 'getComputedStyle')
+        .mockImplementation(() => ({
+          getPropertyValue: jest.fn(str => {
+            return str === 'height' ? '20px' : '#909';
+          })
+        }));
+    });
+
+    afterEach(() => {
+      getComputedStyleSpy.mockReset();
+    });
+
+    test('Returns the unprocessed value of a style property', () => {
+      const result = element._getStyleProp('height');
+      expect(result).toBe(20);
+    });
+
+    test('Returns the numeric value of a style property in pixels', () => {
+      const result = element._getStyleProp('background');
+      expect(result).toBe('#909');
+    });
+  });
 });
