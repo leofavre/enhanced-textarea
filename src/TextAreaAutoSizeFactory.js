@@ -120,16 +120,23 @@ const TextAreaAutoSizeFactory = BaseClass => class extends BaseClass {
 
   _handleUserResize ({ type }) {
     if (type === 'pointerdown') {
-      this._preResizeHeight = this.offsetHeight;
-      this._preResizeWidth = this.offsetWidth;
+      const { offsetHeight, offsetWidth } = this.textElement;
+      this._preResizeHeight = offsetHeight;
+      this._preResizeWidth = offsetWidth;
       return;
     }
 
-    if (type === 'pointerup' && (this._preResizeHeight !== this.offsetHeight ||
-      this._preResizeWidth !== this.offsetWidth)) {
-      this._userHasJustResized = true;
-      this._handleChange();
-      this._userHasJustResized = false;
+    if (type === 'pointerup') {
+      const { offsetHeight, offsetWidth } = this.textElement;
+
+      const hasResized = this._preResizeHeight !== offsetHeight ||
+        this._preResizeWidth !== offsetWidth;
+
+      if (hasResized) {
+        this._userHasJustResized = true;
+        this._handleChange();
+        this._userHasJustResized = false;
+      }
     }
   }
 
