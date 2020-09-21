@@ -3,41 +3,51 @@ let element;
 
 describe('setAttr', () => {
   beforeEach(() => {
-    element = document.createElement('textarea');
+    element = {
+      removeAttribute: jest.fn(),
+      setAttribute: jest.fn()
+    };
   });
 
-  test('Sets an attribute to the unprocessed value if it is a number', () => {
+  test('Calls setAttribute with the attribute name and the unprocessed ' +
+    'value if it is a number', () => {
     setAttr(element, 'height', 20);
-    expect(element.getAttribute('height')).toBe('20');
+    expect(element.setAttribute).toHaveBeenCalledWith('height', 20);
   });
 
-  test('Sets an attribute to the unprocessed value if it is zero', () => {
+  test('Calls setAttribute with the attribute name and the unprocessed ' +
+    'value if it is zero', () => {
     setAttr(element, 'height', 0);
-    expect(element.getAttribute('height')).toBe('0');
+    expect(element.setAttribute).toHaveBeenCalledWith('height', 0);
   });
 
-  test('Sets an attribute to the unprocessed value if it is a string', () => {
+  test('Calls setAttribute with the attribute name and the unprocessed ' +
+    'value if it is a string', () => {
     setAttr(element, 'height', '20px');
-    expect(element.getAttribute('height')).toBe('20px');
+    expect(element.setAttribute).toHaveBeenCalledWith('height', '20px');
   });
 
-  test('Sets an attribute to an empty string if the value is true', () => {
+  test('Calls setAttribute with the attribute name and an empty string ' +
+    'if the value is true', () => {
     setAttr(element, 'height', true);
-    expect(element.getAttribute('height')).toBe('');
+    expect(element.setAttribute).toHaveBeenCalledWith('height', '');
   });
 
-  test('Removes an attribute if the value is null', () => {
+  test('Calls removeAttribute  with the attribute name ' +
+    'if the value is null', () => {
     setAttr(element, 'height', null);
-    expect(element.getAttribute('height')).toBe(null);
+    expect(element.removeAttribute).toHaveBeenCalledWith('height');
   });
 
-  test('Removes an attribute if the value is undefined', () => {
+  test('Calls removeAttribute  with the attribute name ' +
+    'if the value is undefined', () => {
     setAttr(element, 'height');
-    expect(element.getAttribute('height')).toBe(null);
+    expect(element.removeAttribute).toHaveBeenCalledWith('height');
   });
 
-  test('Removes an attribute if the value is false', () => {
+  test('Calls removeAttribute  with the attribute name ' +
+    'if the value is false', () => {
     setAttr(element, 'height', false);
-    expect(element.getAttribute('height')).toBe(null);
+    expect(element.removeAttribute).toHaveBeenCalledWith('height');
   });
 });
