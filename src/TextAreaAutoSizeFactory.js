@@ -134,7 +134,7 @@ const TextAreaAutoSizeFactory = BaseClass => class extends BaseClass {
   }
 
   _getStyleProp (str) {
-    const elementStyles = window.getComputedStyle(this);
+    const elementStyles = window.getComputedStyle(this.textElement);
     const prop = elementStyles.getPropertyValue(str);
 
     return prop.endsWith('px')
