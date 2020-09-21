@@ -65,7 +65,7 @@ const TextAreaAutoSizeFactory = BaseClass => class extends BaseClass {
   }
 
   _handleAutoHeightStart () {
-    this._resizeObserver = new window.ResizeObserver(this._handleChange);
+    this._resizeObserver = new ResizeObserver(this._handleChange);
     this._resizeObserver.observe(this.textElement);
     this.textElement.addEventListener('input', this._handleChange);
     this.textElement.addEventListener('pointerup', this._handleUserResize);
@@ -108,7 +108,7 @@ const TextAreaAutoSizeFactory = BaseClass => class extends BaseClass {
       let nextHeight = prevHeight;
 
       if (numericPrevHeight != null) {
-        nextHeight = this._userHasJustResized
+        nextHeight = this._resizedByUser
           ? `${Math.max(numericNextMinHeight, numericPrevHeight)}px`
           : `${numericPrevHeight}px`;
       }
@@ -118,24 +118,22 @@ const TextAreaAutoSizeFactory = BaseClass => class extends BaseClass {
     }
   }
 
-  _handleUserResize ({ type }) {
+  _handleUserResize ({ type } = {}) {
+    const { offsetHeight, offsetWidth } = this.textElement;
+
     if (type === 'pointerdown') {
-      const { offsetHeight, offsetWidth } = this.textElement;
       this._preResizeHeight = offsetHeight;
       this._preResizeWidth = offsetWidth;
       return;
     }
 
     if (type === 'pointerup') {
-      const { offsetHeight, offsetWidth } = this.textElement;
-
-      const hasResized = this._preResizeHeight !== offsetHeight ||
+      this._resizedByUser = this._preResizeHeight !== offsetHeight ||
         this._preResizeWidth !== offsetWidth;
 
-      if (hasResized) {
-        this._userHasJustResized = true;
+      if (this._resizedByUser) {
         this._handleChange();
-        this._userHasJustResized = false;
+        this._resizedByUser = false;
       }
     }
   }

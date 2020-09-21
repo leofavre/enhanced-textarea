@@ -212,25 +212,20 @@ describe('TextAreaAutoSizeFactory', () => {
   });
 
   describe('._handleAutoHeightStart()', () => {
-    let _ResizeObserver;
+    let ResizeObserverSpy;
 
     beforeEach(() => {
-      _ResizeObserver = window.ResizeObserver;
-      window.ResizeObserver = jest.fn();
-      window.ResizeObserver.prototype.observe = jest.fn();
+      ResizeObserverSpy = jest.spyOn(ResizeObserver.prototype, 'observe');
       element.addEventListener = jest.fn();
     });
 
     afterEach(() => {
-      window.ResizeObserver = _ResizeObserver;
+      ResizeObserverSpy.mockReset();
     });
 
     test('Observes textElement resize', () => {
       element._handleAutoHeightStart();
-      const [instace] = window.ResizeObserver.mock.instances;
-      expect(instace).toBeInstanceOf(window.ResizeObserver);
-
-      expect(window.ResizeObserver.prototype.observe)
+      expect(element._resizeObserver.observe)
         .toHaveBeenCalledWith(element.textElement);
     });
 
@@ -249,28 +244,26 @@ describe('TextAreaAutoSizeFactory', () => {
   });
 
   describe('._handleAutoHeightEnd()', () => {
-    let _ResizeObserver;
+    let ResizeObserverSpy;
 
     beforeEach(() => {
-      _ResizeObserver = window.ResizeObserver;
-      window.ResizeObserver = jest.fn();
-      window.ResizeObserver.prototype.unobserve = jest.fn();
-      element._resizeObserver = new window.ResizeObserver();
+      ResizeObserverSpy = jest.spyOn(ResizeObserver.prototype, 'unobserve');
+      element._resizeObserver = new ResizeObserver();
       element.removeEventListener = jest.fn();
     });
 
     afterEach(() => {
-      window.ResizeObserver = _ResizeObserver;
+      ResizeObserverSpy.mockReset();
     });
 
-    test('Observes textElement resize', () => {
+    test('Stops observing textElement resize', () => {
       element._handleAutoHeightEnd();
 
-      expect(window.ResizeObserver.prototype.unobserve)
+      expect(element._resizeObserver.unobserve)
         .toHaveBeenCalledWith(element.textElement);
     });
 
-    test('Observes user interaction', () => {
+    test('Stops observing user interaction', () => {
       element._handleAutoHeightEnd();
 
       expect(element.textElement.removeEventListener)
@@ -281,6 +274,105 @@ describe('TextAreaAutoSizeFactory', () => {
 
       expect(element.textElement.removeEventListener)
         .toHaveBeenCalledWith('pointerdown', element._handleUserResize);
+    });
+  });
+
+  describe('._handleChange()', () => {
+    test('Does nothing if autoheight is undefined', () => {
+      element._handleChange();
+    });
+  });
+
+  describe('._handleUserResize()', () => {
+    test('Does nothing if type is undefined', () => {
+      element._handleUserResize();
+    });
+
+    test('Stores textElement dimensions on pointerdown', () => {
+      element.textElement.offsetHeight = 50;
+      element.textElement.offsetWidth = 100;
+
+      element._handleUserResize({ type: 'pointerdown' });
+
+      expect(element._preResizeHeight).toBe(50);
+      expect(element._preResizeWidth).toBe(100);
+    });
+
+    test('Calls _handleChange after setting _resizedByUser to true ' +
+      'if textElement was resized on pointerup', () => {
+      let resizedByUser;
+
+      element._preResizeHeight = 50;
+      element._preResizeWidth = 100;
+
+      element.textElement.offsetHeight = 55;
+      element.textElement.offsetWidth = 105;
+
+      element._handleChange = jest.fn(function () {
+        resizedByUser = this._resizedByUser;
+      });
+
+      element._handleUserResize({ type: 'pointerup' });
+
+      expect(element._handleChange).toHaveBeenCalled;
+      expect(resizedByUser).toBe(true);
+    });
+
+    test('Sets _resizedByUser to false after calling _handleChange ' +
+      'if textElement was resized on pointerup', () => {
+      element._preResizeHeight = 50;
+      element._preResizeWidth = 100;
+
+      element.textElement.offsetHeight = 55;
+      element.textElement.offsetWidth = 105;
+
+      element._handleChange = jest.fn();
+      element._handleUserResize({ type: 'pointerup' });
+
+      expect(element._handleChange).toHaveBeenCalled;
+      expect(element._resizedByUser).toBe(false);
+    });
+
+    test('Does not call _handleChange if textElement ' +
+      'was not resized on pointerup', () => {
+      element._preResizeHeight = 50;
+      element._preResizeWidth = 100;
+
+      element.textElement.offsetHeight = 50;
+      element.textElement.offsetWidth = 100;
+
+      element._handleChange = jest.fn();
+      element._handleUserResize({ type: 'pointerup' });
+
+      expect(element._handleChange).not.toHaveBeenCalled;
+    });
+  });
+
+  describe('_getStyleProp()', () => {
+    let getComputedStyleSpy;
+
+    beforeEach(() => {
+      getComputedStyleSpy = jest
+        .spyOn(window, 'getComputedStyle')
+        .mockImplementation(() => ({
+          getPropertyValue: jest.fn(str => {
+            return str === 'height' ? '20px' : '#909';
+          })
+        }));
+    });
+
+    afterEach(() => {
+      getComputedStyleSpy.mockReset();
+    });
+
+    test('Returns the unprocessed value of a style property', () => {
+      const result = element._getStyleProp('background');
+      expect(result).toBe('#909');
+    });
+
+    test('Returns the numeric value of a style property in pixels', () => {
+      const result = element._getStyleProp('height');
+      expect(result).toBe(20);
     });
   });
 });
