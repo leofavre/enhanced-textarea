@@ -212,25 +212,20 @@ describe('TextAreaAutoSizeFactory', () => {
   });
 
   describe('._handleAutoHeightStart()', () => {
-    let _ResizeObserver;
+    let ResizeObserverSpy;
 
     beforeEach(() => {
-      _ResizeObserver = window.ResizeObserver;
-      window.ResizeObserver = jest.fn();
-      window.ResizeObserver.prototype.observe = jest.fn();
+      ResizeObserverSpy = jest.spyOn(ResizeObserver.prototype, 'observe');
       element.addEventListener = jest.fn();
     });
 
     afterEach(() => {
-      window.ResizeObserver = _ResizeObserver;
+      ResizeObserverSpy.mockReset();
     });
 
     test('Observes textElement resize', () => {
       element._handleAutoHeightStart();
-      const [instace] = window.ResizeObserver.mock.instances;
-      expect(instace).toBeInstanceOf(window.ResizeObserver);
-
-      expect(window.ResizeObserver.prototype.observe)
+      expect(element._resizeObserver.observe)
         .toHaveBeenCalledWith(element.textElement);
     });
 
@@ -249,24 +244,22 @@ describe('TextAreaAutoSizeFactory', () => {
   });
 
   describe('._handleAutoHeightEnd()', () => {
-    let _ResizeObserver;
+    let ResizeObserverSpy;
 
     beforeEach(() => {
-      _ResizeObserver = window.ResizeObserver;
-      window.ResizeObserver = jest.fn();
-      window.ResizeObserver.prototype.unobserve = jest.fn();
-      element._resizeObserver = new window.ResizeObserver();
+      ResizeObserverSpy = jest.spyOn(ResizeObserver.prototype, 'unobserve');
+      element._resizeObserver = new ResizeObserver();
       element.removeEventListener = jest.fn();
     });
 
     afterEach(() => {
-      window.ResizeObserver = _ResizeObserver;
+      ResizeObserverSpy.mockReset();
     });
 
     test('Stops observing textElement resize', () => {
       element._handleAutoHeightEnd();
 
-      expect(window.ResizeObserver.prototype.unobserve)
+      expect(element._resizeObserver.unobserve)
         .toHaveBeenCalledWith(element.textElement);
     });
 
