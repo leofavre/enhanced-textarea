@@ -65,7 +65,7 @@ const TextAreaAutoSizeFactory = BaseClass => class extends BaseClass {
   }
 
   _handleAutoHeightStart () {
-    this._resizeObserver = new ResizeObserver(this._handleChange);
+    this._resizeObserver = new window.ResizeObserver(this._handleChange);
     this._resizeObserver.observe(this.textElement);
     this.textElement.addEventListener('input', this._handleChange);
     this.textElement.addEventListener('pointerup', this._handleUserResize);
