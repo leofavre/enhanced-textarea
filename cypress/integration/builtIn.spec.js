@@ -1,91 +1,57 @@
-import expect from 'expect';
 import { LOREM, DELETE_ALL } from '../constants/index.js';
-import setAttr from '../helpers/setAttr.js';
-import setProp from '../helpers/setProp.js';
-import setStyleProp from '../helpers/setStyleProp.js';
-import Logger from '../helpers/Logger.js';
-
-let logger;
 
 describe('Built-in Element', () => {
   beforeEach(() => {
     cy.visit('/');
-    logger = new Logger();
   });
 
-  it('Grows when text is typed', () => {
+  afterEach(() => {
+    cy.wait(500);
+  });
+
+  it('Grows when text is typed and shrinks when text is deleted', () => {
     cy.get('textarea')
-      .then(logger.log('clientHeight'))
-      .focus()
       .type(LOREM)
-      .then(logger.log('clientHeight'))
-      .then(() => {
-        const [initialHeight, finalHeight] = logger.logs;
-        expect(finalHeight).toBeGreaterThan(initialHeight);
-      });
+      .wait(500)
+      .type(DELETE_ALL);
   });
 
-  it('Shrinks when text is deleted', () => {
+  it('Grows when text is set programmatically and shrinks when ' +
+    'text is deleted programmatically', () => {
     cy.get('textarea')
-      .focus()
-      .then(logger.log('clientHeight'))
-      .type(LOREM)
-      .type(DELETE_ALL)
-      .then(logger.log('clientHeight'))
-      .then(() => {
-        const [initialHeight, finalHeight] = logger.logs;
-        expect(finalHeight).toBe(initialHeight);
-      });
-  });
-
-  it('Grows when text is set programmatically', () => {
-    cy.get('textarea')
-      .then(logger.log('clientHeight'))
-      .then(setProp('value', LOREM))
-      .then(logger.log('clientHeight'))
-      .then(() => {
-        const [initialHeight, finalHeight] = logger.logs;
-        expect(finalHeight).toBeGreaterThan(initialHeight);
-      });
-  });
-
-  it('Shrinks when text is deleted programmatically', () => {
-    cy.get('textarea')
-      .then(logger.log('clientHeight'))
-      .then(setProp('value', LOREM))
-      .then(setProp('value', ''))
-      .then(logger.log('clientHeight'))
-      .then(() => {
-        const [initialHeight, finalHeight] = logger.logs;
-        expect(finalHeight).toBe(initialHeight);
-      });
+      .wait(500)
+      .invoke('prop', 'value', LOREM)
+      .wait(500)
+      .invoke('prop', 'value', '');
   });
 
   it('Respects a minimum height when the rows attribute is set', () => {
     cy.get('textarea')
-      .then(setAttr('rows', 2))
-      .then(logger.log('clientHeight'))
-      .focus()
+      .invoke('attr', 'rows', '2')
       .type(LOREM)
-      .type(DELETE_ALL)
-      .then(logger.log('clientHeight'))
-      .then(() => {
-        const [initialHeight, finalHeight] = logger.logs;
-        expect(finalHeight).toBe(initialHeight);
-      });
+      .wait(500)
+      .type(DELETE_ALL);
   });
 
   it('Respects a minimum height when its style property is set', () => {
     cy.get('textarea')
-      .then(setStyleProp('height', '65px'))
-      .then(logger.log('clientHeight'))
-      .focus()
+      .invoke('css', 'height', '65px')
       .type(LOREM)
-      .type(DELETE_ALL)
-      .then(logger.log('clientHeight'))
-      .then(() => {
-        const [initialHeight, finalHeight] = logger.logs;
-        expect(finalHeight).toBe(initialHeight);
-      });
+      .wait(500)
+      .type(DELETE_ALL);
+  });
+
+  it('Grows when a style change causes text to grow and shrinks ' +
+    'when a style change causes text to shrink', () => {
+    cy.get('textarea')
+      .invoke('prop', 'value', LOREM)
+      .wait(500)
+      .invoke('css', 'lineHeight', '2')
+      .wait(500)
+      .invoke('css', 'lineHeight', '3')
+      .wait(500)
+      .invoke('css', 'lineHeight', '2')
+      .wait(500)
+      .invoke('css', 'lineHeight', '1');
   });
 });
