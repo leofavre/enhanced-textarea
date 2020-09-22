@@ -10,8 +10,8 @@ describe('hasStyleExceptHeightChanged', () => {
   });
 
   it('Verifies that style has changed', () => {
-    const prevStyle = 'width: 350px; overflow: hidden;';
-    const nextStyle = 'width: 300px; overflow: auto;';
+    const prevStyle = 'width: 128px; line-height: 2;';
+    const nextStyle = 'width: 300px; line-height: 3;';
     const result = hasStyleExceptHeightChanged(prevStyle, nextStyle);
     expect(result).toBe(true);
   });
