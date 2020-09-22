@@ -10,5 +10,6 @@ jobs:
     after_success:
     - npm run send-coverage
   - name: UI Tests
+    if: branch = master
     script:
     - npm run test-ui
