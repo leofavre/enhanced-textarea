@@ -1,3 +1,4 @@
 module.exports = {
-  testEnvironment: './JestEnvironment.js'
+  testEnvironment: '<rootDir>/JestEnvironment.js',
+  modulePathIgnorePatterns: ['cypress']
 };
