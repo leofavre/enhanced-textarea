@@ -1,6 +1,7 @@
 export const LOREM =
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed ' +
-  'do eiusmod tempor incididunt ut labore et dolore magna aliqua. ' +
-  'Ut enim ad minim.';
+  'I wanna be like Harry Houdini ' +
+  'and be the one to make the great escape.\n' +
+  'I wanna be where no one\'ll see me. ' +
+  'You\'ve gotta learn a lesson give and take.';
 
 export const DELETE_ALL = '{backspace}'.repeat(LOREM.length);

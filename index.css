@@ -3,12 +3,20 @@ body {
   font-family: sans-serif;
   text-align: center;
   line-height: 1.35;
-  box-sizing: content-box;
 }
 
 textarea {
+  box-sizing: content-box;
+  border: 1px solid #999;
+  border-radius: 0px;
   padding: 5px;
   font: inherit;
   text-align: left;
   resize: none;
+  -webkit-appearance: none;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #666;
 }
