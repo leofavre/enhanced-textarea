@@ -1,0 +1,14 @@
+body {
+  margin: 25px;
+  font-family: sans-serif;
+  text-align: center;
+  line-height: 1.35;
+  box-sizing: content-box;
+}
+
+textarea {
+  padding: 5px;
+  font: inherit;
+  text-align: left;
+  resize: none;
+}
