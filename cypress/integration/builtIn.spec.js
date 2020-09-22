@@ -30,19 +30,17 @@ describe('Built-in Element', () => {
       .then(setProp('value', ''));
   });
 
-  it('Shrinks to a minimum height when the rows ' +
-    'attribute is set and text is deleted', () => {
+  it('Respects a minimum height when the rows attribute is set', () => {
     cy.get('textarea')
       .then(setAttr('rows', 2))
-      .then(setProp('value', LOREM))
+      .type(LOREM)
       .type(DELETE_ALL);
   });
 
-  it('Shrinks to a minimum height when the height ' +
-    'style property is set and text is deleted', () => {
+  it('Respects a minimum height when its style property is set', () => {
     cy.get('textarea')
-      .then(setStyleProp('height', '35px'))
-      .then(setProp('value', LOREM))
+      .then(setStyleProp('height', '65px'))
+      .type(LOREM)
       .type(DELETE_ALL);
   });
 });
