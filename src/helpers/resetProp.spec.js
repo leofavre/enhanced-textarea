@@ -1,7 +1,7 @@
 import resetProp from './resetProp.js';
 
 describe('resetProp', () => {
-  test('Deletes and then resets a property from an object', () => {
+  it('Deletes and then resets a property from an object', () => {
     let descriptor;
 
     const element = {

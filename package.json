@@ -4,9 +4,15 @@
   "description": "Template Repository",
   "main": "src/EnhancedTextAreaFactory.js",
   "scripts": {
-    "start": "snowpack dev",
+    "cypress": "cypress run",
+    "cypress-open": "cypress open",
+    "start": "snowpack dev --port=8080",
+    "start-test": "snowpack dev --port=7075 --open=none",
     "send-coverage": "cat ./coverage/lcov.info | coveralls",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "test-watch": "jest --coverage --watchAll",
+    "test-ui": "start-server-and-test start-test 7075 cypress",
+    "test-ui-watch": "start-server-and-test start-test 7075 cypress-open"
   },
   "author": "Leonardo Favre <leo@leofavre.com> (https://www.leofavre.com/)",
   "license": "MIT",
@@ -16,15 +22,18 @@
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.3.0",
     "coveralls": "^3.1.0",
+    "cypress": "^5.2.0",
     "eslint": "^7.9.0",
-    "eslint-config-semistandard": "^15.0.0",
-    "eslint-config-standard": "^14.1.0",
+    "eslint-config-semistandard": "^15.0.1",
+    "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "expect": "^26.4.2",
     "jest": "^26.4.2",
-    "snowpack": "^2.11.1"
+    "snowpack": "^2.11.1",
+    "start-server-and-test": "^1.11.4"
   },
   "publishConfig": {
     "access": "public"

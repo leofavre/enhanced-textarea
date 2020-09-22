@@ -2,7 +2,14 @@ language: node_js
 notifications:
   email: false
 node_js: 12
-script:
-  - npm test
-after_success:
-  - npm run send-coverage
+jobs:
+  include:
+  - name: Unit Tests
+    script:
+    - npm test
+    after_success:
+    - npm run send-coverage
+  - name: UI Tests
+    if: branch = master
+    script:
+    - npm run test-ui

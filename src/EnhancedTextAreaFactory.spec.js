@@ -14,11 +14,11 @@ describe('EnhancedTextAreaFactory', () => {
     WithResizeEvent.mockClear();
   });
 
-  test('Uses an empty class as default parameter', () => {
+  it('Uses an empty class as default parameter', () => {
     EnhancedTextAreaFactory();
   });
 
-  test('Returns a class that extends another passed as parameter', () => {
+  it('Returns a class that extends another passed as parameter', () => {
     const Base = class {};
     const ResultClass = EnhancedTextAreaFactory(Base);
 

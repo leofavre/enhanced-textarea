@@ -1,43 +1,43 @@
 import hasStyleExceptHeightChanged from './hasStyleExceptHeightChanged.js';
 
 describe('hasStyleExceptHeightChanged', () => {
-  test('Returns false if both parameters are undefined', () => {
+  it('Returns false if both parameters are undefined', () => {
     expect(hasStyleExceptHeightChanged());
   });
 
-  test('Returns false if the second parameter is undefined', () => {
+  it('Returns false if the second parameter is undefined', () => {
     expect(hasStyleExceptHeightChanged('width: 300px;'));
   });
 
-  test('Verifies that style has changed', () => {
+  it('Verifies that style has changed', () => {
     const prevStyle = 'width: 350px; overflow: hidden;';
     const nextStyle = 'width: 300px; overflow: auto;';
     const result = hasStyleExceptHeightChanged(prevStyle, nextStyle);
     expect(result).toBe(true);
   });
 
-  test('Verifies that style has not changed', () => {
+  it('Verifies that style has not changed', () => {
     const prevStyle = 'width: 350px; overflow: hidden;';
     const nextStyle = 'width: 350px; overflow: hidden;';
     const result = hasStyleExceptHeightChanged(prevStyle, nextStyle);
     expect(result).toBe(false);
   });
 
-  test('Verifies that style has not changed ignoring spaces', () => {
+  it('Verifies that style has not changed ignoring spaces', () => {
     const prevStyle = 'width: 350px;  overflow:    hidden; ';
     const nextStyle = '   width:   350px;  overflow: hidden;';
     const result = hasStyleExceptHeightChanged(prevStyle, nextStyle);
     expect(result).toBe(false);
   });
 
-  test('Verifies that style has not changed ignoring height', () => {
+  it('Verifies that style has not changed ignoring height', () => {
     const prevStyle = 'height: 250px; width: 350px; overflow: hidden;';
     const nextStyle = 'height: 125px; width: 350px; overflow: hidden;';
     const result = hasStyleExceptHeightChanged(prevStyle, nextStyle);
     expect(result).toBe(false);
   });
 
-  test('Verifies that style has not changed ignoring min-height', () => {
+  it('Verifies that style has not changed ignoring min-height', () => {
     const prevStyle = 'min-height: 250px; width: 350px; overflow: hidden;';
     const nextStyle = 'min-height: 125px; width: 350px; overflow: hidden;';
     const result = hasStyleExceptHeightChanged(prevStyle, nextStyle);

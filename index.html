@@ -3,41 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Text Area Auto Size</title>
-  <script type="module">
-    import EnhancedTextAreaBuiltIn from './src/EnhancedTextAreaBuiltIn.js';
-
-    customElements.define(
-      'enhanced-textarea',
-      EnhancedTextAreaBuiltIn,
-      { extends: 'textarea' }
-    );
-
-    setTimeout(() => {
-      customElements.define(
-        'lazy-enhanced-textarea',
-        class extends EnhancedTextAreaBuiltIn {},
-        { extends: 'textarea' }
-      );
-    }, 1500);
-
-    Array.from(document.querySelectorAll('textarea')).forEach(element => {
-      element.autoheight = true;
-      element.value = 'super long text'.repeat(20).trim();
-      element.rows = 2;
-      element.maxLength = 500;
-    });
-  </script>
+  <title>Enhanced Text Area</title>
+  <script type="module" src="./index.js"></script>
+  <link rel="stylesheet" href="./index.css">
 </head>
 <body>
+  <h1>Enhanced Text Area</h1>
   <textarea
+    cols="40"
+    rows="1"
     is="enhanced-textarea"
-    cols="60"
-  ></textarea>
-
-  <textarea
-    is="lazy-enhanced-textarea"
-    cols="60"
+    autoheight
   ></textarea>
 </body>
 </html>

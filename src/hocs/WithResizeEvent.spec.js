@@ -11,16 +11,16 @@ describe('WithResizeEvent', () => {
     element = new Element();
   });
 
-  test('Uses an empty class as default parameter', () => {
+  it('Uses an empty class as default parameter', () => {
     WithResizeEvent();
   });
 
-  test('Returns a class that extends another passed as parameter', () => {
+  it('Returns a class that extends another passed as parameter', () => {
     expect(Element.prototype).toBeInstanceOf(Base);
   });
 
   describe('.constructor()', () => {
-    test('Makes sure _handlePointer always is bound to the instance', () => {
+    it('Makes sure _handlePointer always is bound to the instance', () => {
       Element.prototype._handlePointer = function () { return this; };
       element = new Element();
       const [result] = [1].map(element._handlePointer);
@@ -29,7 +29,7 @@ describe('WithResizeEvent', () => {
   });
 
   describe('.textElement', () => {
-    test('Returns the instance', () => {
+    it('Returns the instance', () => {
       expect(element.textElement).toBe(element);
     });
   });
@@ -39,7 +39,7 @@ describe('WithResizeEvent', () => {
       element.addEventListener = jest.fn();
     });
 
-    test('Calls super.connectedCallback', () => {
+    it('Calls super.connectedCallback', () => {
       Base.prototype.connectedCallback = jest.fn();
       Element = WithResizeEvent(Base);
       element = new Element();
@@ -48,7 +48,7 @@ describe('WithResizeEvent', () => {
       expect(Base.prototype.connectedCallback).toHaveBeenCalled;
     });
 
-    test('Observes user interaction', () => {
+    it('Observes user interaction', () => {
       element.connectedCallback();
 
       expect(element.textElement.addEventListener)
@@ -64,7 +64,7 @@ describe('WithResizeEvent', () => {
       element.removeEventListener = jest.fn();
     });
 
-    test('Calls super.disconnectedCallback', () => {
+    it('Calls super.disconnectedCallback', () => {
       Base.prototype.disconnectedCallback = jest.fn();
       Element = WithResizeEvent(Base);
       element = new Element();
@@ -73,7 +73,7 @@ describe('WithResizeEvent', () => {
       expect(Base.prototype.disconnectedCallback).toHaveBeenCalled;
     });
 
-    test('Observes user interaction', () => {
+    it('Observes user interaction', () => {
       element.disconnectedCallback();
 
       expect(element.textElement.removeEventListener)
@@ -96,11 +96,11 @@ describe('WithResizeEvent', () => {
       CustomEventSpy.mockReset();
     });
 
-    test('Does nothing if type is undefined', () => {
+    it('Does nothing if type is undefined', () => {
       element._handlePointer();
     });
 
-    test('Stores textElement dimensions on pointerdown', () => {
+    it('Stores textElement dimensions on pointerdown', () => {
       element.textElement.offsetHeight = 50;
       element.textElement.offsetWidth = 100;
 
@@ -110,7 +110,7 @@ describe('WithResizeEvent', () => {
       expect(element._preResizeWidth).toBe(100);
     });
 
-    test('Dispatches userresize event if textElement was resized', () => {
+    it('Dispatches userresize event if textElement was resized', () => {
       element._preResizeHeight = 50;
       element._preResizeWidth = 100;
 
@@ -129,7 +129,7 @@ describe('WithResizeEvent', () => {
         .toHaveBeenCalledWith(CustomEventSpy.mock.instances[0]);
     });
 
-    test('Does not dispatch userresize event if textElement ' +
+    it('Does not dispatch userresize event if textElement ' +
       'was not resized', () => {
       element._preResizeHeight = 50;
       element._preResizeWidth = 100;
