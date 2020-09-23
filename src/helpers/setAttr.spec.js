@@ -33,19 +33,19 @@ describe('setAttr', () => {
     expect(element.setAttribute).toHaveBeenCalledWith('height', '');
   });
 
-  it('Calls removeAttribute  with the attribute name ' +
+  it('Calls removeAttribute with the attribute name ' +
     'if the value is null', () => {
     setAttr(element, 'height', null);
     expect(element.removeAttribute).toHaveBeenCalledWith('height');
   });
 
-  it('Calls removeAttribute  with the attribute name ' +
+  it('Calls removeAttribute with the attribute name ' +
     'if the value is undefined', () => {
     setAttr(element, 'height');
     expect(element.removeAttribute).toHaveBeenCalledWith('height');
   });
 
-  it('Calls removeAttribute  with the attribute name ' +
+  it('Calls removeAttribute with the attribute name ' +
     'if the value is false', () => {
     setAttr(element, 'height', false);
     expect(element.removeAttribute).toHaveBeenCalledWith('height');
