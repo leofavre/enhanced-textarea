@@ -1,4 +1,4 @@
-import EnhancedTextAreaBuiltIn from '../src/EnhancedTextAreaBuiltIn.js';
+import EnhancedTextAreaBuiltIn from '../src/built-in/index.js';
 
 customElements.define(
   'enhanced-textarea',

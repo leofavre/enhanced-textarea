@@ -1,26 +1,28 @@
-import WithAutoHeight from './hocs/WithAutoHeight.js';
-import WithResizeEvent from './hocs/WithResizeEvent.js';
-import EnhancedTextAreaFactory from './EnhancedTextAreaFactory.js';
+import WithAutoHeight from '../hocs/WithAutoHeight.js';
+import WithResizeEvent from '../hocs/WithResizeEvent.js';
+import EnhancedTextAreaBuiltInFactory from './factory.js';
 
-jest.mock('./hocs/WithAutoHeight.js');
-jest.mock('./hocs/WithResizeEvent.js');
+jest.mock('../hocs/WithAutoHeight.js');
+jest.mock('../hocs/WithResizeEvent.js');
 
-WithAutoHeight.mockImplementation(Base => class extends Base {});
-WithResizeEvent.mockImplementation(Base => class extends Base {});
+describe('EnhancedTextAreaBuiltInFactory', () => {
+  beforeEach(() => {
+    WithAutoHeight.mockImplementation(Base => class extends Base {});
+    WithResizeEvent.mockImplementation(Base => class extends Base {});
+  });
 
-describe('EnhancedTextAreaFactory', () => {
   afterEach(() => {
     WithAutoHeight.mockClear();
     WithResizeEvent.mockClear();
   });
 
   it('Uses an empty class as default parameter', () => {
-    EnhancedTextAreaFactory();
+    EnhancedTextAreaBuiltInFactory();
   });
 
   it('Returns a class that extends another passed as parameter', () => {
     const Base = class {};
-    const ResultClass = EnhancedTextAreaFactory(Base);
+    const ResultClass = EnhancedTextAreaBuiltInFactory(Base);
 
     expect(WithResizeEvent).toHaveBeenCalledWith(Base);
     const [{ value: WithResizeEventResult }] = WithResizeEvent.mock.results;
