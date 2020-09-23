@@ -8,12 +8,18 @@ describe('WithResizeEvent', () => {
   });
 
   it('Dispatches an userresize event', () => {
+    const handleUserResize = ({ target }) => {
+      target.setAttribute('resized', '');
+    };
+
     cy.get('textarea')
+      .invoke('on', 'userresize', handleUserResize)
       .invoke('css', 'resize', 'both')
       .trigger('pointerdown', 'bottomRight')
       .wait(500)
       .invoke('css', 'width', '250px')
       .invoke('css', 'height', '50px')
-      .trigger('pointerup');
+      .trigger('pointerup')
+      .should('have.attr', 'resized');
   });
 });
