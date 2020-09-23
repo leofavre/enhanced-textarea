@@ -52,7 +52,7 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
         }
       }
 
-      if (!attrName === 'style' ||
+      if (attrName !== 'style' ||
         hasStyleExceptHeightChanged(prevValue, nextValue)) {
         this._handleChange();
       }
