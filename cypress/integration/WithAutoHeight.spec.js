@@ -13,7 +13,7 @@ describe('WithAutoHeight', () => {
     cy.get('textarea')
       .type(LOREM)
       .should('have.prop', 'clientHeight')
-      .and('be.within', 93, 101);
+      .and('be.within', 90, 98);
 
     cy.get('textarea')
       .wait(500)
@@ -28,7 +28,7 @@ describe('WithAutoHeight', () => {
       .wait(500)
       .invoke('prop', 'value', LOREM)
       .should('have.prop', 'clientHeight')
-      .and('be.within', 93, 101);
+      .and('be.within', 90, 98);
 
     cy.get('textarea')
       .wait(500)
@@ -42,7 +42,7 @@ describe('WithAutoHeight', () => {
       .invoke('attr', 'rows', '2')
       .type(LOREM)
       .should('have.prop', 'clientHeight')
-      .and('be.within', 93, 101);
+      .and('be.within', 90, 98);
 
     cy.get('textarea')
       .wait(500)
@@ -56,7 +56,7 @@ describe('WithAutoHeight', () => {
       .invoke('css', 'height', '65px')
       .type(LOREM)
       .should('have.prop', 'clientHeight')
-      .and('be.within', 93, 101);
+      .and('be.within', 90, 98);
 
     cy.get('textarea')
       .wait(500)
@@ -90,7 +90,7 @@ describe('WithAutoHeight', () => {
       .wait(500)
       .invoke('css', 'lineHeight', '')
       .should('have.prop', 'clientHeight')
-      .and('be.within', 93, 101);
+      .and('be.within', 90, 98);
   });
 
   it('Grows or shrinks according to a class applied ' +
@@ -106,7 +106,7 @@ describe('WithAutoHeight', () => {
       .wait(500)
       .invoke('removeClass', 'larger')
       .should('have.prop', 'clientHeight')
-      .and('be.within', 93, 101);
+      .and('be.within', 90, 98);
   });
 
   it('Calculates height with or without box-sizing: border-box', () => {
