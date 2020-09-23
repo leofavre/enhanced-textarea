@@ -12,12 +12,14 @@ describe('WithAutoHeight', () => {
   it('Grows or shrinks according to text being typed or deleted', () => {
     cy.get('textarea')
       .type(LOREM)
+      .screenshot()
       .should('have.prop', 'clientHeight')
       .and('be.within', 90, 98);
 
     cy.get('textarea')
       .wait(500)
       .type(DELETE_ALL)
+      .screenshot()
       .should('have.prop', 'clientHeight')
       .and('be.within', 27, 35);
   });
@@ -27,12 +29,14 @@ describe('WithAutoHeight', () => {
     cy.get('textarea')
       .wait(500)
       .invoke('prop', 'value', LOREM)
+      .screenshot()
       .should('have.prop', 'clientHeight')
       .and('be.within', 90, 98);
 
     cy.get('textarea')
       .wait(500)
       .invoke('prop', 'value', '')
+      .screenshot()
       .should('have.prop', 'clientHeight')
       .and('be.within', 27, 35);
   });
@@ -47,6 +51,7 @@ describe('WithAutoHeight', () => {
     cy.get('textarea')
       .wait(500)
       .type(DELETE_ALL)
+      .screenshot()
       .should('have.prop', 'clientHeight')
       .and('be.within', 48, 56);
   });
@@ -61,6 +66,7 @@ describe('WithAutoHeight', () => {
     cy.get('textarea')
       .wait(500)
       .type(DELETE_ALL)
+      .screenshot()
       .should('have.prop', 'clientHeight')
       .and('be.within', 71, 79);
   });
@@ -77,12 +83,14 @@ describe('WithAutoHeight', () => {
     cy.get('textarea')
       .wait(500)
       .invoke('css', 'lineHeight', '3')
+      .screenshot()
       .should('have.prop', 'clientHeight')
       .and('be.within', 198, 206);
 
     cy.get('textarea')
       .wait(500)
       .invoke('css', 'lineHeight', '2')
+      .screenshot()
       .should('have.prop', 'clientHeight')
       .and('be.within', 134, 142);
 
@@ -99,6 +107,7 @@ describe('WithAutoHeight', () => {
       .invoke('prop', 'value', LOREM)
       .wait(500)
       .invoke('addClass', 'larger')
+      .screenshot()
       .should('have.prop', 'clientHeight')
       .and('be.within', 198, 206);
 
@@ -117,6 +126,7 @@ describe('WithAutoHeight', () => {
       .invoke('css', 'borderWidth', '15px')
       .wait(500)
       .invoke('css', 'boxSizing', 'border-box')
+      .screenshot()
       .should('have.prop', 'clientHeight')
       .and('be.within', 202, 210);
 
@@ -127,6 +137,7 @@ describe('WithAutoHeight', () => {
     cy.get('textarea')
       .wait(500)
       .invoke('css', 'boxSizing', 'content-box')
+      .screenshot()
       .should('have.prop', 'clientHeight')
       .and('be.within', 160, 168);
 
@@ -139,11 +150,13 @@ describe('WithAutoHeight', () => {
     cy.get('textarea')
       .invoke('prop', 'value', LOREM)
       .invoke('css', 'resize', 'both')
-      .wait(500)
+      .screenshot()
       .trigger('pointerdown', 'bottomRight')
+      .wait(500)
       .invoke('css', 'width', '250px')
       .invoke('css', 'height', '50px')
       .trigger('pointerup')
+      .screenshot()
       .should('have.prop', 'clientHeight')
       .and('be.within', 132, 140);
   });
