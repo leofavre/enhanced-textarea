@@ -4,9 +4,11 @@ const onPropChange = (element, propName, { onGet, onSet }) => {
   const { get: superGet, set: superSet } =
     Object.getOwnPropertyDescriptor(proto, propName) || {};
 
+  const userProtoAccessors = superGet && superSet;
+
   const newProps = {
-    get: function (...args) {
-      const result = superGet
+    get (...args) {
+      const result = userProtoAccessors
         ? superGet.apply(this, args)
         : this[`_${propName}`];
 
@@ -14,15 +16,14 @@ const onPropChange = (element, propName, { onGet, onSet }) => {
 
       return result;
     },
-    set: function (...args) {
-      onSet && onSet(...args);
-
-      if (superSet) {
+    set (...args) {
+      if (userProtoAccessors) {
         superSet.apply(this, args);
-        return;
+      } else {
+        this[`_${propName}`] = args[0];
       }
 
-      this[`_${propName}`] = args[0];
+      onSet && onSet(args[0]);
     }
   };
 
