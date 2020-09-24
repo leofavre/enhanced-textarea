@@ -1,7 +1,7 @@
 {
   "name": "@leofavre/enhanced-textarea",
   "version": "0.1.0",
-  "description": "Template Repository",
+  "description": "Enhanced Text Area",
   "main": "build/index.js",
   "scripts": {
     "build": "snowpack build",
