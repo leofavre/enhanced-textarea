@@ -17,7 +17,7 @@ function getComputedStyle () {
   };
 }
 
-class JestEnvironment extends NodeEnvironment {
+class jestEnvironment extends NodeEnvironment {
   async setup () {
     await super.setup();
 
@@ -44,4 +44,4 @@ class JestEnvironment extends NodeEnvironment {
   }
 }
 
-module.exports = JestEnvironment;
+module.exports = jestEnvironment;

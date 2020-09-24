@@ -1,4 +1,4 @@
-build/
+dist/
 coverage/
 cypress/screenshots/
 cypress/videos/

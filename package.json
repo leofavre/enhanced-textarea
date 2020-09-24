@@ -1,8 +1,8 @@
 {
   "name": "@leofavre/enhanced-textarea",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Enhanced Text Area",
-  "main": "build/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "snowpack build",
     "cypress": "cypress run",
