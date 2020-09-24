@@ -7,25 +7,17 @@ const runElementDefinitionTests = ({ selector, startFunction }) => {
       cy.get(selector).as('textarea');
     });
 
-    afterEach(() => {
-      cy.wait(500);
-    });
-
     it('Lazily sets the autoheight property', () => {
       cy.get('@textarea')
         .invoke('attr', 'autoheight', null)
         .invoke('prop', 'autoheight', true)
         .invoke('prop', 'value', LOREM)
-        .wait(500)
-        .screenshot()
         .should('have.prop', 'clientHeight')
         .and('be.within', 27, 35);
 
       cy.window().then(startFunction);
 
       cy.get('@textarea')
-        .wait(500)
-        .screenshot()
         .should('have.prop', 'clientHeight')
         .and('be.within', 90, 98);
     });
@@ -35,16 +27,12 @@ const runElementDefinitionTests = ({ selector, startFunction }) => {
         .invoke('attr', 'autoheight', '')
         .invoke('prop', 'autoheight', undefined)
         .invoke('prop', 'value', LOREM)
-        .wait(500)
-        .screenshot()
         .should('have.prop', 'clientHeight')
         .and('be.within', 27, 35);
 
       cy.window().then(startFunction);
 
       cy.get('@textarea')
-        .wait(500)
-        .screenshot()
         .should('have.prop', 'clientHeight')
         .and('be.within', 90, 98);
     });
