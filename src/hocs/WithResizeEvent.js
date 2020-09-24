@@ -40,7 +40,7 @@ const WithResizeEvent = (Base = class {}) => class extends Base {
           composed: true
         });
 
-        this.dispatchEvent(event);
+        this.textElement.dispatchEvent(event);
       }
     }
   }

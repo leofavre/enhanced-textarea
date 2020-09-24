@@ -89,7 +89,7 @@ describe('WithResizeEvent', () => {
 
     beforeEach(() => {
       CustomEventSpy = jest.spyOn(global, 'CustomEvent');
-      element.dispatchEvent = jest.fn();
+      element.textElement.dispatchEvent = jest.fn();
     });
 
     afterEach(() => {
@@ -125,7 +125,7 @@ describe('WithResizeEvent', () => {
         composed: true
       });
 
-      expect(element.dispatchEvent)
+      expect(element.textElement.dispatchEvent)
         .toHaveBeenCalledWith(CustomEventSpy.mock.instances[0]);
     });
 
@@ -140,7 +140,7 @@ describe('WithResizeEvent', () => {
       element._handlePointer({ type: 'pointerup' });
 
       expect(CustomEventSpy).not.toHaveBeenCalled;
-      expect(element.dispatchEvent).not.toHaveBeenCalled;
+      expect(element.textElement.dispatchEvent).not.toHaveBeenCalled;
     });
   });
 });

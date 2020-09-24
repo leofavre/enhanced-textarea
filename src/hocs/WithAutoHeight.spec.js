@@ -51,13 +51,13 @@ describe('WithAutoHeight', () => {
   describe('.autoheight', () => {
     it('Calls getCoercedAttr on get', () => {
       element.autoheight;
-      const expectedArgs = [element, 'autoheight', Boolean];
+      const expectedArgs = [element.textElement, 'autoheight', Boolean];
       expect(getCoercedAttr).toHaveBeenCalledWith(...expectedArgs);
     });
 
     it('Calls setAttr on set', () => {
       element.autoheight = true;
-      const expectedArgs = [element, 'autoheight', true];
+      const expectedArgs = [element.textElement, 'autoheight', true];
       expect(setAttr).toHaveBeenCalledWith(...expectedArgs);
     });
   });
@@ -211,7 +211,7 @@ describe('WithAutoHeight', () => {
 
     it('Calls resetProp passing autoheight', () => {
       element.connectedCallback();
-      expect(resetProp).toHaveBeenCalledWith(element, 'autoheight');
+      expect(resetProp).toHaveBeenCalledWith(element.textElement, 'autoheight');
     });
   });
 

@@ -16,11 +16,11 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
   }
 
   get autoheight () {
-    return getCoercedAttr(this, 'autoheight', Boolean);
+    return getCoercedAttr(this.textElement, 'autoheight', Boolean);
   }
 
   set autoheight (value) {
-    setAttr(this, 'autoheight', value);
+    setAttr(this.textElement, 'autoheight', value);
   }
 
   get value () {
@@ -41,11 +41,11 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
 
   attributeChangedCallback (...args) {
     super.attributeChangedCallback && super.attributeChangedCallback(...args);
-    const [attrName, prevValue, nextValue] = args;
+    const [attrName, oldValue, nextValue] = args;
 
-    if (prevValue !== nextValue) {
+    if (oldValue !== nextValue) {
       if (attrName === 'autoheight') {
-        if (prevValue == null) {
+        if (oldValue == null) {
           this._handleAutoHeightStart();
         } else if (nextValue == null) {
           this._handleAutoHeightEnd();
@@ -53,7 +53,7 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
       }
 
       if (attrName !== 'style' ||
-        hasStyleExceptHeightChanged(prevValue, nextValue)) {
+        hasStyleExceptHeightChanged(oldValue, nextValue)) {
         this._handleChange();
       }
     }
@@ -61,7 +61,7 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
 
   connectedCallback () {
     super.connectedCallback && super.connectedCallback();
-    resetProp(this, 'autoheight');
+    resetProp(this.textElement, 'autoheight');
   }
 
   _handleAutoHeightStart () {
