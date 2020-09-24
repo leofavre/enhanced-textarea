@@ -1,5 +1,5 @@
 import { LOREM, DELETE_ALL } from '../constants/index.js';
-const TYPE_DELAY = 2;
+const TYPE_DELAY = 0;
 const typeOptions = { delay: TYPE_DELAY };
 
 const runAutoHeightTests = ({ selector, startFunction }) => {

@@ -1,5 +1,7 @@
 {
   "baseUrl": "http://localhost:7075",
   "viewportWidth": 700,
-  "viewportHeight": 700
+  "viewportHeight": 700,
+  "includeShadowDom": true,
+  "defaultCommandTimeout": 300
 }
