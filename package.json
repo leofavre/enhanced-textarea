@@ -1,9 +1,10 @@
 {
-  "name": "template-repo",
+  "name": "@leofavre/enhanced-textarea",
   "version": "0.1.0",
   "description": "Template Repository",
-  "main": "src/EnhancedTextAreaFactory.js",
+  "main": "build/index.js",
   "scripts": {
+    "build": "snowpack build",
     "cypress": "cypress run",
     "cypress-open": "cypress open",
     "start": "snowpack dev --port=8080",

@@ -4,7 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Enhanced Text Area</title>
-  <script type="module" src="./index.js"></script>
+  <script type="module">
+    import EnhancedTextAreaBuiltIn from './built-in/index.js';
+
+    customElements.define(
+      'enhanced-textarea',
+      EnhancedTextAreaBuiltIn,
+      { extends: 'textarea' }
+    );
+  </script>
   <link rel="stylesheet" href="./index.css">
 </head>
 <body>

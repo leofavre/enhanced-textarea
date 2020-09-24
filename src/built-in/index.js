@@ -1,5 +1,6 @@
-import factory from './factory.js';
+import EnhancedTextAreaBuiltInFactory from './factory.js';
 
-const EnhancedTextAreaBuiltIn = factory(HTMLTextAreaElement);
+const EnhancedTextAreaBuiltIn =
+  EnhancedTextAreaBuiltInFactory(HTMLTextAreaElement);
 
 export default EnhancedTextAreaBuiltIn;
