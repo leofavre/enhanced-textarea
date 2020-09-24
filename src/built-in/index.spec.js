@@ -1,8 +1,39 @@
-import EnhancedTextAreaBuiltIn from './index.js';
+import * as packages from './index.js';
 
 describe('EnhancedTextAreaBuiltIn', () => {
-  it('Extends HTMLTextAreaElement', () => {
-    expect(EnhancedTextAreaBuiltIn.prototype)
-      .toBeInstanceOf(HTMLTextAreaElement);
+  it('Exports a default function', () => {
+    expect(packages.default).toBeDefined;
+  });
+
+  it('Exports a defineElement method', () => {
+    expect(packages.defineElement).toBeInstanceOf(Function);
+  });
+
+  describe('defineElement', () => {
+    let customElementsDefineSpy;
+
+    beforeEach(() => {
+      customElementsDefineSpy = jest.spyOn(global.customElements, 'define');
+    });
+
+    it('Defines a custom element with the default name', () => {
+      packages.defineElement();
+
+      expect(customElementsDefineSpy).toHaveBeenCalledWith(
+        'enhanced-textarea',
+        packages.default,
+        { extends: 'textarea' }
+      );
+    });
+
+    it('Defines a custom element with a custom name', () => {
+      packages.defineElement('custom-name');
+
+      expect(customElementsDefineSpy).toHaveBeenCalledWith(
+        'custom-name',
+        packages.default,
+        { extends: 'textarea' }
+      );
+    });
   });
 });
