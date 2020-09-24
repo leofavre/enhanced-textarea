@@ -7,17 +7,33 @@
   <link rel="stylesheet" href="./index.css">
   <script type="module">
     import { defineElement } from './built-in/index.js';
+    import { enhance } from './script/index.js';
+
     window.defineElement = defineElement;
+    window.enhance = enhance;
+
     const { port = '8080' } = new URL(document.URL);
-    if (Number(port) > 8000) defineElement();
+
+    if (Number(port) >= 8000) {
+      defineElement();
+      enhance(document.querySelector('[data=enhanced-textarea]'));
+    };
   </script>
 </head>
 <body>
   <h1>Enhanced Text Area</h1>
+
+  <h2>Built-in</h2>
   <textarea
     rows="1"
     is="enhanced-textarea"
     autoheight
+  ></textarea>
+  
+  <h2>Script</h2>
+  <textarea
+    rows="1"
+    data="enhanced-textarea"
   ></textarea>
 </body>
 </html>
