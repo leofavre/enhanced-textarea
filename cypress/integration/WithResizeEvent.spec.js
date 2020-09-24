@@ -1,7 +1,8 @@
 describe('WithResizeEvent', () => {
   beforeEach(() => {
     cy.visit('/');
-    // cy.window().then(win => win.defineEnhancedTextAreaBuiltIn());
+    cy.get('textarea').as('textarea');
+    cy.window().then(win => win.defineElement());
   });
 
   afterEach(() => {
@@ -13,7 +14,7 @@ describe('WithResizeEvent', () => {
       target.setAttribute('resized', '');
     };
 
-    cy.get('textarea')
+    cy.get('@textarea')
       .invoke('on', 'userresize', handleUserResize)
       .invoke('css', 'resize', 'both')
       .wait(500)

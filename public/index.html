@@ -4,16 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Enhanced Text Area</title>
-  <script type="module">
-    import EnhancedTextAreaBuiltIn from './built-in/index.js';
-
-    customElements.define(
-      'enhanced-textarea',
-      EnhancedTextAreaBuiltIn,
-      { extends: 'textarea' }
-    );
-  </script>
   <link rel="stylesheet" href="./index.css">
+  <script type="module">
+    import { defineElement } from './built-in.js';
+    window.defineElement = defineElement;
+    const { port = '8080' } = new URL(document.URL);
+    if (Number(port) > 8000) defineElement();
+  </script>
 </head>
 <body>
   <h1>Enhanced Text Area</h1>
