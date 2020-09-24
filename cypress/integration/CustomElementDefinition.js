@@ -1,6 +1,6 @@
 import { LOREM } from '../constants';
 
-describe.skip('Custom Element Definition', () => {
+describe('Custom Element Definition', () => {
   beforeEach(() => {
     cy.visit('/');
     cy.get('textarea').as('textarea');
@@ -20,7 +20,7 @@ describe.skip('Custom Element Definition', () => {
       .should('have.prop', 'clientHeight')
       .and('be.within', 27, 35);
 
-    cy.window().then(win => win.defineEnhancedTextAreaBuiltIn());
+    cy.window().then(win => win.defineElement());
 
     cy.get('@textarea')
       .wait(500)
@@ -39,7 +39,7 @@ describe.skip('Custom Element Definition', () => {
       .should('have.prop', 'clientHeight')
       .and('be.within', 27, 35);
 
-    cy.window().then(win => win.defineEnhancedTextAreaBuiltIn());
+    cy.window().then(win => win.defineElement());
 
     cy.get('@textarea')
       .wait(500)
@@ -49,7 +49,7 @@ describe.skip('Custom Element Definition', () => {
   });
 
   it('Reflects the autoheight property to an attribute', () => {
-    cy.window().then(win => win.defineEnhancedTextAreaBuiltIn());
+    cy.window().then(win => win.defineElement());
 
     cy.get('@textarea')
       .invoke('prop', 'autoheight', true);
@@ -64,7 +64,7 @@ describe.skip('Custom Element Definition', () => {
   });
 
   it('Reflects the autoheight attribute to a property', () => {
-    cy.window().then(win => win.defineEnhancedTextAreaBuiltIn());
+    cy.window().then(win => win.defineElement());
 
     cy.get('@textarea')
       .invoke('attr', 'autoheight', '');

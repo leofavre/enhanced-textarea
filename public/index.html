@@ -7,7 +7,9 @@
   <link rel="stylesheet" href="./index.css">
   <script type="module">
     import { defineElement } from './built-in.js';
-    defineElement();
+    window.defineElement = defineElement;
+    const { port = '8080' } = new URL(document.URL);
+    if (Number(port) > 8000) defineElement();
   </script>
 </head>
 <body>

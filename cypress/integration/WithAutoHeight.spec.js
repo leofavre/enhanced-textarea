@@ -4,7 +4,7 @@ describe('WithAutoHeight', () => {
   beforeEach(() => {
     cy.visit('/');
     cy.get('textarea').as('textarea');
-    // cy.window().then(win => win.defineEnhancedTextAreaBuiltIn());
+    cy.window().then(win => win.defineElement());
   });
 
   afterEach(() => {
