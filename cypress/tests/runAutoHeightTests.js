@@ -1,6 +1,4 @@
-import { LOREM, DELETE_ALL } from '../constants/index.js';
-const TYPE_DELAY = 0;
-const typeOptions = { delay: TYPE_DELAY };
+import { LOREM, DELETE_ALL, TYPE_OPTIONS } from '../constants/index.js';
 
 const runAutoHeightTests = ({ selector, startFunction }) => {
   describe('Auto Height', () => {
@@ -12,12 +10,12 @@ const runAutoHeightTests = ({ selector, startFunction }) => {
 
     it('Grows or shrinks according to text being typed or deleted', () => {
       cy.get('@textarea')
-        .type(LOREM, typeOptions)
+        .type(LOREM, TYPE_OPTIONS)
         .should('have.prop', 'clientHeight')
         .and('be.within', 90, 98);
 
       cy.get('@textarea')
-        .type(DELETE_ALL, typeOptions)
+        .type(DELETE_ALL, TYPE_OPTIONS)
         .should('have.prop', 'clientHeight')
         .and('be.within', 27, 35);
     });
@@ -38,12 +36,12 @@ const runAutoHeightTests = ({ selector, startFunction }) => {
     it('Respects a minimum height when the rows attribute is set', () => {
       cy.get('@textarea')
         .invoke('attr', 'rows', '2')
-        .type(LOREM, typeOptions)
+        .type(LOREM, TYPE_OPTIONS)
         .should('have.prop', 'clientHeight')
         .and('be.within', 90, 98);
 
       cy.get('@textarea')
-        .type(DELETE_ALL, typeOptions)
+        .type(DELETE_ALL, TYPE_OPTIONS)
         .should('have.prop', 'clientHeight')
         .and('be.within', 48, 56);
     });
@@ -52,12 +50,12 @@ const runAutoHeightTests = ({ selector, startFunction }) => {
       'style property is set', () => {
       cy.get('@textarea')
         .invoke('css', 'height', '65px')
-        .type(LOREM, typeOptions)
+        .type(LOREM, TYPE_OPTIONS)
         .should('have.prop', 'clientHeight')
         .and('be.within', 90, 98);
 
       cy.get('@textarea')
-        .type(DELETE_ALL, typeOptions)
+        .type(DELETE_ALL, TYPE_OPTIONS)
         .should('have.prop', 'clientHeight')
         .and('be.within', 71, 79);
     });
@@ -87,7 +85,7 @@ const runAutoHeightTests = ({ selector, startFunction }) => {
         .invoke('prop', 'value', LOREM)
         .invoke('addClass', 'larger')
         .should('have.prop', 'clientHeight')
-        .and('be.within', 198, 206);
+        .and('be.within', 134, 142);
 
       cy.get('@textarea')
         .invoke('removeClass', 'larger')
@@ -102,7 +100,7 @@ const runAutoHeightTests = ({ selector, startFunction }) => {
         .invoke('css', 'borderWidth', '15px')
         .invoke('css', 'boxSizing', 'border-box')
         .should('have.prop', 'clientHeight')
-        .and('be.within', 202, 210);
+        .and('be.within', 160, 168);
 
       cy.get('@textarea')
         .should('have.prop', 'clientWidth')
@@ -127,7 +125,45 @@ const runAutoHeightTests = ({ selector, startFunction }) => {
         .invoke('css', 'height', '50px')
         .trigger('pointerup')
         .should('have.prop', 'clientHeight')
-        .and('be.within', 132, 140);
+        .and('be.within', 90, 98);
+    });
+
+    it('Toggles the autoheight behaviour when the attribute is toggled', () => {
+      cy.get('@textarea')
+        .invoke('attr', 'autoheight', '')
+        .type(LOREM.slice(0, LOREM.length / 2), TYPE_OPTIONS)
+        .should('have.prop', 'clientHeight')
+        .and('be.within', 48, 56);
+
+      cy.get('@textarea')
+        .invoke('attr', 'autoheight', null)
+        .type(LOREM.slice(LOREM.length / 2), TYPE_OPTIONS)
+        .should('have.prop', 'clientHeight')
+        .and('be.within', 48, 56);
+
+      cy.get('@textarea')
+        .invoke('attr', 'autoheight', '')
+        .should('have.prop', 'clientHeight')
+        .and('be.within', 90, 98);
+    });
+
+    it('Toggles the autoheight behaviour when the property is toggled', () => {
+      cy.get('@textarea')
+        .invoke('prop', 'autoheight', true)
+        .type(LOREM.slice(0, LOREM.length / 2), TYPE_OPTIONS)
+        .should('have.prop', 'clientHeight')
+        .and('be.within', 48, 56);
+
+      cy.get('@textarea')
+        .invoke('prop', 'autoheight', false)
+        .type(LOREM.slice(LOREM.length / 2), TYPE_OPTIONS)
+        .should('have.prop', 'clientHeight')
+        .and('be.within', 48, 56);
+
+      cy.get('@textarea')
+        .invoke('prop', 'autoheight', true)
+        .should('have.prop', 'clientHeight')
+        .and('be.within', 90, 98);
     });
   });
 };
