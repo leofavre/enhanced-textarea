@@ -3,7 +3,7 @@ import { LOREM } from '../constants';
 describe('Custom Element Definition', () => {
   beforeEach(() => {
     cy.visit('/');
-    cy.get('textarea').as('textarea');
+    cy.get('textarea[is=enhanced-textarea]').as('textarea');
   });
 
   afterEach(() => {

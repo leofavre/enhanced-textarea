@@ -3,7 +3,7 @@ import { LOREM, DELETE_ALL } from '../constants/index.js';
 describe('WithAutoHeight', () => {
   beforeEach(() => {
     cy.visit('/');
-    cy.get('textarea').as('textarea');
+    cy.get('textarea[is=enhanced-textarea]').as('textarea');
     cy.window().then(win => win.defineElement());
   });
 
