@@ -6,6 +6,7 @@ body {
 }
 
 textarea {
+  width: 350px;
   box-sizing: content-box;
   border: 1px solid #999;
   border-radius: 0px;
@@ -19,4 +20,8 @@ textarea {
 textarea:focus {
   outline: none;
   border-color: #666;
+}
+
+.larger {
+  font-size: 24px;
 }

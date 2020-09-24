@@ -14,4 +14,28 @@ describe('removeStyleProp', () => {
     const result = 'width: 50px;';
     expect(removeStyleProp('height')(styleStr)).toBe(result);
   });
+
+  it('Detects only complete property names in the beginning', () => {
+    const styleStr = 'height: 100px; line-height: 2;';
+    const result = 'line-height: 2;';
+    expect(removeStyleProp('height')(styleStr)).toBe(result);
+  });
+
+  it('Detects only complete property names after a space', () => {
+    const styleStr = 'line-height: 2; height: 100px;';
+    const result = 'line-height: 2;';
+    expect(removeStyleProp('height')(styleStr)).toBe(result);
+  });
+
+  it('Detects only complete property names after a semicolon', () => {
+    const styleStr = 'line-height: 2;height: 100px;';
+    const result = 'line-height: 2;';
+    expect(removeStyleProp('height')(styleStr)).toBe(result);
+  });
+
+  it('Detects only complete property names in the end', () => {
+    const styleStr = 'line-height: 2; height: 100px';
+    const result = 'line-height: 2;';
+    expect(removeStyleProp('height')(styleStr)).toBe(result);
+  });
 });

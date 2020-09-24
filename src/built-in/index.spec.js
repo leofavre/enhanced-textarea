@@ -1,4 +1,4 @@
-import EnhancedTextAreaBuiltIn from './EnhancedTextAreaBuiltIn.js';
+import EnhancedTextAreaBuiltIn from './index.js';
 
 describe('EnhancedTextAreaBuiltIn', () => {
   it('Extends HTMLTextAreaElement', () => {
