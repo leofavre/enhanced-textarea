@@ -10,7 +10,7 @@ const options = {
 };
 
 describe('Script', () => {
-  runAutoHeightTests(options);
   runElementDefinitionTests(options);
+  runAutoHeightTests(options);
   runResizeEventTests(options);
 });

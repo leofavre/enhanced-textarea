@@ -2,6 +2,10 @@ import getCoercedAttr from '../helpers/getCoercedAttr.js';
 import setAttr from '../helpers/setAttr.js';
 
 const WithScript = (Base = class {}) => class extends Base {
+  get textElement () {
+    return this._customTextElement;
+  }
+
   constructor (customTextElement) {
     super();
     this._customTextElement = customTextElement;
@@ -31,6 +35,9 @@ const WithScript = (Base = class {}) => class extends Base {
     const { get: superGet, set: superSet } =
       Object.getOwnPropertyDescriptor(proto, 'value');
 
+    const prev = this.textElement.autoheight ||
+      getCoercedAttr(this.textElement, 'autoheight', Boolean);
+
     Object.defineProperties(this.textElement, {
       autoheight: {
         get () {
@@ -50,10 +57,8 @@ const WithScript = (Base = class {}) => class extends Base {
         }
       }
     });
-  }
 
-  get textElement () {
-    return this._customTextElement;
+    this.textElement.autoheight = prev;
   }
 
   _handleMutation (records) {

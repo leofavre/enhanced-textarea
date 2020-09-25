@@ -10,7 +10,7 @@ const options = {
 };
 
 describe('Built-in', () => {
-  runAutoHeightTests(options);
   runElementDefinitionTests(options);
+  runAutoHeightTests(options);
   runResizeEventTests(options);
 });
