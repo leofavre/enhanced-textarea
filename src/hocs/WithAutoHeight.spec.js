@@ -127,7 +127,9 @@ describe('WithAutoHeight', () => {
     let ResizeObserverSpy;
 
     beforeEach(() => {
-      ResizeObserverSpy = jest.spyOn(ResizeObserver.prototype, 'observe');
+      ResizeObserverSpy = jest
+        .spyOn(ResizeObserver.prototype, 'observe');
+
       element.baseElement.addEventListener = jest.fn();
     });
 
@@ -157,7 +159,9 @@ describe('WithAutoHeight', () => {
     let ResizeObserverSpy;
 
     beforeEach(() => {
-      ResizeObserverSpy = jest.spyOn(ResizeObserver.prototype, 'unobserve');
+      ResizeObserverSpy = jest
+        .spyOn(ResizeObserver.prototype, 'unobserve');
+
       element._resizeObserver = new ResizeObserver();
       element.baseElement.removeEventListener = jest.fn();
     });

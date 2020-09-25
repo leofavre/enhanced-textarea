@@ -1,6 +1,10 @@
 import { LOREM } from '../constants';
 
-const runElementDefinitionTests = ({ selector, startFunction }) => {
+const runElementDefinitionTests = ({
+  selector,
+  shadowRootSelector = selector,
+  startFunction
+}) => {
   describe('Element Definition', () => {
     beforeEach(() => {
       cy.visit('/');

@@ -1,6 +1,10 @@
 import { LOREM, DELETE_ALL, TYPE_OPTIONS } from '../constants/index.js';
 
-const runAutoHeightTests = ({ selector, startFunction }) => {
+const runAutoHeightTests = ({
+  selector,
+  shadowRootSelector = selector,
+  startFunction
+}) => {
   describe('Auto Height', () => {
     beforeEach(() => {
       cy.visit('/');

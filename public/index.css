@@ -5,7 +5,8 @@ body {
   line-height: 1.35;
 }
 
-textarea {
+textarea,
+::part(textarea) {
   width: 350px;
   box-sizing: content-box;
   border: 1px solid #999;
@@ -17,7 +18,8 @@ textarea {
   -webkit-appearance: none;
 }
 
-textarea:focus {
+textarea:focus,
+::part(textarea):focus {
   outline: none;
   border-color: #666;
 }

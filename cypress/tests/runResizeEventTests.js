@@ -1,4 +1,8 @@
-const runResizeEventTests = ({ selector, startFunction }) => {
+const runResizeEventTests = ({
+  selector,
+  shadowRootSelector = selector,
+  startFunction
+}) => {
   describe('Resize Event', () => {
     beforeEach(() => {
       cy.visit('/');

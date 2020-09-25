@@ -1,6 +1,6 @@
 import * as packages from './index.js';
 
-describe('EnhancedTextAreaBuiltIn', () => {
+describe('EnhancedTextAreaElement', () => {
   it('Exports a default function', () => {
     expect(packages.default).toBeDefined;
   });
@@ -21,8 +21,7 @@ describe('EnhancedTextAreaBuiltIn', () => {
 
       expect(customElementsDefineSpy).toHaveBeenCalledWith(
         'enhanced-textarea',
-        packages.default,
-        { extends: 'textarea' }
+        packages.default
       );
     });
 
@@ -31,8 +30,7 @@ describe('EnhancedTextAreaBuiltIn', () => {
 
       expect(customElementsDefineSpy).toHaveBeenCalledWith(
         'custom-name',
-        packages.default,
-        { extends: 'textarea' }
+        packages.default
       );
     });
   });
