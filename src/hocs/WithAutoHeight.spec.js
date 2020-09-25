@@ -1,11 +1,4 @@
-import getCoercedAttr from '../helpers/getCoercedAttr.js';
-import setAttr from '../helpers/setAttr.js';
-import resetProp from '../helpers/resetProp.js';
 import WithAutoHeight from './WithAutoHeight.js';
-
-jest.mock('../helpers/getCoercedAttr.js');
-jest.mock('../helpers/setAttr.js');
-jest.mock('../helpers/resetProp.js');
 
 let Base;
 let Element;
@@ -26,73 +19,9 @@ describe('WithAutoHeight', () => {
     expect(Element.prototype).toBeInstanceOf(Base);
   });
 
-  describe('.constructor()', () => {
-    it('Makes sure _handleChange is always bound to the instance', () => {
-      Element.prototype._handleChange = function () { return this; };
-      element = new Element();
-      const [result] = [1].map(element._handleChange);
-      expect(result).toBe(element);
-    });
-
-    it('Makes sure _handleResize always is bound to the instance', () => {
-      Element.prototype._handleResize = function () { return this; };
-      element = new Element();
-      const [result] = [1].map(element._handleResize);
-      expect(result).toBe(element);
-    });
-  });
-
   describe('.baseElement', () => {
     it('Returns the instance', () => {
       expect(element.baseElement).toBe(element);
-    });
-  });
-
-  describe('.autoheight', () => {
-    it('Calls getCoercedAttr on get', () => {
-      element.autoheight;
-      const expectedArgs = [element.baseElement, 'autoheight', Boolean];
-      expect(getCoercedAttr).toHaveBeenCalledWith(...expectedArgs);
-    });
-
-    it('Calls setAttr on set', () => {
-      element.autoheight = true;
-      const expectedArgs = [element.baseElement, 'autoheight', true];
-      expect(setAttr).toHaveBeenCalledWith(...expectedArgs);
-    });
-  });
-
-  describe('.value', () => {
-    let descriptor;
-
-    beforeEach(() => {
-      Base = class {};
-
-      Object.defineProperty(Base.prototype, 'value', {
-        get: jest.fn(),
-        set: jest.fn()
-      });
-
-      descriptor = Object.getOwnPropertyDescriptor(Base.prototype, 'value');
-
-      Element = WithAutoHeight(Base);
-      element = new Element();
-      element._handleChange = jest.fn();
-    });
-
-    it('Gets super.value', () => {
-      element.value;
-      expect(descriptor.get).toHaveBeenCalled;
-    });
-
-    it('Sets super.value', () => {
-      element.value = 50;
-      expect(descriptor.set).toHaveBeenCalled;
-    });
-
-    it('Calls _handleChange on set', () => {
-      element.value = 50;
-      expect(element._handleChange).toHaveBeenCalled;
     });
   });
 
@@ -133,22 +62,16 @@ describe('WithAutoHeight', () => {
     });
   });
 
-  describe('.attributeChangedCallback()', () => {
-    it('Calls super.attributeChangedCallback forwarding arguments', () => {
-      Base.prototype.attributeChangedCallback = jest.fn();
-      Element = WithAutoHeight(Base);
-      element = new Element();
-      const args = ['attrName', null, 20];
-      element.attributeChangedCallback(...args);
-      expect(Base.prototype.attributeChangedCallback)
-        .toHaveBeenCalledWith(...args);
+  describe('._handleAttributeChange', () => {
+    beforeEach(() => {
+      element.baseElement.hasAttribute = jest.fn();
     });
 
     it('Does nothing when attribute stays the same', () => {
       element._handleAutoHeightStart = jest.fn();
       element._handleAutoHeightEnd = jest.fn();
       element._handleChange = jest.fn();
-      element.attributeChangedCallback('rows', null, null);
+      element._handleAttributeChange('rows', null, null);
       expect(element._handleAutoHeightStart).not.toHaveBeenCalled;
       expect(element._handleAutoHeightEnd).not.toHaveBeenCalled;
       expect(element._handleChange).not.toHaveBeenCalled;
@@ -156,13 +79,13 @@ describe('WithAutoHeight', () => {
 
     it('Calls _handleAutoHeightStart when autoheight is set', () => {
       element._handleAutoHeightStart = jest.fn();
-      element.attributeChangedCallback('autoheight', null, '');
+      element._handleAttributeChange('autoheight', null, '');
       expect(element._handleAutoHeightStart).toHaveBeenCalled;
     });
 
     it('Calls _handleAutoHeightEnd when autoheight is unset', () => {
       element._handleAutoHeightEnd = jest.fn();
-      element.attributeChangedCallback('autoheight', '', null);
+      element._handleAttributeChange('autoheight', '', null);
       expect(element._handleAutoHeightEnd).toHaveBeenCalled;
     });
 
@@ -170,14 +93,14 @@ describe('WithAutoHeight', () => {
       'when autoheight changes but is not set or unset', () => {
       element._handleAutoHeightStart = jest.fn();
       element._handleAutoHeightEnd = jest.fn();
-      element.attributeChangedCallback('autoheight', '', 'autoheight');
+      element._handleAttributeChange('autoheight', '', 'autoheight');
       expect(element._handleAutoHeightStart).not.toHaveBeenCalled;
       expect(element._handleAutoHeightEnd).not.toHaveBeenCalled;
     });
 
     it('Calls _handleChange when any attribute but style changes', () => {
       element._handleChange = jest.fn();
-      element.attributeChangedCallback('rows', '4', '2');
+      element._handleAttributeChange('rows', '4', '2');
       expect(element._handleChange).toHaveBeenCalled;
     });
 
@@ -186,7 +109,7 @@ describe('WithAutoHeight', () => {
       element._handleChange = jest.fn();
       const prevStyle = 'width: 100px;';
       const nextStyle = 'width: 150px;';
-      element.attributeChangedCallback('style', prevStyle, nextStyle);
+      element._handleAttributeChange('style', prevStyle, nextStyle);
       expect(element._handleChange).toHaveBeenCalled;
     });
 
@@ -195,23 +118,8 @@ describe('WithAutoHeight', () => {
       element._handleChange = jest.fn();
       const prevStyle = 'height: 100px; min-height: 100px;';
       const nextStyle = 'height: 150px;';
-      element.attributeChangedCallback('style', prevStyle, nextStyle);
+      element._handleAttributeChange('style', prevStyle, nextStyle);
       expect(element._handleChange).not.toHaveBeenCalled;
-    });
-  });
-
-  describe('.connectedCallback()', () => {
-    it('Calls super.connectedCallback', () => {
-      Base.prototype.connectedCallback = jest.fn();
-      Element = WithAutoHeight(Base);
-      element = new Element();
-      element.connectedCallback();
-      expect(Base.prototype.connectedCallback).toHaveBeenCalled;
-    });
-
-    it('Calls resetProp passing autoheight', () => {
-      element.connectedCallback();
-      expect(resetProp).toHaveBeenCalledWith(element, 'autoheight');
     });
   });
 
@@ -220,7 +128,7 @@ describe('WithAutoHeight', () => {
 
     beforeEach(() => {
       ResizeObserverSpy = jest.spyOn(ResizeObserver.prototype, 'observe');
-      element.addEventListener = jest.fn();
+      element.baseElement.addEventListener = jest.fn();
     });
 
     afterEach(() => {
@@ -229,6 +137,7 @@ describe('WithAutoHeight', () => {
 
     it('Observes baseElement user resize', () => {
       element._handleAutoHeightStart();
+
       expect(element._resizeObserver.observe)
         .toHaveBeenCalledWith(element.baseElement);
     });
@@ -250,7 +159,7 @@ describe('WithAutoHeight', () => {
     beforeEach(() => {
       ResizeObserverSpy = jest.spyOn(ResizeObserver.prototype, 'unobserve');
       element._resizeObserver = new ResizeObserver();
-      element.removeEventListener = jest.fn();
+      element.baseElement.removeEventListener = jest.fn();
     });
 
     afterEach(() => {
@@ -286,13 +195,13 @@ describe('WithAutoHeight', () => {
     });
 
     it('Does nothing if autoheight is undefined', () => {
-      element.autoheight = false;
+      element.baseElement.hasAttribute = () => false;
       element._handleChange();
     });
 
     it('Resizes baseElement considering padding and border ' +
       'if the box-sizing is not border-box', () => {
-      element.autoheight = true;
+      element.baseElement.hasAttribute = () => true;
 
       element.baseElement.offsetHeight = 152;
       element.baseElement.clientHeight = 150;
@@ -313,7 +222,7 @@ describe('WithAutoHeight', () => {
 
     it('Resizes baseElement ignoring padding and border ' +
       'if the box-sizing is border-box', () => {
-      element.autoheight = true;
+      element.baseElement.hasAttribute = () => true;
 
       element.baseElement.offsetHeight = 152;
       element.baseElement.clientHeight = 150;
@@ -331,7 +240,7 @@ describe('WithAutoHeight', () => {
     });
 
     it('Resizes baseElement when height is changed programmatically', () => {
-      element.autoheight = true;
+      element.baseElement.hasAttribute = () => true;
 
       element.baseElement.offsetHeight = 152;
       element.baseElement.clientHeight = 150;
@@ -350,7 +259,7 @@ describe('WithAutoHeight', () => {
 
     it('Resizes baseElement when height is changed by user interaction ' +
       'but restricts it to min-height', () => {
-      element.autoheight = true;
+      element.baseElement.hasAttribute = () => true;
       element._resizedByUser = true;
 
       element.baseElement.offsetHeight = 152;

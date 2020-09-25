@@ -19,37 +19,19 @@ describe('WithResizeEvent', () => {
     expect(Element.prototype).toBeInstanceOf(Base);
   });
 
-  describe('.constructor()', () => {
-    it('Makes sure _handlePointer always is bound to the instance', () => {
-      Element.prototype._handlePointer = function () { return this; };
-      element = new Element();
-      const [result] = [1].map(element._handlePointer);
-      expect(result).toBe(element);
-    });
-  });
-
   describe('.baseElement', () => {
     it('Returns the instance', () => {
       expect(element.baseElement).toBe(element);
     });
   });
 
-  describe('.connectedCallback()', () => {
+  describe('._handleResizeEventStart()', () => {
     beforeEach(() => {
-      element.addEventListener = jest.fn();
-    });
-
-    it('Calls super.connectedCallback', () => {
-      Base.prototype.connectedCallback = jest.fn();
-      Element = WithResizeEvent(Base);
-      element = new Element();
-      element.addEventListener = jest.fn();
-      element.connectedCallback();
-      expect(Base.prototype.connectedCallback).toHaveBeenCalled;
+      element.baseElement.addEventListener = jest.fn();
     });
 
     it('Observes user interaction', () => {
-      element.connectedCallback();
+      element._handleResizeEventStart();
 
       expect(element.baseElement.addEventListener)
         .toHaveBeenCalledWith('pointerup', element._handlePointer);
@@ -59,22 +41,13 @@ describe('WithResizeEvent', () => {
     });
   });
 
-  describe('.disconnectedCallback()', () => {
+  describe('._handleResizeEventEnd()', () => {
     beforeEach(() => {
       element.removeEventListener = jest.fn();
     });
 
-    it('Calls super.disconnectedCallback', () => {
-      Base.prototype.disconnectedCallback = jest.fn();
-      Element = WithResizeEvent(Base);
-      element = new Element();
-      element.removeEventListener = jest.fn();
-      element.disconnectedCallback();
-      expect(Base.prototype.disconnectedCallback).toHaveBeenCalled;
-    });
-
     it('Observes user interaction', () => {
-      element.disconnectedCallback();
+      element._handleResizeEventEnd();
 
       expect(element.baseElement.removeEventListener)
         .toHaveBeenCalledWith('pointerup', element._handlePointer);

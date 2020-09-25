@@ -2,6 +2,12 @@ import hasStyleExceptHeightChanged from '../helpers/hasStyleExceptHeightChanged.
 import pxToNumber from '../helpers/pxToNumber.js';
 
 const WithAutoHeight = (Base = class {}) => class extends Base {
+  constructor () {
+    super();
+    this._handleChange = this._handleChange.bind(this);
+    this._handleResize = this._handleResize.bind(this);
+  }
+
   get baseElement () {
     return this;
   }
@@ -31,20 +37,16 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
   }
 
   _handleAutoHeightStart () {
-    const changeHandler = this._handleChange.bind(this);
-    const resizeHandler = this._handleResize.bind(this);
-    this._resizeObserver = new ResizeObserver(changeHandler);
+    this._resizeObserver = new ResizeObserver(this._handleChange);
     this._resizeObserver.observe(this.baseElement);
-    this.baseElement.addEventListener('input', changeHandler);
-    this.baseElement.addEventListener('userresize', resizeHandler);
+    this.baseElement.addEventListener('input', this._handleChange);
+    this.baseElement.addEventListener('userresize', this._handleResize);
   }
 
   _handleAutoHeightEnd () {
-    const changeHandler = this._handleChange.bind(this);
-    const resizeHandler = this._handleResize.bind(this);
     this._resizeObserver && this._resizeObserver.unobserve(this.baseElement);
-    this.baseElement.removeEventListener('input', changeHandler);
-    this.baseElement.removeEventListener('userresize', resizeHandler);
+    this.baseElement.removeEventListener('input', this._handleChange);
+    this.baseElement.removeEventListener('userresize', this._handleResize);
   }
 
   _handleChange () {
