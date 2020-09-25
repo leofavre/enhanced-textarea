@@ -3,16 +3,16 @@ import setAttr from '../helpers/setAttr.js';
 import resetProp from '../helpers/resetProp.js';
 
 const WithBuiltIn = (Base = class {}) => class extends Base {
-  get textElement () {
+  get baseElement () {
     return this;
   }
 
   get autoheight () {
-    return getCoercedAttr(this.textElement, 'autoheight', Boolean);
+    return getCoercedAttr(this.baseElement, 'autoheight', Boolean);
   }
 
   set autoheight (value) {
-    setAttr(this.textElement, 'autoheight', value);
+    setAttr(this.baseElement, 'autoheight', value);
   }
 
   get value () {

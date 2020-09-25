@@ -2,13 +2,13 @@ import getCoercedAttr from '../helpers/getCoercedAttr.js';
 import setAttr from '../helpers/setAttr.js';
 
 const WithScript = (Base = class {}) => class extends Base {
-  get textElement () {
-    return this._customTextElement;
+  get baseElement () {
+    return this._customBaseElement;
   }
 
-  constructor (customTextElement) {
+  constructor (customBaseElement) {
     super();
-    this._customTextElement = customTextElement;
+    this._customBaseElement = customBaseElement;
     this._handleMutation = this._handleMutation.bind(this);
 
     this._handleResizeEventStart();
@@ -16,7 +16,7 @@ const WithScript = (Base = class {}) => class extends Base {
     const mutationObserver = new MutationObserver(this._handleMutation);
     const observedAttributes = this.constructor.observedAttributes || [];
 
-    mutationObserver.observe(this.textElement, {
+    mutationObserver.observe(this.baseElement, {
       attributes: true,
       attributeOldValue: true,
       attributeFilter: this.constructor.observedAttributes
@@ -30,15 +30,15 @@ const WithScript = (Base = class {}) => class extends Base {
     });
 
     const self = this;
-    const proto = Object.getPrototypeOf(this.textElement);
+    const proto = Object.getPrototypeOf(this.baseElement);
 
     const { get: superGet, set: superSet } =
       Object.getOwnPropertyDescriptor(proto, 'value');
 
-    const prev = this.textElement.autoheight ||
-      getCoercedAttr(this.textElement, 'autoheight', Boolean);
+    const prev = this.baseElement.autoheight ||
+      getCoercedAttr(this.baseElement, 'autoheight', Boolean);
 
-    Object.defineProperties(this.textElement, {
+    Object.defineProperties(this.baseElement, {
       autoheight: {
         get () {
           return getCoercedAttr(this, 'autoheight', Boolean);
@@ -58,12 +58,12 @@ const WithScript = (Base = class {}) => class extends Base {
       }
     });
 
-    this.textElement.autoheight = prev;
+    this.baseElement.autoheight = prev;
   }
 
   _handleMutation (records) {
     records.forEach(({ attributeName, oldValue }) => {
-      const nextValue = this.textElement.getAttribute(attributeName);
+      const nextValue = this.baseElement.getAttribute(attributeName);
       this._handleAttributeChange(attributeName, oldValue, nextValue);
     });
   }
