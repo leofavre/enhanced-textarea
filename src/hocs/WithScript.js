@@ -19,7 +19,7 @@ const WithScript = (Base = class {}) => class extends Base {
     mutationObserver.observe(this.baseElement, {
       attributes: true,
       attributeOldValue: true,
-      attributeFilter: this.constructor.observedAttributes
+      attributeFilter: observedAttributes
     });
 
     observedAttributes.forEach(attributeName => {
@@ -32,10 +32,10 @@ const WithScript = (Base = class {}) => class extends Base {
     const self = this;
     const proto = Object.getPrototypeOf(this.baseElement);
 
-    const { get: superGet, set: superSet } =
+    const { get: superGetValue, set: superSetValue } =
       Object.getOwnPropertyDescriptor(proto, 'value');
 
-    const prev = this.baseElement.autoheight ||
+    const prevAutoHeight = this.baseElement.autoheight ||
       getCoercedAttr(this.baseElement, 'autoheight', Boolean);
 
     Object.defineProperties(this.baseElement, {
@@ -49,16 +49,16 @@ const WithScript = (Base = class {}) => class extends Base {
       },
       value: {
         get (...args) {
-          return superGet.apply(this, args);
+          return superGetValue.apply(this, args);
         },
         set (...args) {
-          superSet.apply(this, args);
+          superSetValue.apply(this, args);
           self._handleChange();
         }
       }
     });
 
-    this.baseElement.autoheight = prev;
+    this.baseElement.autoheight = prevAutoHeight;
   }
 
   _handleMutation (records) {
