@@ -1,11 +1,15 @@
+import getCoercedAttr from '../helpers/getCoercedAttr.js';
+import setAttr from '../helpers/setAttr.js';
+
 const WithScript = (Base = class {}) => class extends Base {
   constructor (customTextElement) {
-    super(customTextElement);
+    super();
     this._customTextElement = customTextElement;
-    this.connectedCallback();
+    this._handleMutation = this._handleMutation.bind(this);
 
-    this._handleAttrChange = this._handleAttrChange.bind(this);
-    const mutationObserver = new MutationObserver(this._handleAttrChange);
+    this._handleResizeEventStart();
+
+    const mutationObserver = new MutationObserver(this._handleMutation);
     const observedAttributes = this.constructor.observedAttributes || [];
 
     mutationObserver.observe(this.textElement, {
@@ -15,10 +19,36 @@ const WithScript = (Base = class {}) => class extends Base {
     });
 
     observedAttributes.forEach(attributeName => {
-      this._handleAttrChange([{
+      this._handleMutation([{
         attributeName,
         oldValue: null
       }]);
+    });
+
+    const self = this;
+    const proto = Object.getPrototypeOf(this.textElement);
+
+    const { get: superGet, set: superSet } =
+      Object.getOwnPropertyDescriptor(proto, 'value');
+
+    Object.defineProperties(this.textElement, {
+      autoheight: {
+        get () {
+          return getCoercedAttr(this, 'autoheight', Boolean);
+        },
+        set (value) {
+          setAttr(this, 'autoheight', value);
+        }
+      },
+      value: {
+        get (...args) {
+          return superGet.apply(this, args);
+        },
+        set (...args) {
+          superSet.apply(this, args);
+          self._handleChange();
+        }
+      }
     });
   }
 
@@ -26,12 +56,10 @@ const WithScript = (Base = class {}) => class extends Base {
     return this._customTextElement;
   }
 
-  _handleAttrChange (records) {
-    records.forEach(record => {
-      const { attributeName, oldValue } = record;
+  _handleMutation (records) {
+    records.forEach(({ attributeName, oldValue }) => {
       const nextValue = this.textElement.getAttribute(attributeName);
-      const args = [attributeName, oldValue, nextValue];
-      super.attributeChangedCallback && super.attributeChangedCallback(...args);
+      this._handleAttributeChange(attributeName, oldValue, nextValue);
     });
   }
 };

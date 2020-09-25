@@ -1,35 +1,9 @@
-import getCoercedAttr from '../helpers/getCoercedAttr.js';
-import setAttr from '../helpers/setAttr.js';
-import resetProp from '../helpers/resetProp.js';
 import hasStyleExceptHeightChanged from '../helpers/hasStyleExceptHeightChanged.js';
 import pxToNumber from '../helpers/pxToNumber.js';
 
 const WithAutoHeight = (Base = class {}) => class extends Base {
-  constructor () {
-    super();
-    this._handleChange = this._handleChange.bind(this);
-    this._handleResize = this._handleResize.bind(this);
-  }
-
   get textElement () {
     return this;
-  }
-
-  get autoheight () {
-    return getCoercedAttr(this.textElement, 'autoheight', Boolean);
-  }
-
-  set autoheight (value) {
-    setAttr(this.textElement, 'autoheight', value);
-  }
-
-  get value () {
-    return super.value;
-  }
-
-  set value (value) {
-    super.value = value;
-    this._handleChange();
   }
 
   static get observedAttributes () {
@@ -39,10 +13,7 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
     ];
   }
 
-  attributeChangedCallback (...args) {
-    super.attributeChangedCallback && super.attributeChangedCallback(...args);
-    const [attrName, oldValue, nextValue] = args;
-
+  _handleAttributeChange (attrName, oldValue, nextValue) {
     if (oldValue !== nextValue) {
       if (attrName === 'autoheight') {
         if (oldValue == null) {
@@ -59,26 +30,25 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
     }
   }
 
-  connectedCallback () {
-    super.connectedCallback && super.connectedCallback();
-    resetProp(this.textElement, 'autoheight');
-  }
-
   _handleAutoHeightStart () {
-    this._resizeObserver = new ResizeObserver(this._handleChange);
+    const changeHandler = this._handleChange.bind(this);
+    const resizeHandler = this._handleResize.bind(this);
+    this._resizeObserver = new ResizeObserver(changeHandler);
     this._resizeObserver.observe(this.textElement);
-    this.textElement.addEventListener('input', this._handleChange);
-    this.textElement.addEventListener('userresize', this._handleResize);
+    this.textElement.addEventListener('input', changeHandler);
+    this.textElement.addEventListener('userresize', resizeHandler);
   }
 
   _handleAutoHeightEnd () {
-    this._resizeObserver.unobserve(this.textElement);
-    this.textElement.removeEventListener('input', this._handleChange);
-    this.textElement.removeEventListener('userresize', this._handleResize);
+    const changeHandler = this._handleChange.bind(this);
+    const resizeHandler = this._handleResize.bind(this);
+    this._resizeObserver && this._resizeObserver.unobserve(this.textElement);
+    this.textElement.removeEventListener('input', changeHandler);
+    this.textElement.removeEventListener('userresize', resizeHandler);
   }
 
   _handleChange () {
-    if (this.autoheight) {
+    if (this.textElement.hasAttribute('autoheight')) {
       const { offsetHeight, clientHeight } = this.textElement;
       const offset = offsetHeight - clientHeight;
 

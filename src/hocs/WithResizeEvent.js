@@ -1,23 +1,18 @@
 const WithResizeEvent = (Base = class {}) => class extends Base {
-  constructor () {
-    super();
-    this._handlePointer = this._handlePointer.bind(this);
-  }
-
   get textElement () {
     return this;
   }
 
-  connectedCallback () {
-    super.connectedCallback && super.connectedCallback();
-    this.textElement.addEventListener('pointerdown', this._handlePointer);
-    this.textElement.addEventListener('pointerup', this._handlePointer);
+  _handleResizeEventStart () {
+    const pointerHandler = this._handlePointer.bind(this);
+    this.textElement.addEventListener('pointerdown', pointerHandler);
+    this.textElement.addEventListener('pointerup', pointerHandler);
   }
 
-  disconnectedCallback () {
-    super.disconnectedCallback && super.disconnectedCallback();
-    this.textElement.removeEventListener('pointerdown', this._handlePointer);
-    this.textElement.removeEventListener('pointerup', this._handlePointer);
+  _handleResizeEventEnd () {
+    const pointerHandler = this._handlePointer.bind(this);
+    this.textElement.removeEventListener('pointerdown', pointerHandler);
+    this.textElement.removeEventListener('pointerup', pointerHandler);
   }
 
   _handlePointer ({ type } = {}) {

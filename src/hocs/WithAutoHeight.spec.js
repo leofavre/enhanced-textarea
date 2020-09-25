@@ -211,7 +211,7 @@ describe('WithAutoHeight', () => {
 
     it('Calls resetProp passing autoheight', () => {
       element.connectedCallback();
-      expect(resetProp).toHaveBeenCalledWith(element.textElement, 'autoheight');
+      expect(resetProp).toHaveBeenCalledWith(element, 'autoheight');
     });
   });
 
