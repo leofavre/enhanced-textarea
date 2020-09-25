@@ -1,6 +1,3 @@
-import getCoercedAttr from '../helpers/getCoercedAttr.js';
-import setAttr from '../helpers/setAttr.js';
-import resetProp from '../helpers/resetProp.js';
 import hasStyleExceptHeightChanged from '../helpers/hasStyleExceptHeightChanged.js';
 import pxToNumber from '../helpers/pxToNumber.js';
 
@@ -11,25 +8,8 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
     this._handleResize = this._handleResize.bind(this);
   }
 
-  get textElement () {
+  get baseElement () {
     return this;
-  }
-
-  get autoheight () {
-    return getCoercedAttr(this, 'autoheight', Boolean);
-  }
-
-  set autoheight (value) {
-    setAttr(this, 'autoheight', value);
-  }
-
-  get value () {
-    return super.value;
-  }
-
-  set value (value) {
-    super.value = value;
-    this._handleChange();
   }
 
   static get observedAttributes () {
@@ -39,13 +19,10 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
     ];
   }
 
-  attributeChangedCallback (...args) {
-    super.attributeChangedCallback && super.attributeChangedCallback(...args);
-    const [attrName, prevValue, nextValue] = args;
-
-    if (prevValue !== nextValue) {
+  _handleAttributeChange (attrName, oldValue, nextValue) {
+    if (oldValue !== nextValue) {
       if (attrName === 'autoheight') {
-        if (prevValue == null) {
+        if (oldValue == null) {
           this._handleAutoHeightStart();
         } else if (nextValue == null) {
           this._handleAutoHeightEnd();
@@ -53,33 +30,28 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
       }
 
       if (attrName !== 'style' ||
-        hasStyleExceptHeightChanged(prevValue, nextValue)) {
+        hasStyleExceptHeightChanged(oldValue, nextValue)) {
         this._handleChange();
       }
     }
   }
 
-  connectedCallback () {
-    super.connectedCallback && super.connectedCallback();
-    resetProp(this, 'autoheight');
-  }
-
   _handleAutoHeightStart () {
     this._resizeObserver = new ResizeObserver(this._handleChange);
-    this._resizeObserver.observe(this.textElement);
-    this.textElement.addEventListener('input', this._handleChange);
-    this.textElement.addEventListener('userresize', this._handleResize);
+    this._resizeObserver.observe(this.baseElement);
+    this.baseElement.addEventListener('input', this._handleChange);
+    this.baseElement.addEventListener('userresize', this._handleResize);
   }
 
   _handleAutoHeightEnd () {
-    this._resizeObserver.unobserve(this.textElement);
-    this.textElement.removeEventListener('input', this._handleChange);
-    this.textElement.removeEventListener('userresize', this._handleResize);
+    this._resizeObserver && this._resizeObserver.unobserve(this.baseElement);
+    this.baseElement.removeEventListener('input', this._handleChange);
+    this.baseElement.removeEventListener('userresize', this._handleResize);
   }
 
   _handleChange () {
-    if (this.autoheight) {
-      const { offsetHeight, clientHeight } = this.textElement;
+    if (this.baseElement.hasAttribute('autoheight')) {
+      const { offsetHeight, clientHeight } = this.baseElement;
       const offset = offsetHeight - clientHeight;
 
       let inner = 0;
@@ -93,12 +65,12 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
         inner = paddingTop + paddingBottom + borderTop + borderBottom;
       }
 
-      const { height: prevHeight } = this.textElement.style;
+      const { height: prevHeight } = this.baseElement.style;
 
-      this.textElement.style.minHeight = 'auto';
-      this.textElement.style.height = 'auto';
+      this.baseElement.style.minHeight = 'auto';
+      this.baseElement.style.height = 'auto';
 
-      const { scrollHeight } = this.textElement;
+      const { scrollHeight } = this.baseElement;
       const numericNextMinHeight = scrollHeight + offset - inner;
       const nextMinHeight = `${numericNextMinHeight}px`;
       const numericPrevHeight = pxToNumber(prevHeight);
@@ -111,8 +83,8 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
           : `${numericPrevHeight}px`;
       }
 
-      this.textElement.style.minHeight = nextMinHeight;
-      this.textElement.style.height = nextHeight;
+      this.baseElement.style.minHeight = nextMinHeight;
+      this.baseElement.style.height = nextHeight;
     }
   }
 
@@ -123,7 +95,7 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
   }
 
   _getStyleProp (str) {
-    const elementStyles = window.getComputedStyle(this.textElement);
+    const elementStyles = window.getComputedStyle(this.baseElement);
     const prop = elementStyles.getPropertyValue(str);
 
     return prop.endsWith('px')

@@ -15,7 +15,14 @@ function getComputedStyle () {
 
 class HTMLTextAreaElement {}
 
+class MutationObserver {
+  disconnect () {}
+  observe () {}
+  takeRecords () {}
+}
+
 class ResizeObserver {
+  disconnect () {}
   observe () {}
   unobserve () {}
 }
@@ -29,6 +36,7 @@ class jestEnvironment extends NodeEnvironment {
     this.global.customElements = customElements;
     this.global.CustomEvent = CustomEvent;
     this.global.getComputedStyle = getComputedStyle;
+    this.global.MutationObserver = MutationObserver;
     this.global.HTMLTextAreaElement = HTMLTextAreaElement;
     this.global.ResizeObserver = ResizeObserver;
 
@@ -36,6 +44,7 @@ class jestEnvironment extends NodeEnvironment {
       customElements,
       CustomEvent,
       getComputedStyle,
+      MutationObserver,
       HTMLTextAreaElement,
       ResizeObserver
     };
@@ -47,6 +56,7 @@ class jestEnvironment extends NodeEnvironment {
     this.global.customElements = undefined;
     this.global.CustomEvent = undefined;
     this.global.getComputedStyle = undefined;
+    this.global.MutationObserver = undefined;
     this.global.HTMLTextAreaElement = undefined;
     this.global.ResizeObserver = undefined;
 
