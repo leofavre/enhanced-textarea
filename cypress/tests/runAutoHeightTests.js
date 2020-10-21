@@ -2,7 +2,6 @@ import { LOREM, DELETE_ALL, TYPE_OPTIONS } from '../constants/index.js';
 
 const runAutoHeightTests = ({
   selector,
-  shadowRootSelector = selector,
   startFunction
 }) => {
   describe('Auto Height', () => {

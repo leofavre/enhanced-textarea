@@ -1,6 +1,5 @@
 const runResizeEventTests = ({
   selector,
-  shadowRootSelector = selector,
   startFunction
 }) => {
   describe('Resize Event', () => {

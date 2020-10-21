@@ -2,7 +2,6 @@ import { LOREM } from '../constants';
 
 const runElementDefinitionTests = ({
   selector,
-  shadowRootSelector = selector,
   startFunction
 }) => {
   describe('Element Definition', () => {
