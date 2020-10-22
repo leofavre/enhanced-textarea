@@ -1,6 +1,6 @@
 {
   "name": "@leofavre/enhanced-textarea",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Enhanced Text Area",
   "main": "index.js",
   "scripts": {
