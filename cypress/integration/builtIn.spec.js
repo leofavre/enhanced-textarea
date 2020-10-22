@@ -2,11 +2,11 @@ import runAutoHeightTests from '../tests/runAutoHeightTests.js';
 import runElementDefinitionTests from '../tests/runElementDefinitionTests.js';
 import runResizeEventTests from '../tests/runResizeEventTests.js';
 
-const selector = 'textarea[is=enhanced-textarea-built-in]';
+const selector = 'textarea[is=enhanced-textarea]';
 
 const options = {
   selector,
-  startFunction: win => win.defineBuiltInElement('enhanced-textarea-built-in')
+  startFunction: win => win.defineElement('enhanced-textarea')
 };
 
 describe('Built-in', () => {
