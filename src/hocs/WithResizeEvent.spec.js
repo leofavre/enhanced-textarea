@@ -19,6 +19,48 @@ describe('WithResizeEvent', () => {
     expect(Element.prototype).toBeInstanceOf(Base);
   });
 
+  describe('.connectedCallback()', () => {
+    beforeEach(() => {
+      element._handleResizeEventStart = jest.fn();
+    });
+
+    it('Calls super.connectedCallback', () => {
+      Base.prototype.connectedCallback = jest.fn();
+      Element = WithResizeEvent(Base);
+      element = new Element();
+      element._handleResizeEventStart = jest.fn();
+
+      element.connectedCallback();
+      expect(Base.prototype.connectedCallback).toHaveBeenCalled;
+    });
+
+    it('Calls _handleResizeEventStart', () => {
+      element.connectedCallback();
+      expect(element._handleResizeEventStart).toHaveBeenCalled;
+    });
+  });
+
+  describe('.disconnectedCallback()', () => {
+    beforeEach(() => {
+      element._handleResizeEventEnd = jest.fn();
+    });
+
+    it('Calls super.disconnectedCallback', () => {
+      Base.prototype.disconnectedCallback = jest.fn();
+      Element = WithResizeEvent(Base);
+      element = new Element();
+      element._handleResizeEventEnd = jest.fn();
+
+      element.disconnectedCallback();
+      expect(Base.prototype.disconnectedCallback).toHaveBeenCalled;
+    });
+
+    it('Calls _handleResizeEventEnd', () => {
+      element.disconnectedCallback();
+      expect(element._handleResizeEventEnd).toHaveBeenCalled;
+    });
+  });
+
   describe('._handleResizeEventStart()', () => {
     beforeEach(() => {
       element.addEventListener = jest.fn();

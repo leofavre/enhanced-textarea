@@ -4,6 +4,16 @@ const WithResizeEvent = (Base = class {}) => class extends Base {
     this._handlePointer = this._handlePointer.bind(this);
   }
 
+  connectedCallback () {
+    super.connectedCallback && super.connectedCallback();
+    this._handleResizeEventStart();
+  }
+
+  disconnectedCallback () {
+    super.disconnectedCallback && super.disconnectedCallback();
+    this._handleResizeEventEnd();
+  }
+
   _handleResizeEventStart () {
     this.addEventListener('pointerdown', this._handlePointer);
     this.addEventListener('pointerup', this._handlePointer);

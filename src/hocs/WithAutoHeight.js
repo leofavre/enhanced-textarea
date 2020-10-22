@@ -1,5 +1,8 @@
 import hasStyleExceptHeightChanged from '../helpers/hasStyleExceptHeightChanged.js';
 import pxToNumber from '../helpers/pxToNumber.js';
+import getCoercedAttr from '../helpers/getCoercedAttr.js';
+import setAttr from '../helpers/setAttr.js';
+import resetProp from '../helpers/resetProp.js';
 
 const WithAutoHeight = (Base = class {}) => class extends Base {
   constructor () {
@@ -8,11 +11,43 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
     this._handleResize = this._handleResize.bind(this);
   }
 
+  get autoheight () {
+    return getCoercedAttr(this, 'autoheight', Boolean);
+  }
+
+  set autoheight (value) {
+    setAttr(this, 'autoheight', value);
+  }
+
+  get value () {
+    return super.value;
+  }
+
+  set value (value) {
+    super.value = value;
+    this._handleChange();
+  }
+
   static get observedAttributes () {
     return [
       ...super.observedAttributes || [],
       ...['autoheight', 'rows', 'cols', 'class', 'style']
     ];
+  }
+
+  attributeChangedCallback (...args) {
+    super.attributeChangedCallback && super.attributeChangedCallback(...args);
+    this._handleAttributeChange(...args);
+  }
+
+  connectedCallback () {
+    super.connectedCallback && super.connectedCallback();
+    resetProp(this, 'autoheight');
+  }
+
+  disconnectedCallback () {
+    super.disconnectedCallback && super.disconnectedCallback();
+    this._handleAutoHeightEnd();
   }
 
   _handleAttributeChange (attrName, oldValue, nextValue) {
