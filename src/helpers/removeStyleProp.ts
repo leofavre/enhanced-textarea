@@ -1,5 +1,5 @@
 const removeStyleProp = (propName: string) => {
-  return (styleStr?: string): string | undefined =>
+  return (styleStr?: string | null): string | undefined =>
     styleStr != null && styleStr.replace
       ? styleStr
         .replace(new RegExp(`(^| |;)${propName}:.*?(;|$)`, 'g'), '$1')

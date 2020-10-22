@@ -1,4 +1,4 @@
-import getCoercedAttr from './getCoercedAttr.js';
+import getCoercedAttr from './getCoercedAttr';
 let element;
 
 describe('setAttr', () => {
@@ -7,11 +7,6 @@ describe('setAttr', () => {
       hasAttribute: jest.fn(),
       getAttribute: jest.fn()
     };
-  });
-
-  it('Calls getAttribute if the attribute is coerced to a String by default', () => {
-    getCoercedAttr(element, 'height');
-    expect(element.getAttribute).toHaveBeenCalledWith('height');
   });
 
   it('Calls getAttribute if the attribute is coerced to a String', () => {

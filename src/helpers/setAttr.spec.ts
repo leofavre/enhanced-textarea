@@ -1,4 +1,4 @@
-import setAttr from './setAttr.js';
+import setAttr from './setAttr';
 let element;
 
 describe('setAttr', () => {
@@ -11,12 +11,12 @@ describe('setAttr', () => {
 
   it('Calls setAttribute with the attribute name and the unprocessed value if it is a number', () => {
     setAttr(element, 'height', 20);
-    expect(element.setAttribute).toHaveBeenCalledWith('height', 20);
+    expect(element.setAttribute).toHaveBeenCalledWith('height', '20');
   });
 
   it('Calls setAttribute with the attribute name and the unprocessed value if it is zero', () => {
     setAttr(element, 'height', 0);
-    expect(element.setAttribute).toHaveBeenCalledWith('height', 0);
+    expect(element.setAttribute).toHaveBeenCalledWith('height', '0');
   });
 
   it('Calls setAttribute with the attribute name and the unprocessed value if it is a string', () => {

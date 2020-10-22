@@ -1,7 +1,7 @@
 import hasStyleExceptHeightChanged from '../helpers/hasStyleExceptHeightChanged.js';
 import pxToNumber from '../helpers/pxToNumber.js';
-import getCoercedAttr from '../helpers/getCoercedAttr.js';
-import setAttr from '../helpers/setAttr.js';
+import getCoercedAttr from '../helpers/getCoercedAttr';
+import setAttr from '../helpers/setAttr';
 import resetProp from '../helpers/resetProp';
 
 const WithAutoheight = (Base = class {}) => class extends Base {

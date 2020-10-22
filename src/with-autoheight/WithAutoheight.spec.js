@@ -1,10 +1,10 @@
-import getCoercedAttr from '../helpers/getCoercedAttr.js';
-import setAttr from '../helpers/setAttr.js';
+import getCoercedAttr from '../helpers/getCoercedAttr';
+import setAttr from '../helpers/setAttr';
 import resetProp from '../helpers/resetProp';
 import WithAutoheight from './WithAutoheight.js';
 
-jest.mock('../helpers/getCoercedAttr.js');
-jest.mock('../helpers/setAttr.js');
+jest.mock('../helpers/getCoercedAttr');
+jest.mock('../helpers/setAttr');
 jest.mock('../helpers/resetProp');
 
 let Base;
