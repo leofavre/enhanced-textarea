@@ -4,9 +4,11 @@ notifications:
 node_js: 14
 jobs:
   include:
-  - name: Unit Tests
+  - name: Type Check
     script:
     - npm run test-types
+  - name: Unit Tests
+    script:
     - npm test
     after_success:
     - npm run send-coverage
