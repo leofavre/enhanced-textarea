@@ -10,13 +10,11 @@
     import WithResizeEvent from './with-resize-event/WithResizeEvent.js';
 
     window.defineElement = function (name) {
-      if (!window.customElements.get(name)) {
-        window.customElements.define(
-          name,
-          WithAutoheight(WithResizeEvent(HTMLTextAreaElement)),
-          { extends: 'textarea' }
-        )
-      }
+      window.customElements.define(
+        name,
+        WithAutoheight(WithResizeEvent(HTMLTextAreaElement)),
+        { extends: 'textarea' }
+      )
     };
 
     const { port = '8080' } = new URL(document.URL);
