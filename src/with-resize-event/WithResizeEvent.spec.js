@@ -19,24 +19,60 @@ describe('WithResizeEvent', () => {
     expect(Element.prototype).toBeInstanceOf(Base);
   });
 
-  describe('.baseElement', () => {
-    it('Returns the instance', () => {
-      expect(element.baseElement).toBe(element);
+  describe('.connectedCallback()', () => {
+    beforeEach(() => {
+      element._handleResizeEventStart = jest.fn();
+    });
+
+    it('Calls super.connectedCallback', () => {
+      Base.prototype.connectedCallback = jest.fn();
+      Element = WithResizeEvent(Base);
+      element = new Element();
+      element._handleResizeEventStart = jest.fn();
+
+      element.connectedCallback();
+      expect(Base.prototype.connectedCallback).toHaveBeenCalled;
+    });
+
+    it('Calls _handleResizeEventStart', () => {
+      element.connectedCallback();
+      expect(element._handleResizeEventStart).toHaveBeenCalled;
+    });
+  });
+
+  describe('.disconnectedCallback()', () => {
+    beforeEach(() => {
+      element._handleResizeEventEnd = jest.fn();
+    });
+
+    it('Calls super.disconnectedCallback', () => {
+      Base.prototype.disconnectedCallback = jest.fn();
+      Element = WithResizeEvent(Base);
+      element = new Element();
+      element._handleResizeEventEnd = jest.fn();
+
+      element.disconnectedCallback();
+      expect(Base.prototype.disconnectedCallback).toHaveBeenCalled;
+    });
+
+    it('Calls _handleResizeEventEnd', () => {
+      element.disconnectedCallback();
+      expect(element._handleResizeEventEnd).toHaveBeenCalled;
     });
   });
 
   describe('._handleResizeEventStart()', () => {
     beforeEach(() => {
-      element.baseElement.addEventListener = jest.fn();
+      element.addEventListener = jest.fn();
     });
 
     it('Observes user interaction', () => {
       element._handleResizeEventStart();
 
-      expect(element.baseElement.addEventListener)
+      expect(element.addEventListener)
         .toHaveBeenCalledWith('pointerup', element._handlePointer);
 
-      expect(element.baseElement.addEventListener)
+      expect(element.addEventListener)
         .toHaveBeenCalledWith('pointerdown', element._handlePointer);
     });
   });
@@ -49,10 +85,10 @@ describe('WithResizeEvent', () => {
     it('Observes user interaction', () => {
       element._handleResizeEventEnd();
 
-      expect(element.baseElement.removeEventListener)
+      expect(element.removeEventListener)
         .toHaveBeenCalledWith('pointerup', element._handlePointer);
 
-      expect(element.baseElement.removeEventListener)
+      expect(element.removeEventListener)
         .toHaveBeenCalledWith('pointerdown', element._handlePointer);
     });
   });
@@ -62,7 +98,7 @@ describe('WithResizeEvent', () => {
 
     beforeEach(() => {
       CustomEventSpy = jest.spyOn(global, 'CustomEvent');
-      element.baseElement.dispatchEvent = jest.fn();
+      element.dispatchEvent = jest.fn();
     });
 
     afterEach(() => {
@@ -73,9 +109,9 @@ describe('WithResizeEvent', () => {
       element._handlePointer();
     });
 
-    it('Stores baseElement dimensions on pointerdown', () => {
-      element.baseElement.offsetHeight = 50;
-      element.baseElement.offsetWidth = 100;
+    it('Stores dimensions on pointerdown', () => {
+      element.offsetHeight = 50;
+      element.offsetWidth = 100;
 
       element._handlePointer({ type: 'pointerdown' });
 
@@ -83,37 +119,37 @@ describe('WithResizeEvent', () => {
       expect(element._preResizeWidth).toBe(100);
     });
 
-    it('Dispatches userresize event if baseElement was resized', () => {
+    it('Dispatches resize event if was resized', () => {
       element._preResizeHeight = 50;
       element._preResizeWidth = 100;
 
-      element.baseElement.offsetHeight = 55;
-      element.baseElement.offsetWidth = 105;
+      element.offsetHeight = 55;
+      element.offsetWidth = 105;
 
       element._handlePointer({ type: 'pointerup' });
 
-      expect(CustomEventSpy).toHaveBeenCalledWith('userresize', {
+      expect(CustomEventSpy).toHaveBeenCalledWith('resize', {
         bubbles: true,
         cancelable: false,
         composed: true
       });
 
-      expect(element.baseElement.dispatchEvent)
+      expect(element.dispatchEvent)
         .toHaveBeenCalledWith(CustomEventSpy.mock.instances[0]);
     });
 
-    it('Does not dispatch userresize event if baseElement ' +
+    it('Does not dispatch resize event if ' +
       'was not resized', () => {
       element._preResizeHeight = 50;
       element._preResizeWidth = 100;
 
-      element.baseElement.offsetHeight = 50;
-      element.baseElement.offsetWidth = 100;
+      element.offsetHeight = 50;
+      element.offsetWidth = 100;
 
       element._handlePointer({ type: 'pointerup' });
 
       expect(CustomEventSpy).not.toHaveBeenCalled;
-      expect(element.baseElement.dispatchEvent).not.toHaveBeenCalled;
+      expect(element.dispatchEvent).not.toHaveBeenCalled;
     });
   });
 });

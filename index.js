@@ -1,9 +1,7 @@
-import EnhancedTextAreaBuiltIn from './dist/built-in/index.js';
-import EnhancedTextAreaElement from './dist/element/index.js';
-import EnhancedTextAreaScript from './dist/script/index.js';
+import WithAutoheight from './dist/with-autoheight/WithAutoheight.js';
+import WithResizeEvent from './dist/with-resize-event/WithResizeEvent.js';
 
 export {
-  EnhancedTextAreaBuiltIn,
-  EnhancedTextAreaElement,
-  EnhancedTextAreaScript
+  WithAutoheight,
+  WithResizeEvent
 };

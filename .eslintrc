@@ -30,7 +30,14 @@
   "overrides": [{
     "files": "*.{test,spec}.js",
     "rules": {
-      "no-unused-expressions": "off"
+      "no-unused-expressions": "off",
+      "max-len": ["error", {
+        "code": 80,
+        "ignorePattern": "(^| +)it[(]|^(import|export)\\s.+\\sfrom\\s.+;$",
+        "ignoreUrls": true,
+        "ignoreTemplateLiterals": true,
+        "ignoreRegExpLiterals": true
+      }]
     }
   }]
 }

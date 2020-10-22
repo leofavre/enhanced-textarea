@@ -6,43 +6,29 @@
   <title>Enhanced Text Area</title>
   <link rel="stylesheet" href="./index.css">
   <script type="module">
-    import { defineElement as defineBuiltInElement } from './built-in/index.js';
-    import { defineElement } from './element/index.js';
-    import { enhance } from './script/index.js';
+    import WithAutoheight from './with-autoheight/WithAutoheight.js';
+    import WithResizeEvent from './with-resize-event/WithResizeEvent.js';
 
-    window.defineBuiltInElement = defineBuiltInElement;
-    window.defineElement = defineElement;
-    window.enhance = enhance;
+    window.defineElement = function (name) {
+      window.customElements.define(
+        name,
+        WithAutoheight(WithResizeEvent(HTMLTextAreaElement)),
+        { extends: 'textarea' }
+      )
+    };
 
     const { port = '8080' } = new URL(document.URL);
 
     if (Number(port) >= 8000) {
-      defineBuiltInElement('enhanced-textarea-built-in');
-      defineElement();
-      enhance(document.querySelector('[data=enhanced-textarea]'));
+      defineElement('enhanced-textarea');
     };
   </script>
 </head>
 <body>
   <h1>Enhanced Text Area</h1>
-
-  <h2>Built-in</h2>
   <textarea
     rows="1"
-    is="enhanced-textarea-built-in"
-    autoheight
-  ></textarea>
-
-  <h2>Element</h2>
-  <enhanced-textarea
-    rows="1"
-    autoheight
-  ></enhanced-textarea>
-  
-  <h2>Script</h2>
-  <textarea
-    rows="1"
-    data="enhanced-textarea"
+    is="enhanced-textarea"
     autoheight
   ></textarea>
 </body>

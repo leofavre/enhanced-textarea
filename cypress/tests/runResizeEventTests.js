@@ -1,6 +1,5 @@
 const runResizeEventTests = ({
   selector,
-  shadowRootSelector = selector,
   startFunction
 }) => {
   describe('Resize Event', () => {
@@ -10,13 +9,13 @@ const runResizeEventTests = ({
       cy.window().then(startFunction);
     });
 
-    it('Dispatches the userresize event', () => {
+    it('Dispatches the resize event', () => {
       const handleUserResize = ({ target }) => {
         target.setAttribute('resized', '');
       };
 
       cy.get('@textarea')
-        .invoke('on', 'userresize', handleUserResize)
+        .invoke('on', 'resize', handleUserResize)
         .invoke('css', 'resize', 'both')
         .trigger('pointerdown', 'bottomRight')
         .invoke('css', 'height', '65px')
