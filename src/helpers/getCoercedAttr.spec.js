@@ -9,8 +9,7 @@ describe('setAttr', () => {
     };
   });
 
-  it('Calls getAttribute if the attribute is coerced to a String ' +
-    'by default', () => {
+  it('Calls getAttribute if the attribute is coerced to a String by default', () => {
     getCoercedAttr(element, 'height');
     expect(element.getAttribute).toHaveBeenCalledWith('height');
   });

@@ -4,14 +4,75 @@ const runAutoHeightTests = ({
   selector,
   startFunction
 }) => {
-  describe('Auto Height', () => {
+  describe('Autoheight', () => {
     beforeEach(() => {
       cy.visit('/');
       cy.get(selector).as('textarea');
+    });
+
+    it('Lazily sets the autoheight property', () => {
+      cy.get('@textarea')
+        .invoke('attr', 'autoheight', null)
+        .invoke('prop', 'autoheight', true)
+        .invoke('prop', 'value', LOREM)
+        .should('have.prop', 'clientHeight')
+        .and('be.within', 27, 35);
+
       cy.window().then(startFunction);
+
+      cy.get('@textarea')
+        .should('have.prop', 'clientHeight')
+        .and('be.within', 90, 98);
+    });
+
+    it('Lazily sets the autoheight attribute', () => {
+      cy.get('@textarea')
+        .invoke('attr', 'autoheight', '')
+        .invoke('prop', 'autoheight', undefined)
+        .invoke('prop', 'value', LOREM)
+        .should('have.prop', 'clientHeight')
+        .and('be.within', 27, 35);
+
+      cy.window().then(startFunction);
+
+      cy.get('@textarea')
+        .should('have.prop', 'clientHeight')
+        .and('be.within', 90, 98);
+    });
+
+    it('Reflects the autoheight property to an attribute', () => {
+      cy.window().then(startFunction);
+
+      cy.get('@textarea')
+        .invoke('prop', 'autoheight', true);
+
+      cy.get('@textarea')
+        .should('have.prop', 'autoheight')
+        .and('equal', true);
+
+      cy.get('@textarea')
+        .should('have.attr', 'autoheight')
+        .and('equal', '');
+    });
+
+    it('Reflects the autoheight attribute to a property', () => {
+      cy.window().then(startFunction);
+
+      cy.get('@textarea')
+        .invoke('attr', 'autoheight', '');
+
+      cy.get('@textarea')
+        .should('have.prop', 'autoheight')
+        .and('equal', true);
+
+      cy.get('@textarea')
+        .should('have.attr', 'autoheight')
+        .and('equal', '');
     });
 
     it('Grows or shrinks according to text being typed or deleted', () => {
+      cy.window().then(startFunction);
+
       cy.get('@textarea')
         .type(LOREM, TYPE_OPTIONS)
         .should('have.prop', 'clientHeight')
@@ -25,6 +86,8 @@ const runAutoHeightTests = ({
 
     it('Grows or shrinks according to text being ' +
       'set or removed programmatically', () => {
+      cy.window().then(startFunction);
+
       cy.get('@textarea')
         .invoke('prop', 'value', LOREM)
         .should('have.prop', 'clientHeight')
@@ -37,6 +100,8 @@ const runAutoHeightTests = ({
     });
 
     it('Respects a minimum height when the rows attribute is set', () => {
+      cy.window().then(startFunction);
+
       cy.get('@textarea')
         .invoke('attr', 'rows', '2')
         .type(LOREM, TYPE_OPTIONS)
@@ -51,6 +116,8 @@ const runAutoHeightTests = ({
 
     it('Respects a minimum height when the height ' +
       'style property is set', () => {
+      cy.window().then(startFunction);
+
       cy.get('@textarea')
         .invoke('css', 'height', '65px')
         .type(LOREM, TYPE_OPTIONS)
@@ -65,6 +132,8 @@ const runAutoHeightTests = ({
 
     it('Grows or shrinks according to style applied ' +
       'directly to the component', () => {
+      cy.window().then(startFunction);
+
       cy.get('@textarea')
         .invoke('prop', 'value', LOREM)
         .invoke('css', 'lineHeight', '3')
@@ -84,6 +153,8 @@ const runAutoHeightTests = ({
 
     it('Grows or shrinks according to a class applied ' +
       'directly to the component', () => {
+      cy.window().then(startFunction);
+
       cy.get('@textarea')
         .invoke('prop', 'value', LOREM)
         .invoke('addClass', 'larger')
@@ -97,6 +168,8 @@ const runAutoHeightTests = ({
     });
 
     it('Calculates height with or without box-sizing: border-box', () => {
+      cy.window().then(startFunction);
+
       cy.get('@textarea')
         .invoke('prop', 'value', LOREM)
         .invoke('css', 'padding', '40px')
@@ -120,6 +193,8 @@ const runAutoHeightTests = ({
     });
 
     it('Respects a minimum height when the user resizes the element', () => {
+      cy.window().then(startFunction);
+
       cy.get('@textarea')
         .invoke('prop', 'value', LOREM)
         .invoke('css', 'resize', 'both')
@@ -132,6 +207,8 @@ const runAutoHeightTests = ({
     });
 
     it('Toggles the autoheight behaviour when the attribute is toggled', () => {
+      cy.window().then(startFunction);
+
       cy.get('@textarea')
         .invoke('attr', 'autoheight', '')
         .type(LOREM.slice(0, LOREM.length / 2), TYPE_OPTIONS)
@@ -151,6 +228,8 @@ const runAutoHeightTests = ({
     });
 
     it('Toggles the autoheight behaviour when the property is toggled', () => {
+      cy.window().then(startFunction);
+
       cy.get('@textarea')
         .invoke('prop', 'autoheight', true)
         .type(LOREM.slice(0, LOREM.length / 2), TYPE_OPTIONS)
