@@ -4,22 +4,18 @@ const WithResizeEvent = (Base = class {}) => class extends Base {
     this._handlePointer = this._handlePointer.bind(this);
   }
 
-  get baseElement () {
-    return this;
-  }
-
   _handleResizeEventStart () {
-    this.baseElement.addEventListener('pointerdown', this._handlePointer);
-    this.baseElement.addEventListener('pointerup', this._handlePointer);
+    this.addEventListener('pointerdown', this._handlePointer);
+    this.addEventListener('pointerup', this._handlePointer);
   }
 
   _handleResizeEventEnd () {
-    this.baseElement.removeEventListener('pointerdown', this._handlePointer);
-    this.baseElement.removeEventListener('pointerup', this._handlePointer);
+    this.removeEventListener('pointerdown', this._handlePointer);
+    this.removeEventListener('pointerup', this._handlePointer);
   }
 
   _handlePointer ({ type } = {}) {
-    const { offsetHeight, offsetWidth } = this.baseElement;
+    const { offsetHeight, offsetWidth } = this;
 
     if (type === 'pointerdown') {
       this._preResizeHeight = offsetHeight;
@@ -38,7 +34,7 @@ const WithResizeEvent = (Base = class {}) => class extends Base {
           composed: true
         });
 
-        this.baseElement.dispatchEvent(event);
+        this.dispatchEvent(event);
       }
     }
   }

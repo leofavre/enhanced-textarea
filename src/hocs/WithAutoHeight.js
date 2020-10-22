@@ -8,10 +8,6 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
     this._handleResize = this._handleResize.bind(this);
   }
 
-  get baseElement () {
-    return this;
-  }
-
   static get observedAttributes () {
     return [
       ...super.observedAttributes || [],
@@ -38,20 +34,20 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
 
   _handleAutoHeightStart () {
     this._resizeObserver = new ResizeObserver(this._handleChange);
-    this._resizeObserver.observe(this.baseElement);
-    this.baseElement.addEventListener('input', this._handleChange);
-    this.baseElement.addEventListener('userresize', this._handleResize);
+    this._resizeObserver.observe(this);
+    this.addEventListener('input', this._handleChange);
+    this.addEventListener('userresize', this._handleResize);
   }
 
   _handleAutoHeightEnd () {
-    this._resizeObserver && this._resizeObserver.unobserve(this.baseElement);
-    this.baseElement.removeEventListener('input', this._handleChange);
-    this.baseElement.removeEventListener('userresize', this._handleResize);
+    this._resizeObserver && this._resizeObserver.unobserve(this);
+    this.removeEventListener('input', this._handleChange);
+    this.removeEventListener('userresize', this._handleResize);
   }
 
   _handleChange () {
-    if (this.baseElement.hasAttribute('autoheight')) {
-      const { offsetHeight, clientHeight } = this.baseElement;
+    if (this.hasAttribute('autoheight')) {
+      const { offsetHeight, clientHeight } = this;
       const offset = offsetHeight - clientHeight;
 
       let inner = 0;
@@ -65,12 +61,12 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
         inner = paddingTop + paddingBottom + borderTop + borderBottom;
       }
 
-      const { height: prevHeight } = this.baseElement.style;
+      const { height: prevHeight } = this.style;
 
-      this.baseElement.style.minHeight = 'auto';
-      this.baseElement.style.height = 'auto';
+      this.style.minHeight = 'auto';
+      this.style.height = 'auto';
 
-      const { scrollHeight } = this.baseElement;
+      const { scrollHeight } = this;
       const numericNextMinHeight = scrollHeight + offset - inner;
       const nextMinHeight = `${numericNextMinHeight}px`;
       const numericPrevHeight = pxToNumber(prevHeight);
@@ -83,8 +79,8 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
           : `${numericPrevHeight}px`;
       }
 
-      this.baseElement.style.minHeight = nextMinHeight;
-      this.baseElement.style.height = nextHeight;
+      this.style.minHeight = nextMinHeight;
+      this.style.height = nextHeight;
     }
   }
 
@@ -95,7 +91,7 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
   }
 
   _getStyleProp (str) {
-    const elementStyles = window.getComputedStyle(this.baseElement);
+    const elementStyles = window.getComputedStyle(this);
     const prop = elementStyles.getPropertyValue(str);
 
     return prop.endsWith('px')

@@ -29,13 +29,13 @@ describe('WithBuiltIn', () => {
   describe('.autoheight', () => {
     it('Calls getCoercedAttr on get', () => {
       element.autoheight;
-      const expectedArgs = [element.baseElement, 'autoheight', Boolean];
+      const expectedArgs = [element, 'autoheight', Boolean];
       expect(getCoercedAttr).toHaveBeenCalledWith(...expectedArgs);
     });
 
     it('Calls setAttr on set', () => {
       element.autoheight = true;
-      const expectedArgs = [element.baseElement, 'autoheight', true];
+      const expectedArgs = [element, 'autoheight', true];
       expect(setAttr).toHaveBeenCalledWith(...expectedArgs);
     });
   });
