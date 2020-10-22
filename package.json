@@ -13,7 +13,8 @@
     "test": "jest --coverage",
     "test-watch": "jest --coverage --watchAll",
     "test-ui": "start-server-and-test start-test 7075 cypress",
-    "test-ui-watch": "start-server-and-test start-test 7075 cypress-open"
+    "test-ui-watch": "start-server-and-test start-test 7075 cypress-open",
+    "test-types": "tsc --noEmit"
   },
   "author": "Leonardo Favre <leo@leofavre.com> (https://www.leofavre.com/)",
   "license": "MIT",
