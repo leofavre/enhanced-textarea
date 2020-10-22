@@ -138,8 +138,7 @@ describe('WithResizeEvent', () => {
         .toHaveBeenCalledWith(CustomEventSpy.mock.instances[0]);
     });
 
-    it('Does not dispatch resize event if ' +
-      'was not resized', () => {
+    it('Does not dispatch resize event if was not resized', () => {
       element._preResizeHeight = 50;
       element._preResizeWidth = 100;
 

@@ -212,8 +212,7 @@ describe('WithAutoheight', () => {
       expect(element._handleAutoHeightEnd).toHaveBeenCalled;
     });
 
-    it('Does not call _handleAutoHeightStart or _handleAutoHeightEnd ' +
-      'when autoheight changes but is not set or unset', () => {
+    it('Does not call _handleAutoHeightStart or _handleAutoHeightEnd when autoheight changes but is not set or unset', () => {
       element._handleAutoHeightStart = jest.fn();
       element._handleAutoHeightEnd = jest.fn();
       element._handleAttributeChange('autoheight', '', 'autoheight');
@@ -227,8 +226,7 @@ describe('WithAutoheight', () => {
       expect(element._handleChange).toHaveBeenCalled;
     });
 
-    it('Calls _handleChange when style properties ' +
-      'except height or min-height change', () => {
+    it('Calls _handleChange when style properties except height or min-height change', () => {
       element._handleChange = jest.fn();
       const prevStyle = 'width: 100px;';
       const nextStyle = 'width: 150px;';
@@ -236,8 +234,7 @@ describe('WithAutoheight', () => {
       expect(element._handleChange).toHaveBeenCalled;
     });
 
-    it('Does not call _handleChange when only style properties ' +
-      'height or min-height change', () => {
+    it('Does not call _handleChange when only style properties height or min-height change', () => {
       element._handleChange = jest.fn();
       const prevStyle = 'height: 100px; min-height: 100px;';
       const nextStyle = 'height: 150px;';
@@ -326,8 +323,7 @@ describe('WithAutoheight', () => {
       element._handleChange();
     });
 
-    it('Resizes considering padding and border ' +
-      'if the box-sizing is not border-box', () => {
+    it('Resizes considering padding and border if the box-sizing is not border-box', () => {
       element.hasAttribute = () => true;
 
       element.offsetHeight = 152;
@@ -347,8 +343,7 @@ describe('WithAutoheight', () => {
       expect(element.style.height).toBe('auto');
     });
 
-    it('Resizes ignoring padding and border ' +
-      'if the box-sizing is border-box', () => {
+    it('Resizes ignoring padding and border if the box-sizing is border-box', () => {
       element.hasAttribute = () => true;
 
       element.offsetHeight = 152;
@@ -384,8 +379,7 @@ describe('WithAutoheight', () => {
       expect(element.style.height).toBe('90px');
     });
 
-    it('Resizes when height is changed by user interaction ' +
-      'but restricts it to min-height', () => {
+    it('Resizes when height is changed by user interaction but restricts it to min-height', () => {
       element.hasAttribute = () => true;
       element._resizedByUser = true;
 
@@ -406,8 +400,7 @@ describe('WithAutoheight', () => {
   });
 
   describe('._handleResize()', () => {
-    it('Class _handleChange after setting _resizedByUser to true ' +
-      'and then sets _resizedByUser to false', () => {
+    it('Class _handleChange after setting _resizedByUser to true and then sets _resizedByUser to false', () => {
       element._handleChange = jest.fn(function () {
         expect(element._resizedByUser).toBe(true);
       });
