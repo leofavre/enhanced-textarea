@@ -13,8 +13,7 @@ textarea {
   padding: 5px;
   font: inherit;
   text-align: left;
-  resize: none;
-  -webkit-appearance: none;
+  appearance: none;
 }
 
 textarea:focus {

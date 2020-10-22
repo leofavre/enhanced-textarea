@@ -1,7 +1,7 @@
 import getCoercedAttr from '../helpers/getCoercedAttr.js';
 import setAttr from '../helpers/setAttr.js';
 import resetProp from '../helpers/resetProp.js';
-import WithAutoHeight from './WithAutoHeight.js';
+import WithAutoheight from './WithAutoheight.js';
 
 jest.mock('../helpers/getCoercedAttr.js');
 jest.mock('../helpers/setAttr.js');
@@ -11,15 +11,15 @@ let Base;
 let Element;
 let element;
 
-describe('WithAutoHeight', () => {
+describe('WithAutoheight', () => {
   beforeEach(() => {
     Base = class {};
-    Element = WithAutoHeight(Base);
+    Element = WithAutoheight(Base);
     element = new Element();
   });
 
   it('Uses an empty class as default parameter', () => {
-    WithAutoHeight();
+    WithAutoheight();
   });
 
   it('Returns a class that extends another passed as parameter', () => {
@@ -53,7 +53,7 @@ describe('WithAutoHeight', () => {
 
       descriptor = Object.getOwnPropertyDescriptor(Base.prototype, 'value');
 
-      Element = WithAutoHeight(Base);
+      Element = WithAutoheight(Base);
       element = new Element();
       element._handleChange = jest.fn();
     });
@@ -104,7 +104,7 @@ describe('WithAutoHeight', () => {
         }
       };
 
-      Element = WithAutoHeight(Base);
+      Element = WithAutoheight(Base);
       element = new Element();
 
       expect(Element.observedAttributes.sort()).toEqual(expectedAttrs.sort());
@@ -118,7 +118,7 @@ describe('WithAutoHeight', () => {
 
     it('Calls super.attributeChangedCallback forwarding arguments', () => {
       Base.prototype.attributeChangedCallback = jest.fn();
-      Element = WithAutoHeight(Base);
+      Element = WithAutoheight(Base);
       element = new Element();
       element._handleAttributeChange = jest.fn();
 
@@ -143,7 +143,7 @@ describe('WithAutoHeight', () => {
 
     it('Calls super.connectedCallback', () => {
       Base.prototype.connectedCallback = jest.fn();
-      Element = WithAutoHeight(Base);
+      Element = WithAutoheight(Base);
       element = new Element();
       element._handleResizeEventStart = jest.fn();
 

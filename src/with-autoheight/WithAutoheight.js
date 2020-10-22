@@ -4,7 +4,7 @@ import getCoercedAttr from '../helpers/getCoercedAttr.js';
 import setAttr from '../helpers/setAttr.js';
 import resetProp from '../helpers/resetProp.js';
 
-const WithAutoHeight = (Base = class {}) => class extends Base {
+const WithAutoheight = (Base = class {}) => class extends Base {
   constructor () {
     super();
     this._handleChange = this._handleChange.bind(this);
@@ -135,4 +135,4 @@ const WithAutoHeight = (Base = class {}) => class extends Base {
   }
 };
 
-export default WithAutoHeight;
+export default WithAutoheight;

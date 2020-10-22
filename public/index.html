@@ -6,9 +6,18 @@
   <title>Enhanced Text Area</title>
   <link rel="stylesheet" href="./index.css">
   <script type="module">
-    import { defineElement } from './built-in/index.js';
+    import WithAutoheight from './with-autoheight/WithAutoheight.js';
+    import WithResizeEvent from './with-resize-event/WithResizeEvent.js';
 
-    window.defineElement = defineElement;
+    window.defineElement = function (name) {
+      if (!window.customElements.get(name)) {
+        window.customElements.define(
+          name,
+          WithAutoheight(WithResizeEvent(HTMLTextAreaElement)),
+          { extends: 'textarea' }
+        )
+      }
+    };
 
     const { port = '8080' } = new URL(document.URL);
 
