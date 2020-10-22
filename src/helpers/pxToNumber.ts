@@ -1,4 +1,4 @@
-const pxToNumber = str => {
+const pxToNumber = (str: string): number | undefined => {
   const isPxMeasure = /[0-9-.].*?px$/.test(str);
 
   if (!isPxMeasure) {

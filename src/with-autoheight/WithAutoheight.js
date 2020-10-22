@@ -1,5 +1,5 @@
-import hasStyleExceptHeightChanged from '../helpers/hasStyleExceptHeightChanged.js';
-import pxToNumber from '../helpers/pxToNumber.js';
+import hasStyleExceptHeightChanged from '../helpers/hasStyleExceptHeightChanged';
+import pxToNumber from '../helpers/pxToNumber';
 import getCoercedAttr from '../helpers/getCoercedAttr';
 import setAttr from '../helpers/setAttr';
 import resetProp from '../helpers/resetProp';
