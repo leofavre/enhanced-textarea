@@ -251,7 +251,7 @@ describe('WithAutoHeight', () => {
         .toHaveBeenCalledWith('input', element._handleChange);
 
       expect(element.addEventListener)
-        .toHaveBeenCalledWith('userresize', element._handleResize);
+        .toHaveBeenCalledWith('resize', element._handleResize);
     });
   });
 
@@ -270,7 +270,7 @@ describe('WithAutoHeight', () => {
       ResizeObserverSpy.mockReset();
     });
 
-    it('Stops observing userresize', () => {
+    it('Stops observing resize', () => {
       element._handleAutoHeightEnd();
 
       expect(element._resizeObserver.unobserve)
@@ -284,7 +284,7 @@ describe('WithAutoHeight', () => {
         .toHaveBeenCalledWith('input', element._handleChange);
 
       expect(element.removeEventListener)
-        .toHaveBeenCalledWith('userresize', element._handleResize);
+        .toHaveBeenCalledWith('resize', element._handleResize);
     });
   });
 

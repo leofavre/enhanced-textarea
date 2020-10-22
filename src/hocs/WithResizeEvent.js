@@ -38,7 +38,7 @@ const WithResizeEvent = (Base = class {}) => class extends Base {
         this._preResizeWidth !== offsetWidth;
 
       if (resizedByUser) {
-        const event = new CustomEvent('userresize', {
+        const event = new CustomEvent('resize', {
           bubbles: true,
           cancelable: false,
           composed: true

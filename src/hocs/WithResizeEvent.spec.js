@@ -119,7 +119,7 @@ describe('WithResizeEvent', () => {
       expect(element._preResizeWidth).toBe(100);
     });
 
-    it('Dispatches userresize event if was resized', () => {
+    it('Dispatches resize event if was resized', () => {
       element._preResizeHeight = 50;
       element._preResizeWidth = 100;
 
@@ -128,7 +128,7 @@ describe('WithResizeEvent', () => {
 
       element._handlePointer({ type: 'pointerup' });
 
-      expect(CustomEventSpy).toHaveBeenCalledWith('userresize', {
+      expect(CustomEventSpy).toHaveBeenCalledWith('resize', {
         bubbles: true,
         cancelable: false,
         composed: true
@@ -138,7 +138,7 @@ describe('WithResizeEvent', () => {
         .toHaveBeenCalledWith(CustomEventSpy.mock.instances[0]);
     });
 
-    it('Does not dispatch userresize event if ' +
+    it('Does not dispatch resize event if ' +
       'was not resized', () => {
       element._preResizeHeight = 50;
       element._preResizeWidth = 100;
