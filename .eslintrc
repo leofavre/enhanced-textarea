@@ -1,5 +1,5 @@
 {
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
   "extends": [
     "semistandard"
   ],
@@ -27,7 +27,16 @@
     "expect": true,
     "cy": true
   },
-  "overrides": [{
+  "overrides": [
+    {
+      "files": "*.ts",
+      "extends": [
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "semistandard"
+      ]
+    },
+    {
     "files": "*.{test,spec}.js",
     "rules": {
       "no-unused-expressions": "off",
