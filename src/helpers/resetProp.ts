@@ -1,4 +1,4 @@
-type AnyObject = Record<string, unknown>
+import { AnyObject } from '../types';
 
 const resetProp = (element: AnyObject, propName: string): void => {
   const value = element[propName];
