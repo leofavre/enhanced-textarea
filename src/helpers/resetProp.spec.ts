@@ -1,4 +1,4 @@
-import resetProp from './resetProp.js';
+import resetProp from './resetProp';
 
 describe('resetProp', () => {
   it('Deletes and then resets a property from an object', () => {

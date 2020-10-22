@@ -1,12 +1,16 @@
-import removeStyleProp from './removeStyleProp.js';
+import removeStyleProp from './removeStyleProp';
 
 describe('removeStyleProp', () => {
   it('Returns a function', () => {
-    expect(removeStyleProp()).toBeInstanceOf(Function);
+    expect(removeStyleProp('')).toBeInstanceOf(Function);
   });
 
-  it('Returns the second parameter if it is not a string', () => {
-    expect(removeStyleProp('height')(20)).toBe(20);
+  it('Returns undefined if it receives null', () => {
+    expect(removeStyleProp('height')(null)).toBeUndefined();
+  });
+
+  it('Returns undefined if it receives undefined', () => {
+    expect(removeStyleProp('height')()).toBeUndefined();
   });
 
   it('Removes a property from a Style string', () => {
@@ -15,7 +19,7 @@ describe('removeStyleProp', () => {
     expect(removeStyleProp('height')(styleStr)).toBe(result);
   });
 
-  it('Detects only complete property names in the beginning', () => {
+  it('Detects only complete property names in the beginning of the string', () => {
     const styleStr = 'height: 100px; line-height: 2;';
     const result = 'line-height: 2;';
     expect(removeStyleProp('height')(styleStr)).toBe(result);
@@ -33,7 +37,7 @@ describe('removeStyleProp', () => {
     expect(removeStyleProp('height')(styleStr)).toBe(result);
   });
 
-  it('Detects only complete property names in the end', () => {
+  it('Detects only complete property names in the end of the string', () => {
     const styleStr = 'line-height: 2; height: 100px';
     const result = 'line-height: 2;';
     expect(removeStyleProp('height')(styleStr)).toBe(result);

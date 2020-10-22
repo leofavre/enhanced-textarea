@@ -1,4 +1,4 @@
-import removeStyleProp from './removeStyleProp.js';
+import removeStyleProp from './removeStyleProp';
 
 const ignoreHeight = removeStyleProp('height');
 const ignoreMinHeight = removeStyleProp('min-height');
