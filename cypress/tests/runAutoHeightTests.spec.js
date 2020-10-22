@@ -84,8 +84,7 @@ const runAutoHeightTests = ({
         .and('be.within', 27, 35);
     });
 
-    it('Grows or shrinks according to text being ' +
-      'set or removed programmatically', () => {
+    it('Grows or shrinks according to text being set or removed programmatically', () => {
       cy.window().then(startFunction);
 
       cy.get('@textarea')
@@ -114,8 +113,7 @@ const runAutoHeightTests = ({
         .and('be.within', 48, 56);
     });
 
-    it('Respects a minimum height when the height ' +
-      'style property is set', () => {
+    it('Respects a minimum height when the height style property is set', () => {
       cy.window().then(startFunction);
 
       cy.get('@textarea')
@@ -130,8 +128,7 @@ const runAutoHeightTests = ({
         .and('be.within', 71, 79);
     });
 
-    it('Grows or shrinks according to style applied ' +
-      'directly to the component', () => {
+    it('Grows or shrinks according to style applied directly to the component', () => {
       cy.window().then(startFunction);
 
       cy.get('@textarea')
@@ -151,8 +148,7 @@ const runAutoHeightTests = ({
         .and('be.within', 90, 98);
     });
 
-    it('Grows or shrinks according to a class applied ' +
-      'directly to the component', () => {
+    it('Grows or shrinks according to a class applied directly to the component', () => {
       cy.window().then(startFunction);
 
       cy.get('@textarea')
