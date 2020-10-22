@@ -37,7 +37,7 @@
       ]
     },
     {
-    "files": "*.{test,spec}.js",
+    "files": "*.{test,spec}.{js,ts}",
     "rules": {
       "no-unused-expressions": "off",
       "max-len": ["error", {
