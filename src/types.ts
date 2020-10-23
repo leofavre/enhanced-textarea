@@ -4,7 +4,7 @@ export type PropName = string;
 
 export type AttrValue = string | null;
 export type AttrName = string;
-export type AttributeChangedCallbackArguments = [AttrName, AttrValue, AttrValue];
+export type AttributeChangedCallbackArguments = [AttrName?, AttrValue?, AttrValue?];
 
 export type BasicPrimitive = string | number | boolean;
 
