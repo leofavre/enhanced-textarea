@@ -1,4 +1,3 @@
-export type Constructor<T> = { new (...args: any[]): T; };
 export type Possibly<T> = T | undefined;
 
 export type PropName = string;
@@ -9,9 +8,12 @@ export type AttributeChangedCallbackArguments = [AttrName, AttrValue, AttrValue]
 
 export type BasicPrimitive = string | number | boolean;
 
-export type HTMLTextAreaElementConstructor = Constructor<HTMLTextAreaElement> & {
+type Constructor<T> = {
+  new (...args: any[]): T;
   observedAttributes: Possibly<AttrName[]>;
 };
+
+export type HTMLTextAreaElementConstructor = Constructor<HTMLTextAreaElement>;
 
 declare global {
   interface HTMLElement {
