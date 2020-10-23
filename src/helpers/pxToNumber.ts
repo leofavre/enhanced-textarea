@@ -1,6 +1,6 @@
-import { Possibly } from '../types';
+import { Maybe } from '../types';
 
-const pxToNumber = (str: string): Possibly<number> => {
+const pxToNumber = (str: string): Maybe<number> => {
   const isPxMeasure = /[0-9-.].*?px$/.test(str);
 
   if (!isPxMeasure) {
