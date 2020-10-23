@@ -1,10 +1,11 @@
 {
   "name": "@leofavre/enhanced-textarea",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Enhanced Text Area",
-  "main": "index.js",
+  "main": "dist/index",
+  "typings": "dist/index",
   "scripts": {
-    "build": "snowpack build",
+    "build": "rm -rf dist/ && tsc",
     "cypress": "cypress run",
     "cypress-open": "cypress open",
     "start": "snowpack dev --port=8080",

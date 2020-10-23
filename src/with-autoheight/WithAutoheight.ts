@@ -11,7 +11,7 @@ import {
 
 function WithAutoheight<T extends HTMLTextAreaElementConstructor> (Base: T): T {
   return class extends Base {
-    _resizedByUser = false;
+    _resizedByUser: boolean;
     _resizeObserver: ResizeObserver;
 
     constructor (...args: any[]) {
