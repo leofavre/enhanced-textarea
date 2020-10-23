@@ -4,10 +4,14 @@ import getCoercedAttr from '../helpers/getCoercedAttr';
 import setAttr from '../helpers/setAttr';
 import resetProp from '../helpers/resetProp';
 
-function WithAutoheight (Base = class {}) {
+import { Constructor } from '../types';
+
+function WithAutoheight<T extends Constructor<HTMLInputElement>> (Base: T): T {
   return class extends Base {
-    constructor () {
-      super();
+    _resizedByUser = false;
+
+    constructor (...args: any[]) {
+      super(...args);
       this._handleChange = this._handleChange.bind(this);
       this._handleResize = this._handleResize.bind(this);
     }
@@ -87,13 +91,14 @@ function WithAutoheight (Base = class {}) {
         const offset = offsetHeight - clientHeight;
 
         let inner = 0;
-        const boxSizing = this._getStyleProp('box-sizing');
+        const boxSizing = this._getStyleProp('box-sizing') as string;
 
         if (boxSizing !== 'border-box') {
-          const paddingTop = this._getStyleProp('padding-top');
-          const paddingBottom = this._getStyleProp('padding-bottom');
-          const borderTop = this._getStyleProp('border-top-width');
-          const borderBottom = this._getStyleProp('border-bottom-width');
+          const paddingTop = this._getStyleProp('padding-top') as number;
+          const paddingBottom = this._getStyleProp('padding-bottom') as number;
+          const borderTop = this._getStyleProp('border-top-width') as number;
+          const borderBottom = this._getStyleProp('border-bottom-width') as number;
+
           inner = paddingTop + paddingBottom + borderTop + borderBottom;
         }
 
@@ -126,7 +131,7 @@ function WithAutoheight (Base = class {}) {
       this._resizedByUser = false;
     }
 
-    _getStyleProp (str) {
+    _getStyleProp (str: string) {
       const elementStyles = window.getComputedStyle(this);
       const prop = elementStyles.getPropertyValue(str);
 

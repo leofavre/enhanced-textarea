@@ -1,4 +1,4 @@
-import WithResizeEvent from './WithResizeEvent.js';
+import WithResizeEvent from './WithResizeEvent';
 
 let Base;
 let Element;
@@ -9,10 +9,6 @@ describe('WithResizeEvent', () => {
     Base = class {};
     Element = WithResizeEvent(Base);
     element = new Element();
-  });
-
-  it('Uses an empty class as default parameter', () => {
-    WithResizeEvent();
   });
 
   it('Returns a class that extends another passed as parameter', () => {

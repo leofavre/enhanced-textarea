@@ -1,7 +1,12 @@
-function WithResizeEvent (Base = class {}) {
+import { Constructor } from '../types';
+
+function WithResizeEvent<T extends Constructor<HTMLInputElement>> (Base: T): T {
   return class extends Base {
-    constructor () {
-      super();
+    _preResizeHeight: number;
+    _preResizeWidth: number;
+
+    constructor (...args: any[]) {
+      super(...args);
       this._handlePointer = this._handlePointer.bind(this);
     }
 
@@ -25,7 +30,8 @@ function WithResizeEvent (Base = class {}) {
       this.removeEventListener('pointerup', this._handlePointer);
     }
 
-    _handlePointer ({ type } = {}) {
+    _handlePointer (evt: Event) {
+      const { type } = evt;
       const { offsetHeight, offsetWidth } = this;
 
       if (type === 'pointerdown') {

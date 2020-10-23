@@ -9,7 +9,7 @@
   },
   "rules": {
     "max-len": ["error", {
-      "code": 80,
+      "code": 90,
       "ignorePattern": "^(import|export)\\s.+\\sfrom\\s.+;$",
       "ignoreUrls": true,
       "ignoreTemplateLiterals": true,
@@ -34,14 +34,19 @@
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended",
         "semistandard"
-      ]
+      ],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": ["error", {
+          "ignoreRestArgs": true
+        }]
+      }
     },
     {
     "files": "*.{test,spec}.{js,ts}",
     "rules": {
       "no-unused-expressions": "off",
       "max-len": ["error", {
-        "code": 80,
+        "code": 90,
         "ignorePattern": "(^| +)it[(]|^(import|export)\\s.+\\sfrom\\s.+;$",
         "ignoreUrls": true,
         "ignoreTemplateLiterals": true,
