@@ -1,10 +1,9 @@
-import { Basic } from '../types';
+type Primitive = string | number | boolean;
+type Args = [HTMLElement, string, (Primitive | null)?];
 
-const setAttr = (
-  element: HTMLElement,
-  attrName: string,
-  value?: Basic | null
-): void => {
+const setAttr = (...args: Args): void => {
+  const [element, attrName, value] = args;
+
   if (value == null || value === false) {
     element.removeAttribute(attrName);
   } else {

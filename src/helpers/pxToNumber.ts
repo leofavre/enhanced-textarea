@@ -1,4 +1,6 @@
-const pxToNumber = (str: string): number | undefined => {
+import { Possibly } from '../types';
+
+const pxToNumber = (str: string): Possibly<number> => {
   const isPxMeasure = /[0-9-.].*?px$/.test(str);
 
   if (!isPxMeasure) {

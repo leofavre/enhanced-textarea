@@ -1,4 +1,7 @@
 import removeStyleProp from './removeStyleProp';
+import { AttrValue } from '../types';
+
+type Args = [AttrValue?, AttrValue?]
 
 const ignoreHeight = removeStyleProp('height');
 const ignoreMinHeight = removeStyleProp('min-height');
@@ -16,10 +19,8 @@ const parseStyle = (styleStr: string): string => {
     .replace(/$/g, ';');
 };
 
-const hasStyleExceptHeightChanged = (
-  prevStyle?: string | null,
-  nextStyle?: string | null
-): boolean => {
+const hasStyleExceptHeightChanged = (...args: Args): boolean => {
+  const [prevStyle, nextStyle] = args;
   if (prevStyle == null || nextStyle == null) {
     return false;
   }

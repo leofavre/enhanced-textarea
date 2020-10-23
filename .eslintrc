@@ -44,6 +44,7 @@
     {
     "files": "*.{test,spec}.{js,ts}",
     "rules": {
+      "@typescript-eslint/ban-ts-comment": "off",
       "no-unused-expressions": "off",
       "max-len": ["error", {
         "code": 90,

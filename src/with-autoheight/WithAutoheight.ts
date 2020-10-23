@@ -4,11 +4,15 @@ import getCoercedAttr from '../helpers/getCoercedAttr';
 import setAttr from '../helpers/setAttr';
 import resetProp from '../helpers/resetProp';
 
-import { Constructor } from '../types';
+import {
+  HTMLTextAreaElementConstructor,
+  AttributeChangedCallbackArguments
+} from '../types';
 
-function WithAutoheight<T extends Constructor<HTMLInputElement>> (Base: T): T {
+function WithAutoheight<T extends HTMLTextAreaElementConstructor> (Base: T): T {
   return class extends Base {
     _resizedByUser = false;
+    _resizeObserver: ResizeObserver;
 
     constructor (...args: any[]) {
       super(...args);
@@ -40,7 +44,7 @@ function WithAutoheight<T extends Constructor<HTMLInputElement>> (Base: T): T {
       ];
     }
 
-    attributeChangedCallback (...args) {
+    attributeChangedCallback (...args: AttributeChangedCallbackArguments) {
       super.attributeChangedCallback && super.attributeChangedCallback(...args);
       this._handleAttributeChange(...args);
     }
@@ -55,7 +59,9 @@ function WithAutoheight<T extends Constructor<HTMLInputElement>> (Base: T): T {
       this._handleAutoHeightEnd();
     }
 
-    _handleAttributeChange (attrName, oldValue, nextValue) {
+    _handleAttributeChange (...args: AttributeChangedCallbackArguments) {
+      const [attrName, oldValue, nextValue] = args;
+
       if (oldValue !== nextValue) {
         if (attrName === 'autoheight') {
           if (oldValue == null) {

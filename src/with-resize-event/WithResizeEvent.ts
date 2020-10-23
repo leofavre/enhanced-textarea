@@ -1,6 +1,6 @@
-import { Constructor } from '../types';
+import { HTMLTextAreaElementConstructor } from '../types';
 
-function WithResizeEvent<T extends Constructor<HTMLInputElement>> (Base: T): T {
+function WithResizeEvent<T extends HTMLTextAreaElementConstructor> (Base: T): T {
   return class extends Base {
     _preResizeHeight: number;
     _preResizeWidth: number;
@@ -30,8 +30,8 @@ function WithResizeEvent<T extends Constructor<HTMLInputElement>> (Base: T): T {
       this.removeEventListener('pointerup', this._handlePointer);
     }
 
-    _handlePointer (evt: Event) {
-      const { type } = evt;
+    _handlePointer (evt?: Event) {
+      const { type } = evt || {};
       const { offsetHeight, offsetWidth } = this;
 
       if (type === 'pointerdown') {
