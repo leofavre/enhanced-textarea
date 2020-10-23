@@ -1,6 +1,6 @@
 {
   "name": "@leofavre/enhanced-textarea",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Enhanced Text Area",
   "main": "dist/index",
   "typings": "dist/index",
