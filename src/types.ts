@@ -11,7 +11,7 @@ export type BasicPrimitive = string | number | boolean;
 type CustomElementConstructor<T> = {
   new (...args: any[]): T;
   prototype: T;
-  observedAttributes: Maybe<AttrName[]>;
+  observedAttributes?: Maybe<AttrName[]>;
 };
 
 export type HTMLTextAreaElementConstructor =
