@@ -2,8 +2,8 @@ import { HTMLTextAreaElementConstructor } from '../types';
 
 function WithResizeEvent<T extends HTMLTextAreaElementConstructor> (Base: T): T {
   return class extends Base {
-    _preResizeHeight: number;
-    _preResizeWidth: number;
+    private _preResizeHeight: number;
+    private _preResizeWidth: number;
 
     constructor (...args: any[]) {
       super(...args);
@@ -20,17 +20,17 @@ function WithResizeEvent<T extends HTMLTextAreaElementConstructor> (Base: T): T 
       this._handleResizeEventEnd();
     }
 
-    _handleResizeEventStart () {
+    private _handleResizeEventStart () {
       this.addEventListener('pointerdown', this._handlePointer);
       this.addEventListener('pointerup', this._handlePointer);
     }
 
-    _handleResizeEventEnd () {
+    private _handleResizeEventEnd () {
       this.removeEventListener('pointerdown', this._handlePointer);
       this.removeEventListener('pointerup', this._handlePointer);
     }
 
-    _handlePointer (evt?: Event) {
+    private _handlePointer (evt?: Event) {
       const { type } = evt || {};
       const { offsetHeight, offsetWidth } = this;
 

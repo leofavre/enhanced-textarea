@@ -1,10 +1,13 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "src",
+    "outDir": "dist",
+    "declaration": true,
     "target": "esnext",
     "module": "esnext",
     "strictNullChecks": true,
     "skipLibCheck": true
   },
-  "include": ["**/*.ts", "**/*.d.ts", "**/*.spec.ts"]
+  "include": ["**/*.ts"],
+  "exclude": ["**/*.d.ts", "**/*.spec.ts", "dist", "node_modules"]
 }

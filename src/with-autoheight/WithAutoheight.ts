@@ -11,8 +11,8 @@ import {
 
 function WithAutoheight<T extends HTMLTextAreaElementConstructor> (Base: T): T {
   return class extends Base {
-    _resizedByUser = false;
-    _resizeObserver: ResizeObserver;
+    private _resizedByUser: boolean;
+    private _resizeObserver: ResizeObserver;
 
     constructor (...args: any[]) {
       super(...args);
@@ -59,7 +59,7 @@ function WithAutoheight<T extends HTMLTextAreaElementConstructor> (Base: T): T {
       this._handleAutoHeightEnd();
     }
 
-    _handleAttributeChange (...args: AttributeChangedCallbackArguments) {
+    private _handleAttributeChange (...args: AttributeChangedCallbackArguments) {
       const [attrName, oldValue, nextValue] = args;
 
       if (oldValue !== nextValue) {
@@ -78,20 +78,20 @@ function WithAutoheight<T extends HTMLTextAreaElementConstructor> (Base: T): T {
       }
     }
 
-    _handleAutoHeightStart () {
+    private _handleAutoHeightStart () {
       this._resizeObserver = new ResizeObserver(this._handleChange);
       this._resizeObserver.observe(this);
       this.addEventListener('input', this._handleChange);
       this.addEventListener('resize', this._handleResize);
     }
 
-    _handleAutoHeightEnd () {
+    private _handleAutoHeightEnd () {
       this._resizeObserver && this._resizeObserver.unobserve(this);
       this.removeEventListener('input', this._handleChange);
       this.removeEventListener('resize', this._handleResize);
     }
 
-    _handleChange () {
+    private _handleChange () {
       if (this.hasAttribute('autoheight')) {
         const { offsetHeight, clientHeight } = this;
         const offset = offsetHeight - clientHeight;
@@ -131,13 +131,13 @@ function WithAutoheight<T extends HTMLTextAreaElementConstructor> (Base: T): T {
       }
     }
 
-    _handleResize () {
+    private _handleResize () {
       this._resizedByUser = true;
       this._handleChange();
       this._resizedByUser = false;
     }
 
-    _getStyleProp (str: string) {
+    private _getStyleProp (str: string) {
       const elementStyles = window.getComputedStyle(this);
       const prop = elementStyles.getPropertyValue(str);
 
