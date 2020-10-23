@@ -41,8 +41,9 @@ function WithResizeEvent<T extends HTMLTextAreaElementConstructor> (Base: T): T 
       }
 
       if (type === 'pointerup') {
-        const resizedByUser = this._preResizeHeight !== offsetHeight ||
-        this._preResizeWidth !== offsetWidth;
+        const resizedByUser =
+          this._preResizeHeight !== offsetHeight ||
+          this._preResizeWidth !== offsetWidth;
 
         if (resizedByUser) {
           const event = new CustomEvent('resize', {
