@@ -8,6 +8,6 @@
     "strictNullChecks": true,
     "skipLibCheck": true
   },
-  "include": ["**/*.ts"],
-  "exclude": ["**/*.d.ts", "**/*.spec.ts", "dist", "node_modules"]
+  "include": ["src/*.ts"],
+  "exclude": ["src/*.d.ts", "src/*.spec.ts", "dist", "node_modules"]
 }
