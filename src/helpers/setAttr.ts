@@ -1,5 +1,6 @@
-type Primitive = string | number | boolean;
-type Args = [HTMLElement, string, (Primitive | null)?];
+import { AttrName, BasicPrimitive } from '../types';
+
+type Args = [HTMLElement, AttrName, (BasicPrimitive | null)?];
 
 const setAttr = (...args: Args): void => {
   const [element, attrName, value] = args;
