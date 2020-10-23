@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "esnext",
+    "module": "esnext",
+    "strictNullChecks": true,
+    "skipLibCheck": true
+  },
+  "include": ["**/*.ts", "**/*.d.ts", "**/*.spec.ts"]
+}

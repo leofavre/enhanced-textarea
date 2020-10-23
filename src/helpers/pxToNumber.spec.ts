@@ -1,4 +1,4 @@
-import pxToNumber from './pxToNumber.js';
+import pxToNumber from './pxToNumber';
 
 describe('pxToNumber', () => {
   it('Extracts the numeric value from a measure in pixels', () => {
@@ -23,9 +23,5 @@ describe('pxToNumber', () => {
 
   it('Ignores empty strings', () => {
     expect(pxToNumber('')).toBeUndefined;
-  });
-
-  it('Ignores undefined entries', () => {
-    expect(pxToNumber()).toBeUndefined;
   });
 });

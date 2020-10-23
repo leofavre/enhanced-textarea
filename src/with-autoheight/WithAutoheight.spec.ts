@@ -1,11 +1,11 @@
-import getCoercedAttr from '../helpers/getCoercedAttr.js';
-import setAttr from '../helpers/setAttr.js';
-import resetProp from '../helpers/resetProp.js';
-import WithAutoheight from './WithAutoheight.js';
+import getCoercedAttr from '../helpers/getCoercedAttr';
+import setAttr from '../helpers/setAttr';
+import resetProp from '../helpers/resetProp';
+import WithAutoheight from './WithAutoheight';
 
-jest.mock('../helpers/getCoercedAttr.js');
-jest.mock('../helpers/setAttr.js');
-jest.mock('../helpers/resetProp.js');
+jest.mock('../helpers/getCoercedAttr');
+jest.mock('../helpers/setAttr');
+jest.mock('../helpers/resetProp');
 
 let Base;
 let Element;
@@ -16,10 +16,6 @@ describe('WithAutoheight', () => {
     Base = class {};
     Element = WithAutoheight(Base);
     element = new Element();
-  });
-
-  it('Uses an empty class as default parameter', () => {
-    WithAutoheight();
   });
 
   it('Returns a class that extends another passed as parameter', () => {
@@ -282,7 +278,7 @@ describe('WithAutoheight', () => {
       ResizeObserverSpy = jest
         .spyOn(ResizeObserver.prototype, 'unobserve');
 
-      element._resizeObserver = new ResizeObserver();
+      element._resizeObserver = new ResizeObserver(jest.fn());
       element.removeEventListener = jest.fn();
     });
 
@@ -418,6 +414,7 @@ describe('WithAutoheight', () => {
     beforeEach(() => {
       getComputedStyleSpy = jest
         .spyOn(window, 'getComputedStyle')
+        // @ts-ignore
         .mockImplementation(() => ({
           getPropertyValue: jest.fn(str => {
             return str === 'height' ? '20px' : '#909';

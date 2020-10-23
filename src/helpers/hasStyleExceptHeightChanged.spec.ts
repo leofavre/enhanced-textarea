@@ -1,4 +1,4 @@
-import hasStyleExceptHeightChanged from './hasStyleExceptHeightChanged.js';
+import hasStyleExceptHeightChanged from './hasStyleExceptHeightChanged';
 
 describe('hasStyleExceptHeightChanged', () => {
   it('Returns false if both parameters are undefined', () => {
