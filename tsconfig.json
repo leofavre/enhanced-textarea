@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist",
+    "baseUrl": "src",
+    "outDir": "dist",
     "declaration": true,
     "target": "esnext",
     "module": "esnext",
@@ -9,5 +9,5 @@
     "skipLibCheck": true
   },
   "include": ["**/*.ts"],
-  "exclude": ["**/*.spec.ts"]
+  "exclude": ["**/*.d.ts", "**/*.spec.ts", "dist", "node_modules"]
 }
