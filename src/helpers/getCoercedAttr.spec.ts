@@ -35,7 +35,7 @@ describe('setAttr', () => {
   });
 
   it('Returns a boolean if coerced to a Boolean', () => {
-    const result = getCoercedAttr(element, 'height', Boolean);
+    const result = getCoercedAttr(element, 'disabled', Boolean);
     expect(result).toBe(true);
   });
 });
