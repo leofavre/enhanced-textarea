@@ -8,6 +8,9 @@
     "strictNullChecks": true,
     "skipLibCheck": true
   },
+  "include": [
+    "./src/*.ts",
+  ],
   "exclude": [
     "./src/*.d.ts",
     "./src/*.spec.ts",
