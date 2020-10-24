@@ -11,3 +11,7 @@ export {
   WithAutoheight,
   WithResizeEvent
 };
+
+export interface EnhancedTextAreaElement extends HTMLTextAreaElement {
+  autoheight: boolean
+}
