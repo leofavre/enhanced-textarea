@@ -1,14 +1,23 @@
-import WithResizeEvent from './WithResizeEvent';
+import WithResizeEvent, { WithResizeEventBase, WithResizeEventDecorator, HTMLTextAreaElementWithResizeEvent } from './WithResizeEvent';
+import { Mutable } from '../types';
 
-let Base;
-let Element;
-let element;
+type MockedElement = Mutable<HTMLTextAreaElementWithResizeEvent & {
+  _preResizeHeight: number;
+  _preResizeWidth: number;
+  _handleResizeEventStart(): void;
+  _handleResizeEventEnd(): void;
+  _handlePointer(evt?: Record<string, string>): void;
+}>;
+
+let Base: WithResizeEventBase;
+let Element: WithResizeEventDecorator;
+let element: MockedElement;
 
 describe('WithResizeEvent', () => {
   beforeEach(() => {
-    Base = class {};
+    Base = class {} as unknown as WithResizeEventBase;
     Element = WithResizeEvent(Base);
-    element = new Element();
+    element = new Element() as unknown as MockedElement;
   });
 
   it('Returns a class that extends another passed as parameter', () => {
@@ -23,16 +32,16 @@ describe('WithResizeEvent', () => {
     it('Calls super.connectedCallback', () => {
       Base.prototype.connectedCallback = jest.fn();
       Element = WithResizeEvent(Base);
-      element = new Element();
+      element = new Element() as unknown as MockedElement;
       element._handleResizeEventStart = jest.fn();
 
       element.connectedCallback();
-      expect(Base.prototype.connectedCallback).toHaveBeenCalled;
+      expect(Base.prototype.connectedCallback).toHaveBeenCalled();
     });
 
     it('Calls _handleResizeEventStart', () => {
       element.connectedCallback();
-      expect(element._handleResizeEventStart).toHaveBeenCalled;
+      expect(element._handleResizeEventStart).toHaveBeenCalled();
     });
   });
 
@@ -44,16 +53,16 @@ describe('WithResizeEvent', () => {
     it('Calls super.disconnectedCallback', () => {
       Base.prototype.disconnectedCallback = jest.fn();
       Element = WithResizeEvent(Base);
-      element = new Element();
+      element = new Element() as unknown as MockedElement;
       element._handleResizeEventEnd = jest.fn();
 
       element.disconnectedCallback();
-      expect(Base.prototype.disconnectedCallback).toHaveBeenCalled;
+      expect(Base.prototype.disconnectedCallback).toHaveBeenCalled();
     });
 
     it('Calls _handleResizeEventEnd', () => {
       element.disconnectedCallback();
-      expect(element._handleResizeEventEnd).toHaveBeenCalled;
+      expect(element._handleResizeEventEnd).toHaveBeenCalled();
     });
   });
 
@@ -90,7 +99,7 @@ describe('WithResizeEvent', () => {
   });
 
   describe('._handlePointer()', () => {
-    let CustomEventSpy;
+    let CustomEventSpy: jest.SpyInstance;
 
     beforeEach(() => {
       CustomEventSpy = jest.spyOn(global, 'CustomEvent');
@@ -143,8 +152,8 @@ describe('WithResizeEvent', () => {
 
       element._handlePointer({ type: 'pointerup' });
 
-      expect(CustomEventSpy).not.toHaveBeenCalled;
-      expect(element.dispatchEvent).not.toHaveBeenCalled;
+      expect(CustomEventSpy).not.toHaveBeenCalled();
+      expect(element.dispatchEvent).not.toHaveBeenCalled();
     });
   });
 });

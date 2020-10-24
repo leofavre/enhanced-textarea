@@ -10,18 +10,18 @@ describe('pxToNumber', () => {
   });
 
   it('Ignores invalid measures', () => {
-    expect(pxToNumber('0px20')).toBeUndefined;
+    expect(pxToNumber('0px20')).toBeUndefined();
   });
 
   it('Ignores invalid measures that end with px', () => {
-    expect(pxToNumber('-0.89-45.389px')).toBeUndefined;
+    expect(pxToNumber('-0.89-45.389px')).toBeUndefined();
   });
 
   it('Ignores entries that are not measures', () => {
-    expect(pxToNumber('auto')).toBeUndefined;
+    expect(pxToNumber('auto')).toBeUndefined();
   });
 
   it('Ignores empty strings', () => {
-    expect(pxToNumber('')).toBeUndefined;
+    expect(pxToNumber('')).toBeUndefined();
   });
 });

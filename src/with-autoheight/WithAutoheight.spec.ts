@@ -1,21 +1,34 @@
+import WithAutoheight, { WithAutoheightBase, WithAutoheightDecorator, HTMLTextAreaElementWithAutoheight } from './WithAutoheight';
+import { AttributeChangedCallbackArgs, Mutable } from '../types';
+
 import getCoercedAttr from '../helpers/getCoercedAttr';
 import setAttr from '../helpers/setAttr';
 import resetProp from '../helpers/resetProp';
-import WithAutoheight from './WithAutoheight';
 
 jest.mock('../helpers/getCoercedAttr');
 jest.mock('../helpers/setAttr');
 jest.mock('../helpers/resetProp');
 
-let Base;
-let Element;
-let element;
+type MockedElement = Mutable<HTMLTextAreaElementWithAutoheight & {
+  _resizedByUser: boolean;
+  _resizeObserver: ResizeObserver;
+  _handleChange(): void;
+  _handleResize(): void;
+  _handleAttributeChange(...args: AttributeChangedCallbackArgs): void;
+  _handleAutoHeightStart(): void;
+  _handleAutoHeightEnd(): void;
+  _getStyleProp(str: string): string | number | undefined;
+}>;
+
+let Base: WithAutoheightBase;
+let Element: WithAutoheightDecorator;
+let element: MockedElement;
 
 describe('WithAutoheight', () => {
   beforeEach(() => {
-    Base = class {};
+    Base = class {} as unknown as WithAutoheightBase;
     Element = WithAutoheight(Base);
-    element = new Element();
+    element = new Element() as unknown as MockedElement;
   });
 
   it('Returns a class that extends another passed as parameter', () => {
@@ -24,9 +37,10 @@ describe('WithAutoheight', () => {
 
   describe('.autoheight', () => {
     it('Calls getCoercedAttr on get', () => {
-      element.autoheight;
+      const result = element.autoheight;
       const expectedArgs = [element, 'autoheight', Boolean];
       expect(getCoercedAttr).toHaveBeenCalledWith(...expectedArgs);
+      expect(result).toBeUndefined();
     });
 
     it('Calls setAttr on set', () => {
@@ -37,36 +51,38 @@ describe('WithAutoheight', () => {
   });
 
   describe('.value', () => {
-    let descriptor;
+    let descriptor: PropertyDescriptor;
 
     beforeEach(() => {
-      Base = class {};
+      Base = class {} as unknown as WithAutoheightBase;
 
       Object.defineProperty(Base.prototype, 'value', {
         get: jest.fn(),
         set: jest.fn()
       });
 
-      descriptor = Object.getOwnPropertyDescriptor(Base.prototype, 'value');
+      descriptor = Object.getOwnPropertyDescriptor(
+        Base.prototype, 'value') as PropertyDescriptor;
 
       Element = WithAutoheight(Base);
-      element = new Element();
+      element = new Element() as unknown as MockedElement;
       element._handleChange = jest.fn();
     });
 
     it('Gets super.value', () => {
-      element.value;
-      expect(descriptor.get).toHaveBeenCalled;
+      const result = element.value;
+      expect(descriptor.get).toHaveBeenCalled();
+      expect(result).toBeUndefined();
     });
 
     it('Sets super.value', () => {
-      element.value = 50;
-      expect(descriptor.set).toHaveBeenCalled;
+      element.value = '50';
+      expect(descriptor.set).toHaveBeenCalled();
     });
 
     it('Calls _handleChange on set', () => {
-      element.value = 50;
-      expect(element._handleChange).toHaveBeenCalled;
+      element.value = '50';
+      expect(element._handleChange).toHaveBeenCalled();
     });
   });
 
@@ -80,7 +96,7 @@ describe('WithAutoheight', () => {
         'style'
       ];
 
-      expect(Element.observedAttributes.sort()).toEqual(expectedAttrs.sort());
+      expect(Element.observedAttributes?.sort()).toEqual(expectedAttrs.sort());
     });
 
     it('Extends super.observedAttributes', () => {
@@ -98,12 +114,12 @@ describe('WithAutoheight', () => {
         static get observedAttributes () {
           return ['disabled', 'readonly'];
         }
-      };
+      } as unknown as WithAutoheightBase;
 
       Element = WithAutoheight(Base);
-      element = new Element();
+      element = new Element() as unknown as MockedElement;
 
-      expect(Element.observedAttributes.sort()).toEqual(expectedAttrs.sort());
+      expect(Element.observedAttributes?.sort()).toEqual(expectedAttrs.sort());
     });
   });
 
@@ -115,69 +131,50 @@ describe('WithAutoheight', () => {
     it('Calls super.attributeChangedCallback forwarding arguments', () => {
       Base.prototype.attributeChangedCallback = jest.fn();
       Element = WithAutoheight(Base);
-      element = new Element();
+      element = new Element() as unknown as MockedElement;
       element._handleAttributeChange = jest.fn();
 
-      const args = ['attrName', null, 20];
-      element.attributeChangedCallback(...args);
+      element.attributeChangedCallback('attrName', null, '20');
       expect(Base.prototype.attributeChangedCallback)
-        .toHaveBeenCalledWith(...args);
+        .toHaveBeenCalledWith('attrName', null, '20');
     });
 
     it('Calls _handleAttributeChange forwarding arguments', () => {
-      const args = ['attrName', null, 20];
-      element.attributeChangedCallback(...args);
+      element.attributeChangedCallback('attrName', null, '20');
       expect(element._handleAttributeChange)
-        .toHaveBeenCalledWith(...args);
+        .toHaveBeenCalledWith('attrName', null, '20');
     });
   });
 
   describe('.connectedCallback()', () => {
-    beforeEach(() => {
-      element._handleResizeEventStart = jest.fn();
-    });
-
     it('Calls super.connectedCallback', () => {
       Base.prototype.connectedCallback = jest.fn();
       Element = WithAutoheight(Base);
-      element = new Element();
-      element._handleResizeEventStart = jest.fn();
+      element = new Element() as unknown as MockedElement;
 
       element.connectedCallback();
-      expect(Base.prototype.connectedCallback).toHaveBeenCalled;
+      expect(Base.prototype.connectedCallback).toHaveBeenCalled();
     });
 
     it('Calls resetProp passing autoheight', () => {
       element.connectedCallback();
       expect(resetProp).toHaveBeenCalledWith(element, 'autoheight');
     });
-
-    it('Calls _handleResizeEventStart', () => {
-      element.connectedCallback();
-      expect(element._handleResizeEventStart).toHaveBeenCalled;
-    });
   });
 
   describe('.disconnectedCallback()', () => {
     beforeEach(() => {
-      element._handleResizeEventEnd = jest.fn();
       element.removeEventListener = jest.fn();
     });
 
     it('Calls super.disconnectedCallback', () => {
       Base.prototype.disconnectedCallback = jest.fn();
       Element = WithAutoheight(Base);
-      element = new Element();
-      element._handleResizeEventEnd = jest.fn();
+      element = new Element() as unknown as MockedElement;
       element.removeEventListener = jest.fn();
 
       element.disconnectedCallback();
-      expect(Base.prototype.disconnectedCallback).toHaveBeenCalled;
-    });
-
-    it('Calls _handleResizeEventEnd', () => {
-      element.disconnectedCallback();
-      expect(element._handleResizeEventEnd).toHaveBeenCalled;
+      expect(Base.prototype.disconnectedCallback).toHaveBeenCalled();
     });
   });
 
@@ -191,35 +188,35 @@ describe('WithAutoheight', () => {
       element._handleAutoHeightEnd = jest.fn();
       element._handleChange = jest.fn();
       element._handleAttributeChange('rows', null, null);
-      expect(element._handleAutoHeightStart).not.toHaveBeenCalled;
-      expect(element._handleAutoHeightEnd).not.toHaveBeenCalled;
-      expect(element._handleChange).not.toHaveBeenCalled;
+      expect(element._handleAutoHeightStart).not.toHaveBeenCalled();
+      expect(element._handleAutoHeightEnd).not.toHaveBeenCalled();
+      expect(element._handleChange).not.toHaveBeenCalled();
     });
 
     it('Calls _handleAutoHeightStart when autoheight is set', () => {
       element._handleAutoHeightStart = jest.fn();
       element._handleAttributeChange('autoheight', null, '');
-      expect(element._handleAutoHeightStart).toHaveBeenCalled;
+      expect(element._handleAutoHeightStart).toHaveBeenCalled();
     });
 
     it('Calls _handleAutoHeightEnd when autoheight is unset', () => {
       element._handleAutoHeightEnd = jest.fn();
       element._handleAttributeChange('autoheight', '', null);
-      expect(element._handleAutoHeightEnd).toHaveBeenCalled;
+      expect(element._handleAutoHeightEnd).toHaveBeenCalled();
     });
 
     it('Does not call _handleAutoHeightStart or _handleAutoHeightEnd when autoheight changes but is not set or unset', () => {
       element._handleAutoHeightStart = jest.fn();
       element._handleAutoHeightEnd = jest.fn();
       element._handleAttributeChange('autoheight', '', 'autoheight');
-      expect(element._handleAutoHeightStart).not.toHaveBeenCalled;
-      expect(element._handleAutoHeightEnd).not.toHaveBeenCalled;
+      expect(element._handleAutoHeightStart).not.toHaveBeenCalled();
+      expect(element._handleAutoHeightEnd).not.toHaveBeenCalled();
     });
 
     it('Calls _handleChange when any attribute but style changes', () => {
       element._handleChange = jest.fn();
       element._handleAttributeChange('rows', '4', '2');
-      expect(element._handleChange).toHaveBeenCalled;
+      expect(element._handleChange).toHaveBeenCalled();
     });
 
     it('Calls _handleChange when style properties except height or min-height change', () => {
@@ -227,7 +224,7 @@ describe('WithAutoheight', () => {
       const prevStyle = 'width: 100px;';
       const nextStyle = 'width: 150px;';
       element._handleAttributeChange('style', prevStyle, nextStyle);
-      expect(element._handleChange).toHaveBeenCalled;
+      expect(element._handleChange).toHaveBeenCalled();
     });
 
     it('Does not call _handleChange when only style properties height or min-height change', () => {
@@ -235,12 +232,12 @@ describe('WithAutoheight', () => {
       const prevStyle = 'height: 100px; min-height: 100px;';
       const nextStyle = 'height: 150px;';
       element._handleAttributeChange('style', prevStyle, nextStyle);
-      expect(element._handleChange).not.toHaveBeenCalled;
+      expect(element._handleChange).not.toHaveBeenCalled();
     });
   });
 
   describe('._handleAutoHeightStart()', () => {
-    let ResizeObserverSpy;
+    let ResizeObserverSpy: jest.SpyInstance;
 
     beforeEach(() => {
       ResizeObserverSpy = jest
@@ -272,7 +269,7 @@ describe('WithAutoheight', () => {
   });
 
   describe('._handleAutoHeightEnd()', () => {
-    let ResizeObserverSpy;
+    let ResizeObserverSpy: jest.SpyInstance;
 
     beforeEach(() => {
       ResizeObserverSpy = jest
@@ -325,7 +322,7 @@ describe('WithAutoheight', () => {
       element.offsetHeight = 152;
       element.clientHeight = 150;
       element.scrollHeight = 195;
-      element.style = { height: 'auto' };
+      element.style = { ...element.style, height: 'auto' };
 
       element._getStyleProp = jest.fn(str => {
         if (str === 'box-sizing') return 'content-box';
@@ -345,7 +342,7 @@ describe('WithAutoheight', () => {
       element.offsetHeight = 152;
       element.clientHeight = 150;
       element.scrollHeight = 195;
-      element.style = { height: 'auto' };
+      element.style = { ...element.style, height: 'auto' };
 
       element._getStyleProp = jest.fn(str => {
         if (str === 'box-sizing') return 'border-box';
@@ -363,7 +360,7 @@ describe('WithAutoheight', () => {
       element.offsetHeight = 152;
       element.clientHeight = 150;
       element.scrollHeight = 195;
-      element.style = { height: '90px' };
+      element.style = { ...element.style, height: '90px' };
 
       element._getStyleProp = jest.fn(str => {
         if (str === 'box-sizing') return 'border-box';
@@ -382,7 +379,7 @@ describe('WithAutoheight', () => {
       element.offsetHeight = 152;
       element.clientHeight = 150;
       element.scrollHeight = 195;
-      element.style = { height: '90px' };
+      element.style = { ...element.style, height: '90px' };
 
       element._getStyleProp = jest.fn(str => {
         if (str === 'box-sizing') return 'border-box';
@@ -403,23 +400,25 @@ describe('WithAutoheight', () => {
 
       element._handleResize();
 
-      expect(element._handleChange).toHaveBeenCalled;
+      expect(element._handleChange).toHaveBeenCalled();
       expect(element._resizedByUser).toBe(false);
     });
   });
 
   describe('_getStyleProp()', () => {
-    let getComputedStyleSpy;
+    let getComputedStyleSpy: jest.SpyInstance;
 
     beforeEach(() => {
+      const mockedGetComputedStyle = () => ({
+        getPropertyValue: jest.fn(str => {
+          return str === 'height' ? '20px' : '#909';
+        })
+      });
+
       getComputedStyleSpy = jest
         .spyOn(window, 'getComputedStyle')
         // @ts-ignore
-        .mockImplementation(() => ({
-          getPropertyValue: jest.fn(str => {
-            return str === 'height' ? '20px' : '#909';
-          })
-        }));
+        .mockImplementation(mockedGetComputedStyle);
     });
 
     afterEach(() => {

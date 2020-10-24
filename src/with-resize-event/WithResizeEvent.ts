@@ -1,6 +1,14 @@
-import { HTMLTextAreaElementConstructor } from '../types';
+import { CustomElementConstructor } from '../types';
 
-function WithResizeEvent<T extends HTMLTextAreaElementConstructor> (Base: T): T {
+export type WithResizeEventBase =
+  CustomElementConstructor<HTMLTextAreaElement>;
+
+export type HTMLTextAreaElementWithResizeEvent = HTMLTextAreaElement;
+
+export type WithResizeEventDecorator =
+  CustomElementConstructor<HTMLTextAreaElementWithResizeEvent>;
+
+function WithResizeEvent (Base: WithResizeEventBase): WithResizeEventDecorator {
   return class extends Base {
     private _preResizeHeight: number;
     private _preResizeWidth: number;

@@ -5,7 +5,7 @@
   "main": "dist/index",
   "typings": "dist/index",
   "scripts": {
-    "build": "rm -rf dist/ && tsc",
+    "build": "rm -rf dist/ && tsc --build tsconfig.json",
     "cypress": "cypress run",
     "cypress-open": "cypress open",
     "start": "snowpack dev --port=8080",
@@ -15,7 +15,7 @@
     "test-watch": "jest --coverage --watchAll",
     "test-ui": "start-server-and-test start-test 7075 cypress",
     "test-ui-watch": "start-server-and-test start-test 7075 cypress-open",
-    "test-types": "tsc --noEmit"
+    "test-types": "tsc --build tsconfig.test.json"
   },
   "author": "Leonardo Favre <leo@leofavre.com> (https://www.leofavre.com/)",
   "license": "MIT",

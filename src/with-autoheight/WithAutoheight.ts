@@ -4,12 +4,20 @@ import getCoercedAttr from '../helpers/getCoercedAttr';
 import setAttr from '../helpers/setAttr';
 import resetProp from '../helpers/resetProp';
 
-import {
-  HTMLTextAreaElementConstructor,
-  AttributeChangedCallbackArgs
-} from '../types';
+import { AttributeChangedCallbackArgs, BasicPrimitive, CustomElementConstructor } from '../types';
 
-function WithAutoheight<T extends HTMLTextAreaElementConstructor> (Base: T): T {
+export type WithAutoheightBase =
+  CustomElementConstructor<HTMLTextAreaElement>;
+
+export type HTMLTextAreaElementWithAutoheight = HTMLTextAreaElement & {
+  autoheight: BasicPrimitive;
+  value: string | null;
+}
+
+export type WithAutoheightDecorator =
+  CustomElementConstructor<HTMLTextAreaElementWithAutoheight>;
+
+function WithAutoheight (Base: WithAutoheightBase): WithAutoheightDecorator {
   return class extends Base {
     private _resizedByUser: boolean;
     private _resizeObserver: ResizeObserver;
