@@ -5,19 +5,21 @@
   "main": "dist/index",
   "typings": "dist/index",
   "scripts": {
+    "all-tests": "npm run test-syntax && npm run test-typings && npm run test && npm run test-ui",
+    "build-storybook": "build-storybook -s ./public",
     "build": "rm -rf dist/ && tsc --build tsconfig.json",
-    "cypress": "cypress run",
     "cypress-open": "cypress open",
-    "start": "snowpack dev --port=8080",
-    "start-test": "snowpack dev --port=7075 --open=none",
+    "cypress": "cypress run",
     "send-coverage": "cat ./coverage/lcov.info | coveralls",
-    "test": "jest --coverage",
-    "test-watch": "jest --coverage --watchAll",
-    "test-ui": "start-server-and-test start-test 7075 cypress",
-    "test-ui-watch": "start-server-and-test start-test 7075 cypress-open",
-    "test-typings": "tsc --build tsconfig.test.json",
+    "start-test": "snowpack dev --port 7075 --open none",
+    "start": "snowpack dev --port 8080",
+    "storybook": "start-storybook -s ./public -p 6006",
     "test-syntax": "eslint .",
-    "all-tests": "npm run test-syntax && npm run test-typings && npm run test && npm run test-ui"
+    "test-typings": "tsc --build tsconfig.test.json",
+    "test-ui-watch": "start-server-and-test start-test 7075 cypress-open",
+    "test-ui": "start-server-and-test start-test 7075 cypress",
+    "test-watch": "jest --coverage --watchAll",
+    "test": "jest --coverage"
   },
   "author": "Leonardo Favre <leo@leofavre.com> (https://www.leofavre.com/)",
   "license": "MIT",
@@ -25,11 +27,16 @@
     "@babel/core": "^7.11.6",
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-typescript": "^7.12.1",
+    "@storybook/addon-actions": "^6.0.27",
+    "@storybook/addon-essentials": "^6.0.27",
+    "@storybook/addon-links": "^6.0.27",
+    "@storybook/html": "^6.0.27",
     "@types/jest": "^26.0.15",
     "@types/resize-observer-browser": "^0.1.4",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
     "babel-jest": "^26.3.0",
+    "babel-loader": "^8.1.0",
     "coveralls": "^3.1.0",
     "cypress": "^5.2.0",
     "eslint": "^7.9.0",
@@ -41,6 +48,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "expect": "^26.4.2",
     "jest": "^26.4.2",
+    "react-is": "^17.0.1",
     "snowpack": "^2.11.1",
     "start-server-and-test": "^1.11.4",
     "storybook": "^6.0.27",
@@ -48,5 +56,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "dependencies": {}
 }
