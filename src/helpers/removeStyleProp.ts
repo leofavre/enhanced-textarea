@@ -1,7 +1,7 @@
-import { AttrValue, Possibly } from '../types';
+import { AttrValue, Maybe } from '../types';
 
 const removeStyleProp = (propName: string) => {
-  return (styleStr?: AttrValue): Possibly<string> =>
+  return (styleStr?: AttrValue): Maybe<string> =>
     styleStr != null && styleStr.replace
       ? styleStr
         .replace(new RegExp(`(^| |;)${propName}:.*?(;|$)`, 'g'), '$1')

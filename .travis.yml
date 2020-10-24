@@ -4,14 +4,26 @@ notifications:
 node_js: 14
 jobs:
   include:
-  - name: Type Check
+  - name: Syntax Tests
     script:
-    - npm run test-types
+    - npm run test-syntax
+
+  - name: Typing Tests
+    script:
+    - npm run test-typings
+
   - name: Unit Tests
+    if: branch != master
     script:
-    - npm test
+    - npm run test
+
+  - name: Unit Tests with Coverage
+    if: branch = master
+    script:
+    - npm run test
     after_success:
     - npm run send-coverage
+    
   - name: UI Tests
     if: branch = master
     script:

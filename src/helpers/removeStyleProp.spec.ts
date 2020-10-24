@@ -6,11 +6,11 @@ describe('removeStyleProp', () => {
   });
 
   it('Returns undefined if it receives null', () => {
-    expect(removeStyleProp('height')(null)).toBeUndefined;
+    expect(removeStyleProp('height')(null)).toBeUndefined();
   });
 
   it('Returns undefined if it receives undefined', () => {
-    expect(removeStyleProp('height')()).toBeUndefined;
+    expect(removeStyleProp('height')()).toBeUndefined();
   });
 
   it('Removes a property from a Style string', () => {

@@ -1,12 +1,12 @@
 import setAttr from './setAttr';
-let element;
+let element: HTMLElement;
 
 describe('setAttr', () => {
   beforeEach(() => {
     element = {
       removeAttribute: jest.fn(),
       setAttribute: jest.fn()
-    };
+    } as unknown as HTMLElement;
   });
 
   it('Calls setAttribute with the attribute name and the unprocessed value if it is a number', () => {

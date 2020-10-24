@@ -9,7 +9,7 @@
   },
   "rules": {
     "max-len": ["error", {
-      "code": 90,
+      "code": 80,
       "ignorePattern": "^(import|export)\\s.+\\sfrom\\s.+;$",
       "ignoreUrls": true,
       "ignoreTemplateLiterals": true,
@@ -45,9 +45,8 @@
     "files": "*.{test,spec}.{js,ts}",
     "rules": {
       "@typescript-eslint/ban-ts-comment": "off",
-      "no-unused-expressions": "off",
       "max-len": ["error", {
-        "code": 90,
+        "code": 80,
         "ignorePattern": "(^| +)it[(]|^(import|export)\\s.+\\sfrom\\s.+;$",
         "ignoreUrls": true,
         "ignoreTemplateLiterals": true,
