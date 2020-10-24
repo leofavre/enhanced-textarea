@@ -4,13 +4,13 @@ import getCoercedAttr from '../helpers/getCoercedAttr';
 import setAttr from '../helpers/setAttr';
 import resetProp from '../helpers/resetProp';
 
-import { AttributeChangedCallbackArgs, BasicPrimitive, CustomElementConstructor } from '../types';
+import { AttributeChangedCallbackArgs, CustomElementConstructor } from '../types';
 
 export type WithAutoheightBase = CustomElementConstructor<HTMLTextAreaElement>;
 
 export type HTMLTextAreaElementWithAutoheight = HTMLTextAreaElement & {
-  autoheight: BasicPrimitive;
-  value: string | null;
+  autoheight: boolean;
+  value: string;
 }
 
 export type WithAutoheightDecorator =
@@ -28,7 +28,7 @@ function WithAutoheight (Base: WithAutoheightBase): WithAutoheightDecorator {
     }
 
     get autoheight () {
-      return getCoercedAttr(this, 'autoheight', Boolean);
+      return getCoercedAttr(this, 'autoheight', Boolean) as boolean;
     }
 
     set autoheight (value) {

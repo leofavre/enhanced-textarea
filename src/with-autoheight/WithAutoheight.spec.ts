@@ -37,10 +37,9 @@ describe('WithAutoheight', () => {
 
   describe('.autoheight', () => {
     it('Calls getCoercedAttr on get', () => {
-      const result = element.autoheight;
+      element.autoheight; // eslint-disable-line no-unused-expressions
       const expectedArgs = [element, 'autoheight', Boolean];
       expect(getCoercedAttr).toHaveBeenCalledWith(...expectedArgs);
-      expect(result).toBeUndefined();
     });
 
     it('Calls setAttr on set', () => {
@@ -70,9 +69,8 @@ describe('WithAutoheight', () => {
     });
 
     it('Gets super.value', () => {
-      const result = element.value;
+      element.value; // eslint-disable-line no-unused-expressions
       expect(descriptor.get).toHaveBeenCalled();
-      expect(result).toBeUndefined();
     });
 
     it('Sets super.value', () => {
