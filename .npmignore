@@ -1,9 +1,10 @@
+.storybook/
 coverage/
 cypress/
 node_modules/
 public/
 src/
-.storybook/
+storybook-static/
 
 .eslintignore
 .eslintrc
@@ -17,6 +18,6 @@ jestEnvironment.js
 snowpack.config.json
 tsconfig.json
 
+.DS_Store
 *.ico
 *.spec.js
-.DS_Store
