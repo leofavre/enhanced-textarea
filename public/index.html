@@ -6,12 +6,12 @@
   <title>Enhanced Text Area</title>
   <link rel="stylesheet" href="./index.css">
   <script type="module">
-    import { WithAutoheight, WithResizeEvent } from './index.js';
+    import EnhancedTextArea from './index.js';
 
-    window.defineElement = function (name) {
+    window.defineElement = name => {
       window.customElements.define(
         name,
-        WithAutoheight(WithResizeEvent(HTMLTextAreaElement)),
+        EnhancedTextArea,
         { extends: 'textarea' }
       )
     };

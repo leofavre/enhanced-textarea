@@ -7,6 +7,7 @@
     "module": "esnext",
     "strictNullChecks": true,
     "skipLibCheck": true,
+    "experimentalDecorators": true,
     "noEmit": true
   },
   "exclude": [
