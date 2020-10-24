@@ -1,4 +1,5 @@
 import { LOREM, DELETE_ALL, TYPE_OPTIONS } from '../constants/index.js';
+import expect from 'expect';
 
 const runAutoHeightTests = ({
   selector,
@@ -240,6 +241,37 @@ const runAutoHeightTests = ({
 
       cy.get('@textarea')
         .invoke('prop', 'autoheight', true)
+        .should('have.prop', 'clientHeight')
+        .and('be.within', 90, 98);
+    });
+
+    it('Still works when the element is disconnected and reconnected to the DOM', () => {
+      cy.window().then(startFunction);
+
+      let cachedNode;
+
+      cy.get('@textarea')
+        .invoke('prop', 'autoheight', true)
+        .type(LOREM.slice(0, LOREM.length / 2), TYPE_OPTIONS)
+        .should('have.prop', 'clientHeight')
+        .and('be.within', 48, 56);
+
+      cy.get('@textarea')
+        .then(([node]) => {
+          expect(node.isConnected).toBeTruthy();
+          cachedNode = node;
+          node.remove();
+          expect(cachedNode.isConnected).toBeFalsy();
+        });
+
+      cy.document()
+        .then(doc => {
+          doc.body.appendChild(cachedNode);
+          expect(cachedNode.isConnected).toBeTruthy();
+        });
+
+      cy.get('@textarea')
+        .type(LOREM.slice(LOREM.length / 2), TYPE_OPTIONS)
         .should('have.prop', 'clientHeight')
         .and('be.within', 90, 98);
     });
