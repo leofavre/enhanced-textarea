@@ -1,12 +1,12 @@
 import getCoercedAttr from './getCoercedAttr';
-let element;
+let element: HTMLElement;
 
 describe('setAttr', () => {
   beforeEach(() => {
     element = {
       hasAttribute: jest.fn(() => true),
       getAttribute: jest.fn(() => '125')
-    };
+    } as unknown as HTMLElement;
   });
 
   it('Calls getAttribute if the attribute is coerced to a String', () => {

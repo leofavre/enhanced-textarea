@@ -6,7 +6,7 @@ import resetProp from '../helpers/resetProp';
 
 import {
   HTMLTextAreaElementConstructor,
-  AttributeChangedCallbackArguments
+  AttributeChangedCallbackArgs
 } from '../types';
 
 function WithAutoheight<T extends HTMLTextAreaElementConstructor> (Base: T): T {
@@ -44,7 +44,7 @@ function WithAutoheight<T extends HTMLTextAreaElementConstructor> (Base: T): T {
       ];
     }
 
-    attributeChangedCallback (...args: AttributeChangedCallbackArguments) {
+    attributeChangedCallback (...args: AttributeChangedCallbackArgs) {
       super.attributeChangedCallback && super.attributeChangedCallback(...args);
       this._handleAttributeChange(...args);
     }
@@ -59,7 +59,7 @@ function WithAutoheight<T extends HTMLTextAreaElementConstructor> (Base: T): T {
       this._handleAutoHeightEnd();
     }
 
-    private _handleAttributeChange (...args: AttributeChangedCallbackArguments) {
+    private _handleAttributeChange (...args: AttributeChangedCallbackArgs) {
       const [attrName, oldValue, nextValue] = args;
 
       if (oldValue !== nextValue) {
@@ -100,12 +100,12 @@ function WithAutoheight<T extends HTMLTextAreaElementConstructor> (Base: T): T {
         const boxSizing = this._getStyleProp('box-sizing') as string;
 
         if (boxSizing !== 'border-box') {
-          const paddingTop = this._getStyleProp('padding-top') as number;
-          const paddingBottom = this._getStyleProp('padding-bottom') as number;
-          const borderTop = this._getStyleProp('border-top-width') as number;
-          const borderBottom = this._getStyleProp('border-bottom-width') as number;
-
-          inner = paddingTop + paddingBottom + borderTop + borderBottom;
+          inner = [
+            this._getStyleProp('padding-top') as number,
+            this._getStyleProp('padding-bottom') as number,
+            this._getStyleProp('border-top-width') as number,
+            this._getStyleProp('border-bottom-width') as number
+          ].reduce((sum, item) => sum + item, 0);
         }
 
         const { height: prevHeight } = this.style;

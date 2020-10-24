@@ -2,7 +2,7 @@ import resetProp from './resetProp';
 
 describe('resetProp', () => {
   it('Deletes and then resets a property from an object', () => {
-    let descriptor;
+    let descriptor: PropertyDescriptor;
 
     const element = {
       get height () { return this._height; },
