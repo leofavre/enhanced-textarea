@@ -1,16 +1,4 @@
 {
-  "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dist",
-    "declaration": true,
-    "target": "esnext",
-    "module": "esnext",
-    "strictNullChecks": true,
-    "skipLibCheck": true
-  },
-  "exclude": [
-    "src/*.d.ts",
-    "With*.ts"
-  ],
+  "extends": "./tsconfig.json",
   "noEmit": true
 }

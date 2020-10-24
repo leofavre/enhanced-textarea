@@ -6,8 +6,7 @@ import resetProp from '../helpers/resetProp';
 
 import { AttributeChangedCallbackArgs, BasicPrimitive, CustomElementConstructor } from '../types';
 
-export type WithAutoheightBase =
-  CustomElementConstructor<HTMLTextAreaElement>;
+export type WithAutoheightBase = CustomElementConstructor<HTMLTextAreaElement>;
 
 export type HTMLTextAreaElementWithAutoheight = HTMLTextAreaElement & {
   autoheight: BasicPrimitive;

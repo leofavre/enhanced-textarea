@@ -1,8 +1,6 @@
 import { CustomElementConstructor } from '../types';
 
-export type WithResizeEventBase =
-  CustomElementConstructor<HTMLTextAreaElement>;
-
+export type WithResizeEventBase = CustomElementConstructor<HTMLTextAreaElement>;
 export type HTMLTextAreaElementWithResizeEvent = HTMLTextAreaElement;
 
 export type WithResizeEventDecorator =
