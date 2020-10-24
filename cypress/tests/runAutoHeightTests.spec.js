@@ -1,7 +1,7 @@
 import { LOREM, DELETE_ALL, TYPE_OPTIONS } from '../constants/index.js';
 import expect from 'expect';
 
-const runAutoHeightTests = ({
+const runAutoheightTests = ({
   selector,
   startFunction
 }) => {
@@ -278,4 +278,4 @@ const runAutoHeightTests = ({
   });
 };
 
-export default runAutoHeightTests;
+export default runAutoheightTests;

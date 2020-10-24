@@ -1,4 +1,4 @@
-import runAutoHeightTests from '../tests/runAutoHeightTests.spec.js';
+import runAutoheightTests from '../tests/runAutoheightTests.spec.js';
 import runResizeEventTests from '../tests/runResizeEventTests.spec.js';
 
 const selector = 'textarea[is=enhanced-textarea]';
@@ -8,5 +8,5 @@ const options = {
   startFunction: win => win.defineElement('enhanced-textarea')
 };
 
-runAutoHeightTests(options);
+runAutoheightTests(options);
 runResizeEventTests(options);
