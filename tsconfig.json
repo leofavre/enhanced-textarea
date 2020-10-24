@@ -15,7 +15,6 @@
     "./src/*.d.ts",
     "./src/*.spec.ts",
     "./dist",
-    "node_modules",
     "./With*.ts"
   ]
 }
