@@ -22,7 +22,19 @@ element.addEventListener('resize', action('Resized by the user'));
 export default {
   title: 'Enhanced Text Area',
   argTypes: {
-    autoheight: { control: 'boolean' }
+    autoheight: {
+      name: 'autoheight',
+      description: 'Controls if the component should automatically grow or ' +
+        'shrink according to the amount of text',
+      table: {
+        defaultValue: {
+          summary: 'false'
+        }
+      },
+      control: {
+        type: 'boolean'
+      }
+    }
   }
 };
 
