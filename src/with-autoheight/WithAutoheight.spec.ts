@@ -145,10 +145,15 @@ describe('WithAutoheight', () => {
   });
 
   describe('.connectedCallback()', () => {
+    beforeEach(() => {
+      element._handleAutoHeightStart = jest.fn();
+    });
+
     it('Calls super.connectedCallback', () => {
       Base.prototype.connectedCallback = jest.fn();
       Element = WithAutoheight(Base);
       element = new Element() as unknown as MockedElement;
+      element._handleAutoHeightStart = jest.fn();
 
       element.connectedCallback();
       expect(Base.prototype.connectedCallback).toHaveBeenCalled();
@@ -158,21 +163,31 @@ describe('WithAutoheight', () => {
       element.connectedCallback();
       expect(resetProp).toHaveBeenCalledWith(element, 'autoheight');
     });
+
+    it('Calls _handleAutoHeightStart', () => {
+      element.connectedCallback();
+      expect(element._handleAutoHeightStart).toHaveBeenCalled();
+    });
   });
 
   describe('.disconnectedCallback()', () => {
     beforeEach(() => {
-      element.removeEventListener = jest.fn();
+      element._handleAutoHeightEnd = jest.fn();
     });
 
     it('Calls super.disconnectedCallback', () => {
       Base.prototype.disconnectedCallback = jest.fn();
       Element = WithAutoheight(Base);
       element = new Element() as unknown as MockedElement;
-      element.removeEventListener = jest.fn();
+      element._handleAutoHeightEnd = jest.fn();
 
       element.disconnectedCallback();
       expect(Base.prototype.disconnectedCallback).toHaveBeenCalled();
+    });
+
+    it('Calls _handleAutoHeightEnd', () => {
+      element.disconnectedCallback();
+      expect(element._handleAutoHeightEnd).toHaveBeenCalled();
     });
   });
 
@@ -238,14 +253,18 @@ describe('WithAutoheight', () => {
     let ResizeObserverSpy: jest.SpyInstance;
 
     beforeEach(() => {
-      ResizeObserverSpy = jest
-        .spyOn(ResizeObserver.prototype, 'observe');
-
+      ResizeObserverSpy = jest.spyOn(ResizeObserver.prototype, 'observe');
       element.addEventListener = jest.fn();
+      element._handleAutoHeightEnd = jest.fn();
     });
 
     afterEach(() => {
       ResizeObserverSpy.mockReset();
+    });
+
+    it('Reset listeners by calling _handleAutoHeightEnd', () => {
+      element._handleAutoHeightStart();
+      expect(element._handleAutoHeightEnd).toHaveBeenCalled();
     });
 
     it('Observes user resize', () => {

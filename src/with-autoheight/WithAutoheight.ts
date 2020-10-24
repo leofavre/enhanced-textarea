@@ -10,7 +10,6 @@ export type WithAutoheightBase = CustomElementConstructor<HTMLTextAreaElement>;
 
 export type HTMLTextAreaElementWithAutoheight = HTMLTextAreaElement & {
   autoheight: boolean;
-  value: string;
 }
 
 export type WithAutoheightDecorator =
@@ -59,6 +58,7 @@ function WithAutoheight (Base: WithAutoheightBase): WithAutoheightDecorator {
     connectedCallback () {
       super.connectedCallback && super.connectedCallback();
       resetProp(this, 'autoheight');
+      this._handleAutoHeightStart();
     }
 
     disconnectedCallback () {
@@ -86,6 +86,7 @@ function WithAutoheight (Base: WithAutoheightBase): WithAutoheightDecorator {
     }
 
     private _handleAutoHeightStart () {
+      this._handleAutoHeightEnd();
       this._resizeObserver = new ResizeObserver(this._handleChange);
       this._resizeObserver.observe(this);
       this.addEventListener('input', this._handleChange);
