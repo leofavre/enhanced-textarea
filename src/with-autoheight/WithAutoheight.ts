@@ -116,7 +116,7 @@ function WithAutoheight (Base: WithAutoheightBase): WithAutoheightDecorator {
           ].reduce((sum, item) => sum + item, 0);
         }
 
-        const { height: prevHeight } = this.style;
+        const { height: pastHeight } = this.style;
 
         this.style.minHeight = 'auto';
         this.style.height = 'auto';
@@ -124,9 +124,9 @@ function WithAutoheight (Base: WithAutoheightBase): WithAutoheightDecorator {
         const { scrollHeight } = this;
         const numericNextMinHeight = scrollHeight + offset - inner;
         const nextMinHeight = `${numericNextMinHeight}px`;
-        const numericPrevHeight = pxToNumber(prevHeight);
+        const numericPrevHeight = pxToNumber(pastHeight);
 
-        let nextHeight = prevHeight;
+        let nextHeight = pastHeight;
 
         if (numericPrevHeight != null) {
           nextHeight = this._resizedByUser

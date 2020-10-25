@@ -234,17 +234,17 @@ describe('WithAutoheight', () => {
 
     it('Calls _handleChange when style properties except height or min-height change', () => {
       element._handleChange = jest.fn();
-      const prevStyle = 'width: 100px;';
+      const pastStyle = 'width: 100px;';
       const nextStyle = 'width: 150px;';
-      element._handleAttributeChange('style', prevStyle, nextStyle);
+      element._handleAttributeChange('style', pastStyle, nextStyle);
       expect(element._handleChange).toHaveBeenCalled();
     });
 
     it('Does not call _handleChange when only style properties height or min-height change', () => {
       element._handleChange = jest.fn();
-      const prevStyle = 'height: 100px; min-height: 100px;';
+      const pastStyle = 'height: 100px; min-height: 100px;';
       const nextStyle = 'height: 150px;';
-      element._handleAttributeChange('style', prevStyle, nextStyle);
+      element._handleAttributeChange('style', pastStyle, nextStyle);
       expect(element._handleChange).not.toHaveBeenCalled();
     });
   });

@@ -2,19 +2,19 @@ import removeStyleProp from './removeStyleProp';
 import parseStyleStr from './parseStyleStr';
 
 export interface IHasStyleExceptHeightChanged {
-  (prevStyle: string | null, nextStyle: string | null): boolean
+  (pastStyle: string | null, nextStyle: string | null): boolean
 }
 
 const ignoreHeight = removeStyleProp('height');
 const ignoreMinHeight = removeStyleProp('min-height');
 
 const hasStyleExceptHeightChanged: IHasStyleExceptHeightChanged = (...args) => {
-  const [prevStyle, nextStyle] = args;
-  if (prevStyle == null || nextStyle == null) {
+  const [pastStyle, nextStyle] = args;
+  if (pastStyle == null || nextStyle == null) {
     return false;
   }
 
-  return ignoreHeight(ignoreMinHeight(parseStyleStr(prevStyle))) !==
+  return ignoreHeight(ignoreMinHeight(parseStyleStr(pastStyle))) !==
     ignoreHeight(ignoreMinHeight(parseStyleStr(nextStyle)));
 };
 
