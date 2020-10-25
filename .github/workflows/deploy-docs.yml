@@ -22,5 +22,3 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: storybook
-          FOLDER: storybook-static
-          DEBUG: true
