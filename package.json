@@ -4,6 +4,23 @@
   "description": "Enhanced Text Area",
   "main": "dist/index",
   "typings": "dist/index",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leofavre/enhanced-textarea.git"
+  },
+  "keywords": [
+    "autoheight",
+    "autosize",
+    "built-in-custom-element",
+    "custom-element",
+    "enhanced-textarea",
+    "textarea",
+    "web-component"
+  ],
+  "bugs": {
+    "url": "https://github.com/leofavre/enhanced-textarea/issues"
+  },
+  "homepage": "https://github.com/leofavre/enhanced-textarea#readme",
   "scripts": {
     "all-tests": "npm run test-syntax && npm run test-typings && npm run test && npm run test-ui",
     "build-storybook": "build-storybook -s ./public",
@@ -56,6 +73,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {}
+  }
 }
