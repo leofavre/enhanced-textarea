@@ -3,5 +3,6 @@ coverage/
 cypress/screenshots/
 cypress/videos/
 node_modules/
+storybook-static/
 
 .DS_Store

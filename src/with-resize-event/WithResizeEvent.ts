@@ -27,6 +27,7 @@ function WithResizeEvent (Base: WithResizeEventBase): WithResizeEventDecorator {
     }
 
     private _handleResizeEventStart () {
+      this._handleResizeEventEnd();
       this.addEventListener('pointerdown', this._handlePointer);
       this.addEventListener('pointerup', this._handlePointer);
     }

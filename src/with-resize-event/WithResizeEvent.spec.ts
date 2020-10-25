@@ -68,7 +68,13 @@ describe('WithResizeEvent', () => {
 
   describe('._handleResizeEventStart()', () => {
     beforeEach(() => {
+      element._handleResizeEventEnd = jest.fn();
       element.addEventListener = jest.fn();
+    });
+
+    it('Reset listeners by calling _handleResizeEventEnd', () => {
+      element._handleResizeEventStart();
+      expect(element._handleResizeEventEnd).toHaveBeenCalled();
     });
 
     it('Observes user interaction', () => {

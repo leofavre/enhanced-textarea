@@ -4,13 +4,12 @@ import getCoercedAttr from '../helpers/getCoercedAttr';
 import setAttr from '../helpers/setAttr';
 import resetProp from '../helpers/resetProp';
 
-import { AttributeChangedCallbackArgs, BasicPrimitive, CustomElementConstructor } from '../types';
+import { AttributeChangedCallbackArgs, CustomElementConstructor } from '../types';
 
 export type WithAutoheightBase = CustomElementConstructor<HTMLTextAreaElement>;
 
 export type HTMLTextAreaElementWithAutoheight = HTMLTextAreaElement & {
-  autoheight: BasicPrimitive;
-  value: string | null;
+  autoheight: boolean;
 }
 
 export type WithAutoheightDecorator =
@@ -28,7 +27,7 @@ function WithAutoheight (Base: WithAutoheightBase): WithAutoheightDecorator {
     }
 
     get autoheight () {
-      return getCoercedAttr(this, 'autoheight', Boolean);
+      return getCoercedAttr(this, 'autoheight', Boolean) as boolean;
     }
 
     set autoheight (value) {
@@ -59,11 +58,12 @@ function WithAutoheight (Base: WithAutoheightBase): WithAutoheightDecorator {
     connectedCallback () {
       super.connectedCallback && super.connectedCallback();
       resetProp(this, 'autoheight');
+      this._handleAutoheightStart();
     }
 
     disconnectedCallback () {
       super.disconnectedCallback && super.disconnectedCallback();
-      this._handleAutoHeightEnd();
+      this._handleAutoheightEnd();
     }
 
     private _handleAttributeChange (...args: AttributeChangedCallbackArgs) {
@@ -72,9 +72,9 @@ function WithAutoheight (Base: WithAutoheightBase): WithAutoheightDecorator {
       if (oldValue !== nextValue) {
         if (attrName === 'autoheight') {
           if (oldValue == null) {
-            this._handleAutoHeightStart();
+            this._handleAutoheightStart();
           } else if (nextValue == null) {
-            this._handleAutoHeightEnd();
+            this._handleAutoheightEnd();
           }
         }
 
@@ -85,14 +85,15 @@ function WithAutoheight (Base: WithAutoheightBase): WithAutoheightDecorator {
       }
     }
 
-    private _handleAutoHeightStart () {
+    private _handleAutoheightStart () {
+      this._handleAutoheightEnd();
       this._resizeObserver = new ResizeObserver(this._handleChange);
       this._resizeObserver.observe(this);
       this.addEventListener('input', this._handleChange);
       this.addEventListener('resize', this._handleResize);
     }
 
-    private _handleAutoHeightEnd () {
+    private _handleAutoheightEnd () {
       this._resizeObserver && this._resizeObserver.unobserve(this);
       this.removeEventListener('input', this._handleChange);
       this.removeEventListener('resize', this._handleResize);

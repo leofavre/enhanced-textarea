@@ -1,4 +1,18 @@
 {
-  "extends": "./tsconfig.json",
-  "noEmit": true
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "declaration": true,
+    "target": "esnext",
+    "module": "esnext",
+    "strictNullChecks": true,
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "noEmit": true
+  },
+  "exclude": [
+    "./src/*.d.ts",
+    "./dist",
+    "./With*.ts"
+  ]
 }
