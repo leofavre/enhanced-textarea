@@ -1,17 +1,15 @@
-interface IGetCoercedAttr {
-  (
-    element: HTMLElement,
-    attrName: string,
-    coercionFunction: (attrValue: string | null) => unknown
-  ): unknown
+type ICoercionFn = (attrValue: string | null) => unknown;
+
+export interface IGetCoercedAttr {
+  (element: HTMLElement, attrName: string, coercionFn: ICoercionFn): unknown
 }
 
 const getCoercedAttr: IGetCoercedAttr = (...args) => {
-  const [element, attrName, coercionFunction] = args;
+  const [element, attrName, coercionFn] = args;
 
-  return coercionFunction === Boolean
+  return coercionFn === Boolean
     ? element.hasAttribute(attrName)
-    : coercionFunction(element.getAttribute(attrName));
+    : coercionFn(element.getAttribute(attrName));
 };
 
 export default getCoercedAttr;

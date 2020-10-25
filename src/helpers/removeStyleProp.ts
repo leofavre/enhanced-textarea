@@ -1,4 +1,4 @@
-interface IRemoveStyleProp {
+export interface IRemoveStyleProp {
   (propName: string): (styleStr: string | null) => string | null
 }
 

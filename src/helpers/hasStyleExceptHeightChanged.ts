@@ -1,7 +1,7 @@
 import removeStyleProp from './removeStyleProp';
 import parseStyleStr from './parseStyleStr';
 
-interface IHasStyleExceptHeightChanged {
+export interface IHasStyleExceptHeightChanged {
   (prevStyle: string | null, nextStyle: string | null): boolean
 }
 

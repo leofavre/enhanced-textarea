@@ -1,4 +1,4 @@
-interface IResetProp {
+export interface IResetProp {
   <T>(element: T, propName: string): void
 }
 

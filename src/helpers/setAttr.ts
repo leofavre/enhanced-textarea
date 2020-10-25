@@ -1,4 +1,4 @@
-interface ISetAttr {
+export interface ISetAttr {
   (element: HTMLElement, attrName: string, value?: unknown): void
 }
 

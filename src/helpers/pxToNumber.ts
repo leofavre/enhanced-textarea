@@ -1,4 +1,4 @@
-interface IPxToNumber {
+export interface IPxToNumber {
   (str: string): number | undefined
 }
 

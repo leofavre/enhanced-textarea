@@ -1,4 +1,4 @@
-interface IParseStyleStr {
+export interface IParseStyleStr {
   (s: string): string
 }
 
