@@ -1,12 +1,16 @@
 import hasStyleExceptHeightChanged from './hasStyleExceptHeightChanged';
 
 describe('hasStyleExceptHeightChanged', () => {
-  it('Returns false if both parameters are undefined', () => {
-    expect(hasStyleExceptHeightChanged());
+  it('Returns false if both parameters are null', () => {
+    expect(hasStyleExceptHeightChanged(null, null)).toBe(false);
   });
 
-  it('Returns false if the second parameter is undefined', () => {
-    expect(hasStyleExceptHeightChanged('width: 300px;'));
+  it('Returns false if the first parameter is null', () => {
+    expect(hasStyleExceptHeightChanged(null, 'width: 300px;')).toBe(false);
+  });
+
+  it('Returns false if the second parameter is null', () => {
+    expect(hasStyleExceptHeightChanged('width: 300px;', null)).toBe(false);
   });
 
   it('Verifies that style has changed', () => {

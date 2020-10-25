@@ -1,32 +1,21 @@
 import removeStyleProp from './removeStyleProp';
-import { AttrValue } from '../types';
+import parseStyleStr from './parseStyleStr';
 
-type Args = [AttrValue?, AttrValue?]
+interface IHasStyleExceptHeightChanged {
+  (prevStyle: string | null, nextStyle: string | null): boolean
+}
 
 const ignoreHeight = removeStyleProp('height');
 const ignoreMinHeight = removeStyleProp('min-height');
 
-const parseStyle = (styleStr: string): string => {
-  return styleStr
-    .replace(/  +/g, ' ')
-    .replace(/ ;/g, ';')
-    .trim()
-    .replace(/;$/g, '')
-    .replace(/:([^ ])/g, ': $1')
-    .split('; ')
-    .sort()
-    .join(';')
-    .replace(/$/g, ';');
-};
-
-const hasStyleExceptHeightChanged = (...args: Args): boolean => {
+const hasStyleExceptHeightChanged: IHasStyleExceptHeightChanged = (...args) => {
   const [prevStyle, nextStyle] = args;
   if (prevStyle == null || nextStyle == null) {
     return false;
   }
 
-  return ignoreHeight(ignoreMinHeight(parseStyle(prevStyle))) !==
-    ignoreHeight(ignoreMinHeight(parseStyle(nextStyle)));
+  return ignoreHeight(ignoreMinHeight(parseStyleStr(prevStyle))) !==
+    ignoreHeight(ignoreMinHeight(parseStyleStr(nextStyle)));
 };
 
 export default hasStyleExceptHeightChanged;

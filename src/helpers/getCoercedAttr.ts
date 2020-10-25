@@ -1,9 +1,12 @@
-import { AttrName, BasicPrimitive } from '../types';
+interface IGetCoercedAttr {
+  (
+    element: HTMLElement,
+    attrName: string,
+    coercionFunction: (attrValue: string | null) => unknown
+  ): unknown
+}
 
-type CoercionFunction = (arg?: BasicPrimitive | null) => BasicPrimitive;
-type Args = [HTMLElement, AttrName, CoercionFunction];
-
-const getCoercedAttr = (...args: Args): BasicPrimitive => {
+const getCoercedAttr: IGetCoercedAttr = (...args) => {
   const [element, attrName, coercionFunction] = args;
 
   return coercionFunction === Boolean

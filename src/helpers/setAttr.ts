@@ -1,8 +1,8 @@
-import { AttrName, BasicPrimitive } from '../types';
+interface ISetAttr {
+  (element: HTMLElement, attrName: string, value?: unknown): void
+}
 
-type Args = [HTMLElement, AttrName, (BasicPrimitive | null)?];
-
-const setAttr = (...args: Args): void => {
+const setAttr: ISetAttr = (...args) => {
   const [element, attrName, value] = args;
 
   if (value == null || value === false) {
