@@ -1,6 +1,6 @@
 export type AttrValue = string | null;
 export type AttrName = string;
-export type AttributeChangedCallbackArgs = [AttrName?, AttrValue?, AttrValue?];
+export type AttributeChangedCallbackArgs = [AttrName, AttrValue, AttrValue];
 export type BasicPrimitive = string | number | boolean;
 export type PropName = string;
 
