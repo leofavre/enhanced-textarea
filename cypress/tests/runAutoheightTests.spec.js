@@ -246,9 +246,9 @@ const runAutoheightTests = ({
     });
 
     it('Still works when the element is disconnected and reconnected to the DOM', () => {
-      cy.window().then(startFunction);
-
       let cachedNode;
+
+      cy.window().then(startFunction);
 
       cy.get('@textarea')
         .invoke('prop', 'autoheight', true)
