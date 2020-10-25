@@ -5,14 +5,14 @@ export interface IParseStyleStr {
 const parseStyleStr:IParseStyleStr = (styleStr) => {
   return styleStr
     .replace(/  +/g, ' ')
-    .replace(/ ;/g, ';')
     .trim()
-    .replace(/;$/g, '')
-    .replace(/:([^ ])/g, ': $1')
+    .replace(/ ;/g, ';')
+    .replace(/: /g, ':')
+    .replace(/;$/, '')
     .split('; ')
     .sort()
     .join(';')
-    .replace(/$/g, ';');
+    .replace(/$/, ';');
 };
 
 export default parseStyleStr;
