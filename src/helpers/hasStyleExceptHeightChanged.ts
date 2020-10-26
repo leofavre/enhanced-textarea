@@ -1,14 +1,14 @@
 import removeStyleProp from './removeStyleProp';
 import parseStyleStr from './parseStyleStr';
 
-export interface IHasStyleExceptHeightChanged {
+interface IhasStyleExceptHeightChanged {
   (pastStyle: string | null, nextStyle: string | null): boolean
 }
 
 const ignoreHeight = removeStyleProp('height');
 const ignoreMinHeight = removeStyleProp('min-height');
 
-const hasStyleExceptHeightChanged: IHasStyleExceptHeightChanged = (...args) => {
+const hasStyleExceptHeightChanged: IhasStyleExceptHeightChanged = (...args) => {
   const [pastStyle, nextStyle] = args;
   if (pastStyle == null || nextStyle == null) {
     return false;

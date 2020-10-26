@@ -1,8 +1,8 @@
-export interface IParseStyleStr {
-  (s: string): string
+interface IparseStyleStr {
+  (styleStr: string): string
 }
 
-const parseStyleStr:IParseStyleStr = (styleStr) => {
+const parseStyleStr: IparseStyleStr = (styleStr) => {
   return styleStr
     .replace(/  +/g, ' ')
     .trim()

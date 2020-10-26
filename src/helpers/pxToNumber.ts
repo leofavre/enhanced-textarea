@@ -1,8 +1,8 @@
-export interface IPxToNumber {
+interface IpxToNumber {
   (str: string): number | undefined
 }
 
-const pxToNumber: IPxToNumber = str => {
+const pxToNumber: IpxToNumber = str => {
   const isPxMeasure = /[0-9-.].*?px$/.test(str);
 
   if (!isPxMeasure) {

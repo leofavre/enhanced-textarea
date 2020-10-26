@@ -1,8 +1,8 @@
-export interface ISetAttr {
+interface IsetAttr {
   (element: HTMLElement, attrName: string, value?: unknown): void
 }
 
-const setAttr: ISetAttr = (...args) => {
+const setAttr: IsetAttr = (...args) => {
   const [element, attrName, value] = args;
 
   if (value == null || value === false) {

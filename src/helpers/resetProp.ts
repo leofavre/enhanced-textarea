@@ -1,11 +1,11 @@
-export interface IResetProp {
-  <T>(record: T, propName: string): void
+interface IresetProp {
+  <T>(objectLike: T, propName: string): void
 }
 
-const resetProp: IResetProp = (record, propName) => {
-  const value = record[propName];
-  delete record[propName];
-  record[propName] = value;
+const resetProp: IresetProp = (objectLike, propName) => {
+  const value = objectLike[propName];
+  delete objectLike[propName];
+  objectLike[propName] = value;
 };
 
 export default resetProp;

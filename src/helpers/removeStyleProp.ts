@@ -1,8 +1,8 @@
-export interface IRemoveStyleProp {
+interface IremoveStyleProp {
   (propName: string): (styleStr: string | null) => string | null
 }
 
-const removeStyleProp: IRemoveStyleProp = propName => styleStr => {
+const removeStyleProp: IremoveStyleProp = propName => styleStr => {
   return styleStr != null && styleStr.replace
     ? styleStr
       .replace(new RegExp(`(^| |;)${propName}:.*?(;|$)`, 'g'), '$1')
