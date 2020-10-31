@@ -9,7 +9,7 @@ export type Constructor<T> = {
 }
 
 export type HTMLTextAreaElementConstructor =
-  Constructor<HTMLTextAreaElement> & { observedAttributes: string[] };
+  Constructor<HTMLTextAreaElement> & { observedAttributes?: string[] };
 
 declare global {
   interface HTMLElement {
