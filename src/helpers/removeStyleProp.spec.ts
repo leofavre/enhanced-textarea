@@ -6,11 +6,7 @@ describe('removeStyleProp', () => {
   });
 
   it('Returns undefined if it receives null', () => {
-    expect(removeStyleProp('height')(null)).toBeUndefined();
-  });
-
-  it('Returns undefined if it receives undefined', () => {
-    expect(removeStyleProp('height')()).toBeUndefined();
+    expect(removeStyleProp('height')(null)).toBeNull();
   });
 
   it('Removes a property from a Style string', () => {
@@ -19,25 +15,25 @@ describe('removeStyleProp', () => {
     expect(removeStyleProp('height')(styleStr)).toBe(result);
   });
 
-  it('Detects only complete property names in the beginning of the string', () => {
+  it('Detects complete property names in the beginning of the string', () => {
     const styleStr = 'height: 100px; line-height: 2;';
     const result = 'line-height: 2;';
     expect(removeStyleProp('height')(styleStr)).toBe(result);
   });
 
-  it('Detects only complete property names after a space', () => {
+  it('Detects complete property names after a space', () => {
     const styleStr = 'line-height: 2; height: 100px;';
     const result = 'line-height: 2;';
     expect(removeStyleProp('height')(styleStr)).toBe(result);
   });
 
-  it('Detects only complete property names after a semicolon', () => {
+  it('Detects complete property names after a semicolon', () => {
     const styleStr = 'line-height: 2;height: 100px;';
     const result = 'line-height: 2;';
     expect(removeStyleProp('height')(styleStr)).toBe(result);
   });
 
-  it('Detects only complete property names in the end of the string', () => {
+  it('Detects complete property names at the end of the string', () => {
     const styleStr = 'line-height: 2; height: 100px';
     const result = 'line-height: 2;';
     expect(removeStyleProp('height')(styleStr)).toBe(result);

@@ -1,13 +1,14 @@
-import { AttrValue, Maybe } from '../types';
+interface IremoveStyleProp {
+  (propName: string): (styleStr: string | null) => string | null
+}
 
-const removeStyleProp = (propName: string) => {
-  return (styleStr?: AttrValue): Maybe<string> =>
-    styleStr != null && styleStr.replace
-      ? styleStr
-        .replace(new RegExp(`(^| |;)${propName}:.*?(;|$)`, 'g'), '$1')
-        .replace(/  +/g, ' ')
-        .trim()
-      : styleStr || undefined;
+const removeStyleProp: IremoveStyleProp = propName => styleStr => {
+  return styleStr != null && styleStr.replace
+    ? styleStr
+      .replace(new RegExp(`(^| |;)${propName}:.*?(;|$)`, 'g'), '$1')
+      .replace(/  +/g, ' ')
+      .trim()
+    : styleStr || null;
 };
 
 export default removeStyleProp;

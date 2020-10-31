@@ -1,12 +1,15 @@
-import { CustomElementConstructor } from '../types';
+import { Constructor, HTMLTextAreaElementConstructor } from '../types';
 
-export type WithResizeEventBase = CustomElementConstructor<HTMLTextAreaElement>;
-export type HTMLTextAreaElementWithResizeEvent = HTMLTextAreaElement;
+export type EnhancedWithResizeEvent = HTMLTextAreaElement;
 
-export type WithResizeEventDecorator =
-  CustomElementConstructor<HTMLTextAreaElementWithResizeEvent>;
+export type EnhancedWithResizeEventConstructor =
+  Constructor<EnhancedWithResizeEvent>;
 
-function WithResizeEvent (Base: WithResizeEventBase): WithResizeEventDecorator {
+export interface IWithResizeEvent {
+  (Base: HTMLTextAreaElementConstructor): EnhancedWithResizeEventConstructor
+}
+
+const WithResizeEvent: IWithResizeEvent = Base => {
   return class extends Base {
     private _preResizeHeight: number;
     private _preResizeWidth: number;
@@ -16,12 +19,12 @@ function WithResizeEvent (Base: WithResizeEventBase): WithResizeEventDecorator {
       this._handlePointer = this._handlePointer.bind(this);
     }
 
-    connectedCallback () {
+    connectedCallback (): void {
       super.connectedCallback && super.connectedCallback();
       this._handleResizeEventStart();
     }
 
-    disconnectedCallback () {
+    disconnectedCallback (): void {
       super.disconnectedCallback && super.disconnectedCallback();
       this._handleResizeEventEnd();
     }
@@ -64,6 +67,6 @@ function WithResizeEvent (Base: WithResizeEventBase): WithResizeEventDecorator {
       }
     }
   };
-}
+};
 
 export default WithResizeEvent;

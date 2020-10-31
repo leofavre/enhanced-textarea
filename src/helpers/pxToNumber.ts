@@ -1,6 +1,8 @@
-import { Maybe } from '../types';
+interface IpxToNumber {
+  (str: string): number | undefined
+}
 
-const pxToNumber = (str: string): Maybe<number> => {
+const pxToNumber: IpxToNumber = str => {
   const isPxMeasure = /[0-9-.].*?px$/.test(str);
 
   if (!isPxMeasure) {

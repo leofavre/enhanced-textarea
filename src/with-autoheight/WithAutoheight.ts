@@ -4,18 +4,20 @@ import getCoercedAttr from '../helpers/getCoercedAttr';
 import setAttr from '../helpers/setAttr';
 import resetProp from '../helpers/resetProp';
 
-import { AttributeChangedCallbackArgs, CustomElementConstructor } from '../types';
+import { AttributeChangedCallbackParams, Constructor, HTMLTextAreaElementConstructor } from '../types';
 
-export type WithAutoheightBase = CustomElementConstructor<HTMLTextAreaElement>;
-
-export type HTMLTextAreaElementWithAutoheight = HTMLTextAreaElement & {
+export type EnhancedWithAutoheight = HTMLTextAreaElement & {
   autoheight: boolean;
 }
 
-export type WithAutoheightDecorator =
-  CustomElementConstructor<HTMLTextAreaElementWithAutoheight>;
+export type EnhancedWithAutoheightConstructor =
+  Constructor<EnhancedWithAutoheight>;
 
-function WithAutoheight (Base: WithAutoheightBase): WithAutoheightDecorator {
+export interface IWithAutoheight {
+  (Base: HTMLTextAreaElementConstructor): EnhancedWithAutoheightConstructor
+}
+
+const WithAutoheight: IWithAutoheight = Base => {
   return class extends Base {
     private _resizedByUser: boolean;
     private _resizeObserver: ResizeObserver;
@@ -26,47 +28,47 @@ function WithAutoheight (Base: WithAutoheightBase): WithAutoheightDecorator {
       this._handleResize = this._handleResize.bind(this);
     }
 
-    get autoheight () {
+    get autoheight (): boolean {
       return getCoercedAttr(this, 'autoheight', Boolean) as boolean;
     }
 
-    set autoheight (value) {
+    set autoheight (value: boolean) {
       setAttr(this, 'autoheight', value);
     }
 
-    get value () {
+    get value (): string {
       return super.value;
     }
 
-    set value (value) {
+    set value (value: string) {
       super.value = value;
       this._handleChange();
     }
 
-    static get observedAttributes () {
+    static get observedAttributes (): string[] {
       return [
         ...super.observedAttributes || [],
         ...['autoheight', 'rows', 'cols', 'class', 'style']
       ];
     }
 
-    attributeChangedCallback (...args: AttributeChangedCallbackArgs) {
+    attributeChangedCallback (...args: AttributeChangedCallbackParams): void {
       super.attributeChangedCallback && super.attributeChangedCallback(...args);
       this._handleAttributeChange(...args);
     }
 
-    connectedCallback () {
+    connectedCallback (): void {
       super.connectedCallback && super.connectedCallback();
       resetProp(this, 'autoheight');
       this._handleAutoheightStart();
     }
 
-    disconnectedCallback () {
+    disconnectedCallback (): void {
       super.disconnectedCallback && super.disconnectedCallback();
       this._handleAutoheightEnd();
     }
 
-    private _handleAttributeChange (...args: AttributeChangedCallbackArgs) {
+    private _handleAttributeChange (...args: AttributeChangedCallbackParams) {
       const [attrName, oldValue, nextValue] = args;
 
       if (oldValue !== nextValue) {
@@ -116,7 +118,7 @@ function WithAutoheight (Base: WithAutoheightBase): WithAutoheightDecorator {
           ].reduce((sum, item) => sum + item, 0);
         }
 
-        const { height: prevHeight } = this.style;
+        const { height: pastHeight } = this.style;
 
         this.style.minHeight = 'auto';
         this.style.height = 'auto';
@@ -124,9 +126,9 @@ function WithAutoheight (Base: WithAutoheightBase): WithAutoheightDecorator {
         const { scrollHeight } = this;
         const numericNextMinHeight = scrollHeight + offset - inner;
         const nextMinHeight = `${numericNextMinHeight}px`;
-        const numericPrevHeight = pxToNumber(prevHeight);
+        const numericPrevHeight = pxToNumber(pastHeight);
 
-        let nextHeight = prevHeight;
+        let nextHeight = pastHeight;
 
         if (numericPrevHeight != null) {
           nextHeight = this._resizedByUser
@@ -154,6 +156,6 @@ function WithAutoheight (Base: WithAutoheightBase): WithAutoheightDecorator {
         : prop;
     }
   };
-}
+};
 
 export default WithAutoheight;

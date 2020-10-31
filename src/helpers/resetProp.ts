@@ -1,9 +1,11 @@
-import { PropName } from '../types';
+interface IresetProp {
+  <T>(objectLike: T, propName: string): void
+}
 
-const resetProp = <T>(element: T, propName: PropName): void => {
-  const value = element[propName];
-  delete element[propName];
-  element[propName] = value;
+const resetProp: IresetProp = (objectLike, propName) => {
+  const value = objectLike[propName];
+  delete objectLike[propName];
+  objectLike[propName] = value;
 };
 
 export default resetProp;
