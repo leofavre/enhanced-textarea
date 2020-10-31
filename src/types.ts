@@ -1,28 +1,20 @@
-export type AttrValue = string | null;
-export type AttrName = string;
-export type AttributeChangedCallbackArgs = [AttrName, AttrValue, AttrValue];
-export type BasicPrimitive = string | number | boolean;
-export type PropName = string;
+type AttrName = string;
+type AttrValue = string | null;
 
-export type Constrcutor<T> = {
+export type AttributeChangedCallbackParams = [AttrName, AttrValue, AttrValue];
+
+export type Constructor<T> = {
   new (...args: any[]): T;
   prototype: T;
 }
 
-export type CustomElementConstructor<T> = Constrcutor<T> & {
-  observedAttributes?: AttrName[];
-};
-
-export type Maybe<T> = T | undefined;
-
-export type Mutable<T> = {
-  -readonly [P in keyof T]: T[P];
-};
+export type HTMLTextAreaElementConstructor =
+  Constructor<HTMLTextAreaElement> & { observedAttributes: string[] };
 
 declare global {
   interface HTMLElement {
     connectedCallback(): void;
     disconnectedCallback(): void;
-    attributeChangedCallback(...args: AttributeChangedCallbackArgs): void;
+    attributeChangedCallback(...args: AttributeChangedCallbackParams): void;
   }
 }
