@@ -1,23 +1,14 @@
-import WithResizeEvent, { WithResizeEventBase, WithResizeEventDecorator, HTMLTextAreaElementWithResizeEvent } from './WithResizeEvent';
-import { Mutable } from '../types';
+import WithResizeEvent from './WithResizeEvent';
 
-type MockedElement = Mutable<HTMLTextAreaElementWithResizeEvent & {
-  _preResizeHeight: number;
-  _preResizeWidth: number;
-  _handleResizeEventStart(): void;
-  _handleResizeEventEnd(): void;
-  _handlePointer(evt?: Record<string, string>): void;
-}>;
-
-let Base: WithResizeEventBase;
-let Element: WithResizeEventDecorator;
-let element: MockedElement;
+let Base;
+let Element;
+let element;
 
 describe('WithResizeEvent', () => {
   beforeEach(() => {
-    Base = class {} as unknown as WithResizeEventBase;
+    Base = class {};
     Element = WithResizeEvent(Base);
-    element = new Element() as unknown as MockedElement;
+    element = new Element();
   });
 
   it('Returns a class that extends another passed as parameter', () => {
@@ -32,7 +23,7 @@ describe('WithResizeEvent', () => {
     it('Calls super.connectedCallback', () => {
       Base.prototype.connectedCallback = jest.fn();
       Element = WithResizeEvent(Base);
-      element = new Element() as unknown as MockedElement;
+      element = new Element();
       element._handleResizeEventStart = jest.fn();
 
       element.connectedCallback();
@@ -53,7 +44,7 @@ describe('WithResizeEvent', () => {
     it('Calls super.disconnectedCallback', () => {
       Base.prototype.disconnectedCallback = jest.fn();
       Element = WithResizeEvent(Base);
-      element = new Element() as unknown as MockedElement;
+      element = new Element();
       element._handleResizeEventEnd = jest.fn();
 
       element.disconnectedCallback();
@@ -105,7 +96,7 @@ describe('WithResizeEvent', () => {
   });
 
   describe('._handlePointer()', () => {
-    let CustomEventSpy: jest.SpyInstance;
+    let CustomEventSpy;
 
     beforeEach(() => {
       CustomEventSpy = jest.spyOn(global, 'CustomEvent');
